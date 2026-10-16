@@ -24,7 +24,8 @@ on `x` mod `2`). On `A = k × M` put
 
 Then:
 
-* `A` is an associative unital `k`-algebra (`TraceDefectCounterexample.mul_assoc`) — associativity
+* `A` is an associative unital `k`-algebra (`TraceDefectCounterexample.Carrier.mul_assoc`) —
+  associativity
   of the `M`-component asks `β(m, p) • q = β(p, q) • m`, and both sides lie in `2 · M = 0`;
 * `(A, n)` is a conic algebra (`TraceDefectCounterexample.conic`), with trace `t (a, m) = 2a`;
 * but `t(xy) ≠ t(x)t(y) - n(x, y)` for `x = m₁`, `y = m₂`
@@ -54,13 +55,20 @@ the dual numbers `k₀[ε]`, `ε² = 0`, and `C = k ⊕ k₀³` with `(a, u)(b, 
 and `n_z(a, u) = a² + (a zᵀu)ε`; conditions (i)–(iv) of the exercise say that the conjugation is an
 involution iff `zᵀ[u, v] = 0`. Here `ℤ/4` plays the part of `k₀[ε]` with `2` as `ε` and `ℤ/2` that
 of `k₀`; rank `2` suffices instead of `3` because the non-symmetric `β` is imposed directly rather
-than obtained as a commutator, which also keeps the whole verification inside `decide`.
+than obtained as a commutator.
 
 ## Implementation notes
 
-Every verification is a finite check: `A` has `16` elements, so all the axioms — distributivity,
-associativity, bilinearity of the companion form, the degree-two identity, alternativity — are
-closed by `decide`. No `native_decide` (`AGENTS.md` §5).
+The axioms are checked in coordinates. The only finite checks about the structure itself concern
+`β` on the four-element module `M`: it is additive and `ℤ/4`-linear in each slot, and its values
+annihilate `M` (`Carrier.beta_add_left`, …, `Carrier.beta_smul`), each closed by `decide` over at
+most `64` cases. Distributivity, associativity, the scalar laws, bilinearity of the companion form
+and the quadratic-form axioms then follow by `ring` and `module` on the coordinates, and
+alternativity follows from associativity. The degree-two identity and the statements about `m₁`
+and `m₂` are closed by `decide`. No `native_decide` (`AGENTS.md` §5).
+
+Closing every axiom by `decide` over all `16³` triples of `A` also works, but takes about ten
+times as long to elaborate.
 
 The instance `Module (ℤ/4) (ℤ/2)` is `local`: it is needed to build the example and must not
 escape into the rest of the development.
@@ -98,38 +106,107 @@ instance : Module (ZMod 4) Carrier :=
 whole point: the trace defect of the resulting conic algebra is `β(p, m) - β(m, p)`. -/
 def beta (m p : ZMod 2 × ZMod 2) : ZMod 4 := ((2 * m.1.val * p.2.val : ℕ) : ZMod 4)
 
+/-! ### `β` is bilinear, and its values annihilate `M`
+
+These are the only finite checks about the structure; each runs over at most `64` cases. -/
+
+theorem beta_add_left (m m' p : ZMod 2 × ZMod 2) : beta (m + m') p = beta m p + beta m' p := by
+  revert m m' p; decide
+
+theorem beta_add_right (m p p' : ZMod 2 × ZMod 2) : beta m (p + p') = beta m p + beta m p' := by
+  revert m p p'; decide
+
+theorem beta_smul_left (a : ZMod 4) (m p : ZMod 2 × ZMod 2) : beta (a • m) p = a * beta m p := by
+  revert a m p; decide
+
+theorem beta_smul_right (a : ZMod 4) (m p : ZMod 2 × ZMod 2) : beta m (a • p) = a * beta m p := by
+  revert a m p; decide
+
+/-- The values of `β` lie in `2 · ℤ/4`, which annihilates `M`. This is what makes the
+multiplication associative. -/
+theorem beta_smul (m p q : ZMod 2 × ZMod 2) : beta m p • q = 0 := by
+  revert m p q; decide
+
+theorem beta_zero_left (p : ZMod 2 × ZMod 2) : beta 0 p = 0 := by revert p; decide
+
+theorem beta_zero_right (m : ZMod 2 × ZMod 2) : beta m 0 = 0 := by revert m; decide
+
 instance : Mul Carrier := ⟨fun x y ↦ (x.1 * y.1 + beta x.2 y.2, x.1 • y.2 + y.1 • x.2)⟩
 instance : One Carrier := ⟨(1, 0)⟩
+
+/-! ### Coordinates -/
+
+theorem ext {x y : Carrier} (h₁ : x.1 = y.1) (h₂ : x.2 = y.2) : x = y := Prod.ext h₁ h₂
+
+@[simp] theorem fst_add (x y : Carrier) : (x + y).1 = x.1 + y.1 := rfl
+@[simp] theorem snd_add (x y : Carrier) : (x + y).2 = x.2 + y.2 := rfl
+@[simp] theorem fst_zero : (0 : Carrier).1 = 0 := rfl
+@[simp] theorem snd_zero : (0 : Carrier).2 = 0 := rfl
+@[simp] theorem fst_one : (1 : Carrier).1 = 1 := rfl
+@[simp] theorem snd_one : (1 : Carrier).2 = 0 := rfl
+@[simp] theorem fst_smul (a : ZMod 4) (x : Carrier) : (a • x).1 = a * x.1 := rfl
+@[simp] theorem snd_smul (a : ZMod 4) (x : Carrier) : (a • x).2 = a • x.2 := rfl
+@[simp] theorem fst_mul (x y : Carrier) : (x * y).1 = x.1 * y.1 + beta x.2 y.2 := rfl
+@[simp] theorem snd_mul (x y : Carrier) : (x * y).2 = x.1 • y.2 + y.1 • x.2 := rfl
+
+/-! ### The algebra structure -/
 
 instance : NonAssocRing Carrier :=
   { (inferInstance : AddCommGroup Carrier), (inferInstance : Mul Carrier),
     (inferInstance : One Carrier) with
-    left_distrib := by decide
-    right_distrib := by decide
-    zero_mul := by decide
-    mul_zero := by decide
-    one_mul := by decide
-    mul_one := by decide }
+    left_distrib x y z := ext (by simp only [fst_mul, fst_add, snd_add, beta_add_right]; ring)
+      (by simp only [snd_mul, fst_add, snd_add]; module)
+    right_distrib x y z := ext (by simp only [fst_mul, fst_add, snd_add, beta_add_left]; ring)
+      (by simp only [snd_mul, fst_add, snd_add]; module)
+    zero_mul x := ext (by simp [beta_zero_left]) (by simp)
+    mul_zero x := ext (by simp [beta_zero_right]) (by simp)
+    one_mul x := ext (by simp [beta_zero_left]) (by simp)
+    mul_one x := ext (by simp [beta_zero_right]) (by simp) }
 
-instance : SMulCommClass (ZMod 4) Carrier Carrier := ⟨by decide⟩
-instance : IsScalarTower (ZMod 4) Carrier Carrier := ⟨by decide⟩
+instance : SMulCommClass (ZMod 4) Carrier Carrier where
+  smul_comm a x y := by
+    change a • (x * y) = x * (a • y)
+    exact ext (by simp only [fst_smul, fst_mul, snd_smul, beta_smul_right]; ring)
+      (by simp only [snd_smul, snd_mul, fst_smul]; module)
+
+instance : IsScalarTower (ZMod 4) Carrier Carrier where
+  smul_assoc a x y := by
+    change (a • x) * y = a • (x * y)
+    exact ext (by simp only [fst_smul, fst_mul, snd_smul, beta_smul_left]; ring)
+      (by simp only [snd_smul, snd_mul, fst_smul]; module)
 
 /-- The multiplication is **associative**: the two sides of associativity differ only in the
-`M`-component, where they are `β(m, p) • q` and `β(p, q) • m`, both in `2 · M = 0`. -/
-theorem mul_assoc (x y z : Carrier) : x * y * z = x * (y * z) := by revert x y z; decide
+`M`-component, where they are `β(m, p) • q` and `β(p, q) • m`, both in `2 · M = 0`
+(`Carrier.beta_smul`). -/
+theorem mul_assoc (x y z : Carrier) : x * y * z = x * (y * z) :=
+  ext (by
+      simp only [fst_mul, snd_mul, beta_add_left, beta_add_right, beta_smul_left, beta_smul_right]
+      ring)
+    (by
+      simp only [fst_mul, snd_mul, add_smul, beta_smul, add_zero]
+      module)
 
-instance : IsAlternative Carrier := ⟨by decide, by decide⟩
+instance : IsAlternative Carrier :=
+  ⟨fun a b ↦ (mul_assoc a a b).symm, fun a b ↦ mul_assoc b a a⟩
 
 /-- The companion bilinear form of the norm: `n(x, y) = 2 a b - β(m, p) - β(p, m)`. -/
 def polarForm : Carrier →ₗ[ZMod 4] Carrier →ₗ[ZMod 4] ZMod 4 :=
   LinearMap.mk₂ (ZMod 4) (fun x y ↦ 2 * x.1 * y.1 - beta x.2 y.2 - beta y.2 x.2)
-    (by decide) (by decide) (by decide) (by decide)
+    (fun x x' y ↦ by simp only [fst_add, snd_add, beta_add_left, beta_add_right]; ring)
+    (fun a x y ↦ by
+      simp only [fst_smul, snd_smul, beta_smul_left, beta_smul_right, smul_eq_mul]; ring)
+    (fun x y y' ↦ by simp only [fst_add, snd_add, beta_add_left, beta_add_right]; ring)
+    (fun a x y ↦ by
+      simp only [fst_smul, snd_smul, beta_smul_left, beta_smul_right, smul_eq_mul]; ring)
 
 /-- The norm `n (a, m) = a² - β(m, m)`. -/
 def norm : QuadraticForm (ZMod 4) Carrier where
   toFun x := x.1 * x.1 - beta x.2 x.2
-  toFun_smul := by decide
-  exists_companion' := ⟨polarForm, by decide⟩
+  toFun_smul a x := by
+    simp only [fst_smul, snd_smul, beta_smul_left, beta_smul_right, smul_eq_mul]; ring
+  exists_companion' := ⟨polarForm, fun x y ↦ by
+    simp only [polarForm, LinearMap.mk₂_apply, fst_add, snd_add, beta_add_left, beta_add_right]
+    ring⟩
 
 end Carrier
 

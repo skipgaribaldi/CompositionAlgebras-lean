@@ -777,11 +777,12 @@ Elman–Karpenko–Merkurjev, p. 49, cited at the end of `GN §6`.
 false over a general base — even for **associative** algebras.
 `Conic/TraceDefectCounterexample.lean` exhibits an associative conic algebra over `ℤ/4`, namely
 `ℤ/4 · 1 ⊕ (ℤ/2)²` with a non-symmetric multiplication `β` on the second summand, for which
-`conj(m₁m₂) = 2·1 ≠ 0 = conj(m₂)·conj(m₁)`; the whole thing is checked by `decide`. What survives
-over any base is the identity `ȳ x̄ − conj(xy) = (t(x)t(y) − n(x,y) − t(xy))·1` and, for alternative
-algebras, the fact that the obstruction times `x` is a multiple of `1`. Getting the
-anti-homomorphism property over a ring needs the algebra to be projective, which is a hypothesis on
-the *theorem*, not on `ConicAlgebra` (`ConicAlgebra.conj_mul_of_projective`).
+`conj(m₁m₂) = 2·1 ≠ 0 = conj(m₂)·conj(m₁)`; the axioms are verified in coordinates from a few
+small finite checks on `β`. What survives over any base is the identity
+`ȳ x̄ − conj(xy) = (t(x)t(y) − n(x,y) − t(xy))·1` and, for alternative algebras, the fact that the
+obstruction times `x` is a multiple of `1`. Getting the anti-homomorphism property over a ring needs
+the algebra to be projective, which is a hypothesis on the *theorem*, not on `ConicAlgebra`
+(`ConicAlgebra.conj_mul_of_projective`).
 
 This is a trap for the reader, not an error in the literature: `GPR` states the criterion as an
 iff (`GPR 16.10(a)`), puts projectivity into the hypotheses of the theorems that deliver the
