@@ -48,7 +48,7 @@ forks the API and makes every downstream lemma unusable by anyone else.
   `QuadraticForm.prod`
 - `LinearMap.BilinForm`, `.Nondegenerate`, `.SeparatingLeft`, `.IsSymm`
 - `Module.Free`, `Module.Finite`, `Module.Projective`, `Module.rank`, `Module.finrank`, `Basis`,
-  `Module.Dual`, `Submodule`, `Algebra.TensorProduct`
+  `Module.Dual`, `Module.IsUnimodular`, `Submodule`, `Algebra.TensorProduct`
 - `Complex`, `Quaternion`, `QuaternionAlgebra`, `Analysis.Quaternion`
 - `FieldTheory.ChevalleyWarning`, `LinearAlgebra.QuadraticForm.Real`, `Padics`
 - `Polynomial`, `MvPolynomial`, `Ideal`, `IsLocalRing`, `Jacobson` radical API
@@ -124,8 +124,10 @@ CompositionAlgebras/
                          -- GPR Exc. 9.31; rankIdempotent, and what the rank-zero one does
     SelfAnnihilating.lean
                          -- φ x • x = 0 on a f.g. projective module forces φ = 0
-    Unimodular.lean      -- IsUnimodular for module elements. Lives here, not in QuadraticForm/,
-                         -- because no quadratic form is involved and LGRing/ needs it
+    Unimodular.lean      -- API for mathlib's Module.IsUnimodular: GPR 9.13's form, the field
+                         -- case, the splitting M ≃ R × ker l. Lives here, not in
+                         -- QuadraticForm/, because no quadratic form is involved and LGRing/
+                         -- needs it
     Invertible.lean      -- invertible modules and line bundles
     ExteriorPower.lean   -- exterior powers of finite projective modules
     AlternatingBaseChange.lean
@@ -288,8 +290,8 @@ is in the wrong place, not that the rule needs relaxing.
 
 If you find yourself wanting to import "upwards", the definition is in the wrong file. Move it,
 don't add the import. (`Module/Unimodular.lean` lives in `Module/` and not in `QuadraticForm/`
-for exactly this reason: `LGRing/Unimodular.lean` needs `IsUnimodular`, and `IsUnimodular` is
-module theory with no quadratic form in sight.)
+for exactly this reason: `LGRing/` needs its unimodular-element API, and that API is module
+theory with no quadratic form in sight.)
 
 Keep imports minimal in general: import the specific mathlib files you need, not
 `import Mathlib`. (`import Mathlib` is acceptable only in scratch files that are not part of the
@@ -386,9 +388,9 @@ source's name (`IsGPR…`, `IsEKM…`), and every docstring that mentions regula
 source's sense is meant.
 
 **(c) GPR isotropy is *unimodular*, mathlib's is *nonzero*.** Do not implement GPR's isotropy as
-`¬ QuadraticMap.Anisotropic`. Use the `IsUnimodular` predicate. They agree over fields and over
-PIDs (`GPR 22.19`) and differ in general. As with the regularity words in (b), the predicate carries
-its source's name: `QuadraticMap.IsGPRIsotropic`, never a bare `IsIsotropic`.
+`¬ QuadraticMap.Anisotropic`. Use mathlib's `Module.IsUnimodular` predicate. They agree over fields
+and over PIDs (`GPR 22.19`) and differ in general. As with the regularity words in (b), the
+predicate carries its source's name: `QuadraticMap.IsGPRIsotropic`, never a bare `IsIsotropic`.
 
 **(d) The Cayley–Dickson scalar is arbitrary.** `Cay(B, μ)` takes `μ : k`, **not** `μ : kˣ`. Unit
 hypotheses go on theorems. Encoding `μ : kˣ` in the construction breaks the sedenion example.

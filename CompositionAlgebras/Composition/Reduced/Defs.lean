@@ -164,8 +164,8 @@ theorem isHyperbolicPair (hc : C.IsElementaryIdempotent c) :
 omit [SMulCommClass k A A] [IsScalarTower k A A] in
 /-- An elementary idempotent is **unimodular** (`GPR 9.17`): the trace is a functional taking the
 value `1` on it. -/
-theorem isUnimodular (hc : C.IsElementaryIdempotent c) : IsUnimodular k c :=
-  isUnimodular_of_exists_linearMap_apply_eq_one C.trace hc.trace_eq_one
+theorem isUnimodular (hc : C.IsElementaryIdempotent c) : Module.IsUnimodular k c :=
+  Module.isUnimodular_of_apply_eq_one (f := C.trace) hc.trace_eq_one
 
 omit [SMulCommClass k A A] [IsScalarTower k A A] in
 /-- **`GPR 22.9`, (i) ⇒ (iii)**: an elementary idempotent is a unimodular null vector, so the norm
@@ -310,7 +310,7 @@ theorem exists_isElementaryIdempotent_of_isGPRIsotropic {C : ConicAlgebra k A}
     (hreg : C.norm.IsGPRRegular) (hmul : C.IsMultiplicative)
     (hiso : C.norm.IsGPRIsotropic) : C.HasElementaryIdempotent := by
   obtain ⟨u, hu, hnu⟩ := hiso
-  obtain ⟨l, hl⟩ := hu.exists_linearMap_apply_eq_one
+  obtain ⟨l, hl⟩ := Module.isUnimodular_iff.mp hu
   obtain ⟨v, hv⟩ := hreg.2 (l.comp C.conj)
   refine ⟨u * v, ⟨by rw [hmul u v, hnu, zero_mul], ?_⟩⟩
   have hpolar : QuadraticMap.polar C.norm v (C.conj u) = 1 := by

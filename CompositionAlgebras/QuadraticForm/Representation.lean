@@ -95,7 +95,7 @@ theorem Module.HasFullSupport.nontrivial_quotient_tensor (h : Module.HasFullSupp
 module of full support contains a unimodular element. This is `IsLGRing.exists_isUnimodular`
 (`LGRing/Unimodular.lean`) fed through `HasFullSupport.nontrivial_quotient_tensor`. -/
 theorem Module.exists_isUnimodular_of_hasFullSupport [Module.Finite R M] [Module.Projective R M]
-    (hLG : IsLGRing R) (hM : Module.HasFullSupport R M) : ∃ m : M, IsUnimodular R m :=
+    (hLG : IsLGRing R) (hM : Module.HasFullSupport R M) : ∃ m : M, Module.IsUnimodular R m :=
   hLG.exists_isUnimodular fun 𝔪 h𝔪 ↦ haveI := h𝔪; hM.nontrivial_quotient_tensor 𝔪
 
 /-- **`GN C.13(a)`, `(ai) ⇒ (aii)`.** If `q` takes an invertible value then `M` has full support.

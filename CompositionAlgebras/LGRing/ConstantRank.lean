@@ -120,7 +120,7 @@ theorem Module.free_of_isLGRing_of_rankAtStalk_eq (hLG : IsLGRing R) (d : ℕ) :
     obtain ⟨m, hm⟩ := hLG.exists_isUnimodular (M := M) fun 𝔪 h𝔪 ↦
       Module.nontrivial_quotient_tensor_of_rankAtStalk_pos 𝔪 h𝔪 (by
         rw [h]; exact Nat.succ_pos d)
-    obtain ⟨l, hl⟩ := hm.exists_linearMap_apply_eq_one
+    obtain ⟨l, hl⟩ := Module.isUnimodular_iff.mp hm
     set e := LinearMap.equivProdKerOfApplyEqOne l m hl with he
     have : Module.Finite R (LinearMap.ker l) := Module.Finite.of_linearEquiv_prod e
     have : Module.Projective R (LinearMap.ker l) := Module.Projective.of_linearEquiv_prod e

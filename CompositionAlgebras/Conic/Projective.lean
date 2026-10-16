@@ -98,8 +98,8 @@ include C in
 /-- **`GPR 16.7`.** In a conic algebra that is finitely generated projective as a module, the unit
 is unimodular. This is `GPR 11.15` for the pointed quadratic module `(A, n, 1)`: over a projective
 module the norm is `b(x, x)` for a bilinear `b`, and `b(1, ·)` sends `1` to `n 1 = 1`. -/
-theorem isUnimodular_one : IsUnimodular k (1 : A) :=
-  isUnimodular_of_exists_linearMap_apply_eq_one C.unitForm C.unitForm_one
+theorem isUnimodular_one : Module.IsUnimodular k (1 : A) :=
+  Module.isUnimodular_of_apply_eq_one (f := C.unitForm) C.unitForm_one
 
 omit [SMulCommClass k A A] [IsScalarTower k A A] in
 /-- **Uniqueness of the conic norm on a finitely generated projective algebra** (`GPR 16.16`).

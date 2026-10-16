@@ -40,7 +40,7 @@ For `t c : Fin n → R` set `m := π t` and `l := ∑ᵢ cᵢ · (proj i ∘ σ)
   `l m = ∑ᵢ cᵢ · (e t)ᵢ = ∑ᵢ ∑ⱼ Eᵢⱼ tⱼ cᵢ`,
 
 which is exactly `bilinearPairing E` evaluated at the point `(t, c)` — and by `GPR 9.17`
-(`isUnimodular_of_exists_linearMap_apply_eq_one`), a value of `1` produces a unimodular element.
+(`Module.isUnimodular_of_apply_eq_one`), a value of `1` produces a unimodular element.
 So it suffices to know that `bilinearPairing E` represents a unit over `R`, and by the LG axiom
 that reduces to representing a unit over every residue field `k = R ⧸ 𝔪`.
 
@@ -126,7 +126,7 @@ supplies the hypothesis from the more geometric formulation. -/
 theorem IsLGRing.exists_isUnimodular [Module.Finite R M] [Module.Projective R M]
     (hLG : IsLGRing R)
     (hM : ∀ (𝔪 : Ideal R), 𝔪.IsMaximal → Nontrivial ((R ⧸ 𝔪) ⊗[R] M)) :
-    ∃ m : M, IsUnimodular R m := by
+    ∃ m : M, Module.IsUnimodular R m := by
   classical
   obtain ⟨n, π, σ, -, -, hσ⟩ := Module.Finite.exists_comp_eq_id_of_projective R M
   set e : (Fin n → R) →ₗ[R] (Fin n → R) := σ ∘ₗ π with he
@@ -203,6 +203,6 @@ theorem IsLGRing.exists_isUnimodular [Module.Finite R M] [Module.Projective R M]
     rw [LinearMap.proj_apply, hei, Finset.mul_sum]
     exact Finset.sum_congr rfl fun j _ ↦ by rw [htj, hci]; ring
   rw [← hlm] at hs
-  refine ⟨π t, isUnimodular_of_exists_linearMap_apply_eq_one ((hs.unit⁻¹ : Rˣ) • l) ?_⟩
+  refine ⟨π t, Module.isUnimodular_of_apply_eq_one (f := (hs.unit⁻¹ : Rˣ) • l) ?_⟩
   rw [LinearMap.smul_apply, Units.smul_def, smul_eq_mul]
   exact hs.val_inv_mul

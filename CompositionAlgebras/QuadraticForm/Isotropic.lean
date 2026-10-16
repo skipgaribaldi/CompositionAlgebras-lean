@@ -18,11 +18,12 @@ Defines `QuadraticMap.IsGPRIsotropic`: `Q` is isotropic iff it has a **unimodula
 (`GPR 11.17`), not merely a nonzero one.
 
 ⚠ **This is not mathlib's `QuadraticMap.Anisotropic`.** `¬ Q.Anisotropic` unfolds to "there is a
-*nonzero* `x` with `Q x = 0`". GPR's isotropy demands a *unimodular* null vector — strictly
-stronger over a general ring, since `IsUnimodular` demands `R·u` be a free rank-1 direct summand,
-not merely `u ≠ 0`. The two notions coincide over a field, and `GPR 22.19` shows they also coincide
-over a PID; in general they do not, and the reduced-composition-algebra layer (`GPR 22.9` ff.) needs
-the GPR notion specifically. See `AGENTS.md` §6(c).
+*nonzero* `x` with `Q x = 0`". GPR's isotropy demands a *unimodular* null vector — strictly stronger
+over a general ring, since unimodularity (mathlib's `Module.IsUnimodular`: some functional takes the
+value `1` at `u`, equivalently `R·u` is a free rank-1 direct summand, `GPR 9.13`, `GPR 9.17`) asks
+for more than `u ≠ 0`. The two notions coincide over a field, and `GPR 22.19` shows they also
+coincide over a PID; in general they do not, and the reduced-composition-algebra layer (`GPR 22.9`
+ff.) needs the GPR notion specifically. See `AGENTS.md` §6(c).
 
 The name carries its source, as for the regularity ladder (`QuadraticForm.IsGPRNondegenerate`,
 `IsGPRNonsingular`, `IsGPRRegular` in `QuadraticForm/Regularity.lean`): there is no bare
@@ -57,7 +58,7 @@ cancelled are only assumed non-singular (`GN 6.5`, not `GPR 11.27`).
 * `QuadraticForm.isGPRIsotropic_hyperbolic` : a hyperbolic form is isotropic whenever its first
   module contains a unimodular element.
 * `QuadraticMap.isGPRIsotropic_iff_not_anisotropic` : over a **field**, the two notions coincide —
-  every nonzero vector is unimodular (`isUnimodular_of_ne_zero`), so the extra strength GPR's
+  every nonzero vector is unimodular (`Module.isUnimodular_of_ne_zero`), so the extra strength GPR's
   definition carries over a general ring disappears entirely over a field.
 
 `GPR 22.19`'s further statement — that the two notions already coincide over a **PID**, more
@@ -79,7 +80,7 @@ variable {R : Type u} [CommRing R] {M : Type v} [AddCommGroup M] [Module R M]
 
 /-- `Q` is **isotropic** in the GPR sense: it has a *unimodular* null vector (`GPR 11.17`). -/
 def QuadraticMap.IsGPRIsotropic (Q : QuadraticMap R M N) : Prop :=
-  ∃ u : M, IsUnimodular R u ∧ Q u = 0
+  ∃ u : M, Module.IsUnimodular R u ∧ Q u = 0
 
 namespace QuadraticMap.IsGPRIsotropic
 
@@ -96,9 +97,9 @@ theorem not_anisotropic [Nontrivial R] {Q : QuadraticMap R M N} (h : Q.IsGPRIsot
   obtain ⟨u, hu, hQu⟩ := h
   intro hA
   obtain rfl := hA u hQu
-  have hinj := hu.1
-  rw [LinearMap.toSpanSingleton_zero] at hinj
-  exact one_ne_zero (hinj (by simp))
+  obtain ⟨l, hl⟩ := Module.isUnimodular_iff.mp hu
+  rw [map_zero] at hl
+  exact zero_ne_one hl
 
 end QuadraticMap.IsGPRIsotropic
 
@@ -108,7 +109,7 @@ theorem QuadraticMap.isGPRIsotropic_of_not_anisotropic {K : Type u} [Field K] {M
     [AddCommGroup M] [Module K M] {N : Type w} [AddCommGroup N] [Module K N]
     {Q : QuadraticMap K M N} (h : ¬ Q.Anisotropic) : Q.IsGPRIsotropic := by
   obtain ⟨x, hx, hQx⟩ := (QuadraticMap.not_anisotropic_iff_exists Q).mp h
-  exact ⟨x, isUnimodular_of_ne_zero hx, hQx⟩
+  exact ⟨x, Module.isUnimodular_of_ne_zero hx, hQx⟩
 
 /-- Over a field, GPR-sense isotropy and mathlib's `¬ Anisotropic` are the same notion. -/
 theorem QuadraticMap.isGPRIsotropic_iff_not_anisotropic {K : Type u} [Field K] {M : Type v}
@@ -122,7 +123,7 @@ private theorem exists_smul_isUnimodular_of_ne_zero_of_pid
     {R : Type u} [CommRing R] [IsDomain R] [IsPrincipalIdealRing R]
     {M : Type v} [AddCommGroup M] [Module R M] [Module.Finite R M] [Module.Projective R M]
     {x : M} (hx : x ≠ 0) :
-    ∃ d : R, d ≠ 0 ∧ ∃ u : M, IsUnimodular R u ∧ x = d • u := by
+    ∃ d : R, d ≠ 0 ∧ ∃ u : M, Module.IsUnimodular R u ∧ x = d • u := by
   classical
   let : Module.IsTorsionFree R M := inferInstance
   obtain ⟨n, b⟩ := Module.basisOfFiniteTypeTorsionFree' (R := R) (M := M)
@@ -166,7 +167,7 @@ private theorem exists_smul_isUnimodular_of_ne_zero_of_pid
     rw [Module.Basis.constr_apply_fintype]
     simp only [u, b.equivFun.apply_symm_apply, smul_eq_mul]
     exact hsum
-  exact ⟨d, hd, u, isUnimodular_of_exists_linearMap_apply_eq_one l hlu, hxu⟩
+  exact ⟨d, hd, u, Module.isUnimodular_of_apply_eq_one (f := l) hlu, hxu⟩
 
 /-- **`GPR 22.19`:** over a PID, a quadratic form has a unimodular null vector if and only if it
 has a nonzero null vector. The module is only assumed finitely generated projective. -/
@@ -195,11 +196,11 @@ variable {Q : QuadraticForm R M}
 /-- A hyperbolic form is GPR-isotropic as soon as its first module contains a unimodular element.
 The null vector is `(m, 0)`; a functional taking `m` to `1` extends across the product by the first
 projection. -/
-theorem isGPRIsotropic_hyperbolic {m : M} (hm : IsUnimodular R m) :
+theorem isGPRIsotropic_hyperbolic {m : M} (hm : Module.IsUnimodular R m) :
     (hyperbolic R M).IsGPRIsotropic := by
-  obtain ⟨l, hl⟩ := hm.exists_linearMap_apply_eq_one
-  refine ⟨(m, 0), isUnimodular_of_exists_linearMap_apply_eq_one
-    (l.comp (LinearMap.fst R M (Module.Dual R M))) ?_, ?_⟩
+  obtain ⟨l, hl⟩ := Module.isUnimodular_iff.mp hm
+  refine ⟨(m, 0), Module.isUnimodular_of_apply_eq_one
+    (f := l.comp (LinearMap.fst R M (Module.Dual R M))) ?_, ?_⟩
   · simpa only [LinearMap.comp_apply, LinearMap.fst_apply] using hl
   · simp only [hyperbolic_apply, LinearMap.zero_apply]
 
@@ -210,8 +211,8 @@ Regularity is used exactly once, to solve `l = q(·, w)` for the functional `l` 
 supplied by unimodularity (`GPR 9.17`); then `GPR`'s formula `v = -q(w) • u + w` finishes the job
 (`QuadraticMap.isHyperbolicPair_neg_smul_add`). -/
 theorem exists_isHyperbolicPair_of_isUnimodular (hQ : Q.IsGPRRegular) {u : M}
-    (hu : IsUnimodular R u) (hqu : Q u = 0) : ∃ v : M, IsHyperbolicPair Q u v := by
-  obtain ⟨l, hl⟩ := hu.exists_linearMap_apply_eq_one
+    (hu : Module.IsUnimodular R u) (hqu : Q u = 0) : ∃ v : M, IsHyperbolicPair Q u v := by
+  obtain ⟨l, hl⟩ := Module.isUnimodular_iff.mp hu
   obtain ⟨w, hw⟩ := hQ.2 l
   have huw : polar Q u w = 1 := by
     have h := DFunLike.congr_fun hw u
@@ -223,8 +224,8 @@ theorem exists_isHyperbolicPair_of_isUnimodular (hQ : Q.IsGPRRegular) {u : M}
 /-- **`GPR 11.17`, `(ii) ⇒ (i)`.** The first member of a hyperbolic pair is isotropic in the GPR
 sense: it is unimodular, since `q(·, v)` sends it to `1`. No hypothesis on `Q`. -/
 theorem isUnimodular_of_isHyperbolicPair {u v : M} (h : IsHyperbolicPair Q u v) :
-    IsUnimodular R u :=
-  isUnimodular_of_exists_linearMap_apply_eq_one (QuadraticMap.polarBilin Q v) <| by
+    Module.IsUnimodular R u :=
+  Module.isUnimodular_of_apply_eq_one (f := QuadraticMap.polarBilin Q v) <| by
     rw [QuadraticMap.polarBilin_apply_apply, polar_comm]
     exact h.polar_eq_one
 

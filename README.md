@@ -109,10 +109,6 @@ import mathlib only, and nothing composition-algebra-specific (see
   is a statement about modules that anyone doing commutative algebra might want, and it currently
   has no home in mathlib. *(Layer 0.)*
 
-- **Unimodular elements of a module.** `R·u` free of rank 1 and a direct summand. A small, general
-  definition that mathlib lacks and that is needed to state ring-theoretic isotropy correctly.
-  *(Layer 0.)*
-
 - **The rank decomposition of a finitely generated projective module** (`GPR Exc. 9.31`). A f.g.
   projective module takes finitely many ranks, and the base ring splits uniquely into a product of
   rings on each factor of which the module has constant rank. Nothing here is about composition
@@ -178,23 +174,23 @@ mathlib is canonical. Concretely:
   `QuadraticForm.polarBilin`, `QuadraticMap.Anisotropic`, `QuadraticMap.IsometryEquiv`,
   `QuadraticForm.baseChange`, `LinearMap.BilinForm` and `.Nondegenerate`.
 - Modules: `Module.Free`, `Module.Finite`, `Module.Projective`, `Module.rank`, `Module.finrank`,
-  `Basis`, `Module.Dual`, `Algebra.TensorProduct`.
+  `Basis`, `Module.Dual`, `Module.IsUnimodular`, `Algebra.TensorProduct`.
 - Concrete algebras: `Complex`, `Quaternion` / `QuaternionAlgebra`, and `Analysis.Quaternion`
   for the real normed picture.
 - Field-theoretic inputs where the classification needs them: `FieldTheory.ChevalleyWarning`,
   `LinearAlgebra.QuadraticForm.Real` (Sylvester's law of inertia), `Padics`.
 
-**We build what mathlib lacks:** LG rings, Witt cancellation, unimodular elements of a module,
-the nonsingular/regular quadratic-form predicates, alternative algebras, Moufang, Artin, conic
-algebras, Cayley–Dickson, composition algebras, octonions, and the classification results.
+**We build what mathlib lacks:** LG rings, Witt cancellation, the nonsingular/regular quadratic-form
+predicates, alternative algebras, Moufang, Artin, conic algebras, Cayley–Dickson, composition
+algebras, octonions, and the classification results.
 
 **Upstreaming.** The items in [Results of independent interest](#results-of-independent-interest)
 are plausible mathlib contributions on their own merits, and are written so they can be lifted out
-cleanly — in rough order of readiness: unimodular elements; alternative rings with the Moufang
-identities (and Artin's theorem once its hard direction lands); Witt cancellation over fields; LG
-rings together with constant-rank-projective ⇒ free; then the conic/composition tower. The import
-discipline that keeps this possible is specified in [`AGENTS.md`](AGENTS.md); the short version is
-that general-purpose files must not import composition-algebra-specific ones.
+cleanly — in rough order of readiness: alternative rings with the Moufang identities (and Artin's
+theorem once its hard direction lands); Witt cancellation over fields; LG rings together with
+constant-rank-projective ⇒ free; then the conic/composition tower. The import discipline that keeps
+this possible is specified in [`AGENTS.md`](AGENTS.md); the short version is that general-purpose
+files must not import composition-algebra-specific ones.
 
 ---
 
@@ -243,13 +239,14 @@ Foundational quadratic-form theory, absent from mathlib. Independent of everythi
   it is the conceptually right statement and worth recording even if not formalized.
 - **Unimodular elements and constant-rank projectives (`GN 2.5`–`2.6`, `GPR 11.24`).** `m ∈ M` is
   **unimodular** if `m ⊗ 1_{κ(𝔭)} ≠ 0` for all `𝔭 ∈ Spec R`; equivalently `R·m` is free of rank 1
-  and a direct summand of `M` (`GPR 9.17`). Then: over an LG ring a **faithfully projective** module
-  contains a unimodular element (`GN 2.6(a)`), and a finite projective module of **constant rank is
-  free** (`GN 2.6(b)`, also stated in `GN 2.1(c)`) — the motto, made precise — whence
-  `Pic(R) = 0` (`GN (2.1.1)`). *Both are formalized*: 2.6(a) in `LGRing/Unimodular.lean`, by an
-  elementary argument that stays inside the polynomial form of the LG axiom rather than following
-  `GN`'s scheme-theoretic route, and 2.6(b) in `LGRing/ConstantRank.lean`, by induction on
-  mathlib's `Module.rankAtStalk`.
+  and a direct summand of `M`; equivalently some linear functional takes the value `1` at `m`
+  (`GPR 9.17`). The last form is mathlib's `Module.IsUnimodular`, which we use. Then: over an LG
+  ring a **faithfully projective** module contains a unimodular element (`GN 2.6(a)`), and a finite
+  projective module of **constant rank is free** (`GN 2.6(b)`, also stated in `GN 2.1(c)`) — the
+  motto, made precise — whence `Pic(R) = 0` (`GN (2.1.1)`). *Both are formalized*: 2.6(a) in
+  `LGRing/Unimodular.lean`, by an elementary argument that stays inside the polynomial form of the
+  LG axiom rather than following `GN`'s scheme-theoretic route, and 2.6(b) in
+  `LGRing/ConstantRank.lean`, by induction on mathlib's `Module.rankAtStalk`.
 - **Representation lemma (`GPR 11.26`; `GN Lemma C.13(a)`).** Over an LG ring, a quadratic space
   `(M, q)` represents a unit — `q(M) ∩ Rˣ ≠ ∅` — iff `M` is faithfully projective (equivalently,
   has full support). `GPR 11.26` states it for `q` **regular**; `GN C.13(a)` observes the same proof
@@ -441,7 +438,8 @@ and §23 is the comparison between those and algebra isomorphisms.
 
 - **Isotropy, GPR sense (`GPR 11.17`).** `q` is isotropic iff there is a **unimodular** `u` with
   `q(u) = 0`. This is *not* mathlib's notion; see [Boundaries and traps](#boundaries-and-traps).
-  Requires a `IsUnimodular` predicate on module elements (`GPR 9.13`: `k·u` a free direct summand).
+  Uses mathlib's `Module.IsUnimodular` (a functional takes the value `1` at `u`), which agrees
+  with the definition in `GPR 9.13` (`k·u` a free direct summand) by `GPR 9.17`.
 - **`GPR 22.9`.** For rank > 1: reduced ⟺ contains a split quadratic étale subalgebra ⟺ norm
   isotropic ⟺ norm hyperbolic. The first three are **proved** (`Composition/Reduced/Defs.lean`),
   through the equivalent (in rank > 1, `GPR 22.7`) condition *has an elementary idempotent*.

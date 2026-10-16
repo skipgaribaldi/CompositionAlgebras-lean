@@ -362,7 +362,7 @@ theorem isSplitOfRank_of_isometryEquiv_hyperbolic_of_isUnimodular [Nontrivial k]
     (hcomp : C.IsComposition.{u, v, u}) (hLG : IsLGRing k)
     (hA : Module.rankAtStalk (R := k) A = fun _ ↦ r)
     (hr : r = 2 ∨ r = 4 ∨ r = 8) {M : Type*} [AddCommGroup M] [Module k M]
-    {m : M} (hm : IsUnimodular k m)
+    {m : M} (hm : Module.IsUnimodular k m)
     (e : (QuadraticForm.hyperbolic k M).IsometryEquiv C.norm) : C.IsSplitOfRank r :=
   (hcomp.isSplitOfRank_iff_isGPRIsotropic_of_isLGRing hLG hA hr).mpr
     ((QuadraticForm.isGPRIsotropic_hyperbolic hm).map_isometryEquiv e)
