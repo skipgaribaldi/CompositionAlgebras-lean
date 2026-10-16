@@ -359,8 +359,6 @@ theorem IsComposition.mul_assoc_of_isLGRing_of_rankAtStalk_eq_two [Nontrivial k]
   exact congrArg Subtype.val
     (C.adjoinElement_mul_assoc u ⟨x, hmem x⟩ ⟨y, hmem y⟩ ⟨z, hmem z⟩)
 
-set_option maxHeartbeats 800000 in
--- Elaborating the transported Cayley multiplication and associativity proof exceeds the default.
 /-- Over an LG ring, a rank-four composition algebra is associative. It is a double of its
 rank-two associative commutative subalgebra, so `GPR 18.14(b)` applies. -/
 theorem IsComposition.mul_assoc_of_isLGRing_of_rankAtStalk_eq_four [Nontrivial k]
