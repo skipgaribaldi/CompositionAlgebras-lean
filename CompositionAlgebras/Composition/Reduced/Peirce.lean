@@ -14,13 +14,13 @@ import CompositionAlgebras.Nonassociative.Alternative.Peirce
 /-!
 # Peirce decomposition at an elementary idempotent
 
-This file specializes the singular Peirce decomposition [GPR, 14.12] to an elementary idempotent
-in a multiplicative conic alternative algebra. It proves [GPR, Exc. 19.35(1)--(6)]: the diagonal
-components, existence of Peirce coordinates, and the coordinate formulas for the norm, polar form,
-trace, and conjugation. Under regularity it also proves that the two off-diagonal components are in
-duality under the polar form, and it constructs the alternating trace trilinear form at the end of
-the exercise. `GPR 19.11` supplies regularity for a constant-rank composition algebra of rank other
-than one.
+This file specializes the singular Peirce decomposition [GPR, Exc. 14.12] to an elementary
+idempotent in a multiplicative conic alternative algebra. It proves [GPR, Exc. 19.35(1)--(6)]: the
+diagonal components, existence of Peirce coordinates, and the coordinate formulas for the norm,
+polar form, trace, and conjugation. Under regularity it also proves that the two off-diagonal
+components are in duality under the polar form, and it constructs the alternating trace trilinear
+form at the end of the exercise. `GPR 19.11` supplies regularity for a constant-rank composition
+algebra of rank other than one.
 
 ## Main results
 
@@ -51,7 +51,8 @@ classification is in `Composition/Reduced/TwistedMatrix.lean`.
 
 ## References
 
-* [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 14.12, 19.35.
+* [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, Exc. 14.12,
+  Exc. 19.35.
 -/
 
 universe u v
@@ -228,8 +229,8 @@ theorem mul_self_eq_zero_of_mem_peirceComponent (hc : C.IsElementaryIdempotent c
     hc.norm_eq_zero_of_mem_peirceComponent hmul hx, zero_smul, zero_smul, sub_zero]
 
 /-- Multiplication restricted to one off-diagonal Peirce component is alternating:
-`x * y + y * x = 0` [GPR, 14.12]. This is the linearization of the square-zero rule and does not
-divide by `2`. -/
+`x * y + y * x = 0` [GPR, Exc. 14.12]. This is the linearization of the square-zero rule and does
+not divide by `2`. -/
 theorem mul_add_mul_eq_zero_of_mem_peirceComponent
     (hc : C.IsElementaryIdempotent c) (hmul : C.IsMultiplicative)
     {x y : A} {i j : Bool} (hij : i ≠ j)
@@ -246,7 +247,7 @@ theorem mul_add_mul_eq_zero_of_mem_peirceComponent
         hc.mul_self_eq_zero_of_mem_peirceComponent hmul hij hx,
         hc.mul_self_eq_zero_of_mem_peirceComponent hmul hij hy, zero_add, add_zero] using hsum
 
-/-- Products in one off-diagonal Peirce component anticommute [GPR, 14.12]. This formulation is
+/-- Products in one off-diagonal Peirce component anticommute [GPR, Exc. 14.12]. This formulation is
 valid in characteristic `2`, where the negation may be invisible. -/
 theorem mul_eq_neg_mul_of_mem_peirceComponent
     (hc : C.IsElementaryIdempotent c) (hmul : C.IsMultiplicative)
@@ -258,7 +259,7 @@ theorem mul_eq_neg_mul_of_mem_peirceComponent
   exact hc.mul_add_mul_eq_zero_of_mem_peirceComponent hmul hij hx hy
 
 /-- The product of elements in opposite off-diagonal Peirce components is their negative polar
-pairing times the corresponding diagonal idempotent [GPR, 14.12, Exc. 19.35]:
+pairing times the corresponding diagonal idempotent [GPR, Exc. 14.12, Exc. 19.35]:
 `xy = -n(x, y)cᵢ` for `x ∈ Cᵢⱼ` and `y ∈ Cⱼᵢ`. -/
 theorem mul_eq_neg_polar_smul_peirceIdempotent
     (hc : C.IsElementaryIdempotent c) (hmul : C.IsMultiplicative)

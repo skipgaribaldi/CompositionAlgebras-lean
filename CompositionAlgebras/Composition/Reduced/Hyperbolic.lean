@@ -32,7 +32,7 @@ as an isometry equivalence and completes clause (iv) of `GPR 22.9`.
 
 ## References
 
-* [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 19.35, 22.9.
+* [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, Exc. 19.35, 22.9.
 -/
 
 universe u v

@@ -20,7 +20,7 @@ Defines `QuadraticMap.IsGPRIsotropic`: `Q` is isotropic iff it has a **unimodula
 ⚠ **This is not mathlib's `QuadraticMap.Anisotropic`.** `¬ Q.Anisotropic` unfolds to "there is a
 *nonzero* `x` with `Q x = 0`". GPR's isotropy demands a *unimodular* null vector — strictly stronger
 over a general ring, since unimodularity (mathlib's `Module.IsUnimodular`: some functional takes the
-value `1` at `u`, equivalently `R·u` is a free rank-1 direct summand, `GPR 9.13`, `GPR 9.17`) asks
+value `1` at `u`, equivalently `R·u` is a free rank-1 direct summand, `GPR 9.13`) asks
 for more than `u ≠ 0`. The two notions coincide over a field, and `GPR Exc. 12.38(c)` shows they
 also coincide for finitely generated projective (that is, finite free) modules over a PID (the
 module hypothesis is needed: the zero form on the `ℤ`-module `ℤ/2` has a nonzero null vector but no
@@ -71,8 +71,8 @@ preserve the null-vector equation.
 
 ## References
 
-* [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 11.17,
-  Exc. 12.38, 22.19.
+* [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 9.13,
+  11.17, Exc. 12.38, 22.19.
 * [GN] Gille, Neher, *Group schemes over LG-rings…*, European Journal of Mathematics **11** (2025),
   article 42, 6.5.
 -/
@@ -214,7 +214,7 @@ theorem isGPRIsotropic_dualProd {m : M} (hm : Module.IsUnimodular R m) :
 unimodular `u` with `q u = 0` — extends to a hyperbolic pair.
 
 Regularity is used exactly once, to solve `l = q(·, w)` for the functional `l` with `l u = 1`
-supplied by unimodularity (`GPR 9.17`); then `GPR`'s formula `v = -q(w) • u + w` finishes the job
+supplied by unimodularity (`GPR 9.13`); then `GPR`'s formula `v = -q(w) • u + w` finishes the job
 (`QuadraticMap.isHyperbolicPair_neg_smul_add`). -/
 theorem exists_isHyperbolicPair_of_isUnimodular (hQ : Q.IsGPRRegular) {u : M}
     (hu : Module.IsUnimodular R u) (hqu : Q u = 0) : ∃ v : M, IsHyperbolicPair Q u v := by

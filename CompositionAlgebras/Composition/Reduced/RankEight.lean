@@ -35,7 +35,7 @@ constant rank three. This is Petersson's converse theorem `GPR 22.15`.
 
 ## References
 
-* [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 19.35, 22.15.
+* [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, Exc. 19.35, 22.15.
 -/
 
 universe u v

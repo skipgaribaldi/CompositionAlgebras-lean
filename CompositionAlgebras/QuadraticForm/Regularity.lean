@@ -68,7 +68,7 @@ for finite-dimensional forms over a field of characteristic not `2` all four not
 * `QuadraticForm.IsGPRNonsingular` : `radical (Q.baseChangeOfProjective F) = ⊥` for every field `F`
   with `[Algebra R F]` (`GN C.8(e)`). GPR calls this property **non-singular**; readers may know
   the same condition as **non-degenerate**, **ordinary**, or **semiregular**, especially over
-  fields (`GPR 11.37`, Remark (2)).
+  fields (`GPR Exc. 11.37`, Remark (2)).
 * `QuadraticForm.IsEKMNondegenerate` : for `Q` over a *field* `F`,
   `radical (Q.baseChangeOfProjective K) = ⊥` for every field `K` with `[Algebra F K]`
   (`EKM Definition 7.17`, condition (1) of `Lemma

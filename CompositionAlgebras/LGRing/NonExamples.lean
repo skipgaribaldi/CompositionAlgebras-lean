@@ -41,7 +41,7 @@ admitting an element of odd negative valuation is not LG) is not formalized here
 
 ## References
 
-* [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, Exercise 11.42.
+* [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, Exercise Exc. 11.42.
 -/
 
 open Polynomial

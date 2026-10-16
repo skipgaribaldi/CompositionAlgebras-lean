@@ -12,8 +12,8 @@ import Mathlib.LinearAlgebra.Dual.Lemmas
 An element `m` of an `R`-module `M` is **unimodular** when some linear functional takes the value
 `1` at `m`. This is mathlib's `Module.IsUnimodular R m`, which the library uses throughout.
 `GPR 9.13` defines unimodularity differently, by asking that `R·m` be free of rank 1 and a direct
-summand of `M`; `GPR 9.17` shows the two agree. This file proves that agreement and supplies the
-API the rest of the library needs beyond what mathlib provides.
+summand of `M`, and observes there that the two agree. This file proves that agreement and supplies
+the API the rest of the library needs beyond what mathlib provides.
 
 This is not a norm-theoretic notion — no quadratic form is in sight here — but it is the piece
 `QuadraticForm/Isotropic.lean` needs to state GPR-sense isotropy correctly (`GPR 11.17`): a
@@ -26,10 +26,10 @@ This is not a norm-theoretic notion — no quadratic form is in sight here — b
 
 ## Main results
 
-* `Module.isUnimodular_iff_injective_toSpanSingleton_and_isComplemented_span` : **`GPR 9.17`**, the
-  algebraic half: `m` is unimodular iff `R·m` is free of rank 1 (`toSpanSingleton` injective) and a
-  direct summand of `M` (`Submodule.span R {m}` is complemented), which is the definition in
-  `GPR 9.13`.
+* `Module.isUnimodular_iff_injective_toSpanSingleton_and_isComplemented_span` : the equivalence
+  noted in **`GPR 9.13`** — `m` is unimodular iff `R·m` is free of rank 1 (`toSpanSingleton`
+  injective) and a direct summand of `M` (`Submodule.span R {m}` is complemented), which is the
+  definition there.
 * `Module.IsUnimodular.map` : unimodularity transports along a linear equivalence.
 * `Module.IsUnimodular.units_smul` : unimodularity is unaffected by scaling by a unit.
 * `Module.isUnimodular_of_ne_zero` : over a field, unimodular is *exactly* nonzero — every nonzero
@@ -62,9 +62,9 @@ variable {R : Type u} [CommRing R]
 
 namespace Module
 
-/-- **`GPR 9.17`**, the algebraic half: `m` is unimodular — hit by a functional — exactly when the
-cyclic submodule `R·m` is free of rank 1 (equivalently, `r • m = 0 → r = 0`) and a direct summand
-of `M`, which is how `GPR 9.13` defines unimodularity. -/
+/-- **`GPR 9.13`**: `m` is unimodular — hit by a functional — exactly when the cyclic submodule
+`R·m` is free of rank 1 (equivalently, `r • m = 0 → r = 0`) and a direct summand of `M`, which is
+how `GPR 9.13` defines unimodularity. -/
 theorem isUnimodular_iff_injective_toSpanSingleton_and_isComplemented_span {M : Type v}
     [AddCommGroup M] [Module R M] {m : M} :
     IsUnimodular R m ↔

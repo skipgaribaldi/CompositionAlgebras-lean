@@ -16,7 +16,7 @@ import Mathlib.Algebra.Polynomial.Degree.SmallDegree
 Over a field, the base-change-stable regularity condition `QuadraticForm.IsGPRNonsingular` admits
 a finite, checkable characterisation: `Q` is non-singular iff its radical vanishes *and* the
 radical of its polar form is at most a line. That is `EKM Lemma 7.16`, and `GPR Exercise 11.37`
-with one extra rung. This file proves both, and the part of `GPR 11.37`'s Remark (1) that
+with one extra rung. This file proves both, and the part of `GPR Exc. 11.37`'s Remark (1) that
 describes what the two cases look like.
 
 ## Relation to mathlib
@@ -53,13 +53,13 @@ stronger, and over a field it is GPR's **non-singular** rung. GPR's "non-degener
   `QuadraticForm.isEKMNondegenerate_iff_nondegenerate` : **`EKM Lemma 7.16`**, as the equivalence
   of conditions (1) and (3), and its restatement for `IsEKMNondegenerate`.
 * `QuadraticForm.isGPRNonsingular_tfae` : **`GPR Exercise 11.37`**, all four conditions.
-* `QuadraticForm.isGPRNonsingular_of_isAlgClosed` : `GPR 11.37` (iii) ⇒ (i) for an arbitrary
+* `QuadraticForm.isGPRNonsingular_of_isAlgClosed` : `GPR Exc. 11.37` (iii) ⇒ (i) for an arbitrary
   algebraically closed `K`, which is what makes the "for some `K`" reading of (iii) legitimate.
 * `QuadraticForm.isGPRRegular_xor_finrank_ker_polarBilin_eq_one`,
   `QuadraticForm.ringChar_eq_two_of_finrank_ker_polarBilin_eq_one`,
-  `QuadraticForm.exists_isometryEquiv_rankOne_prod` : **`GPR 11.37`, Remark (1)** — see below.
+  `QuadraticForm.exists_isometryEquiv_rankOne_prod` : **`GPR Exc. 11.37`, Remark (1)** — see below.
 
-## `GPR 11.37`, Remark (1), and what is missing
+## `GPR Exc. 11.37`, Remark (1), and what is missing
 
 Remark (1) says that for finite-dimensional `V`, condition (ii) holds iff *exactly one* of
 
@@ -193,7 +193,7 @@ theorem QuadraticForm.one_tmul_ne_zero {L : Type*} [Field L] [Algebra F L] {u : 
   exact hφ ((injective_iff_map_eq_zero _).mp (algebraMap F L).injective _
     (by simpa [Algebra.smul_def] using h1))
 
-/-- **`EKM 7.16`, (3) ⇒ (1); `GPR 11.37`, (ii) ⇒ (i).** If the radical of `Q` vanishes and the
+/-- **`EKM 7.16`, (3) ⇒ (1); `GPR Exc. 11.37`, (ii) ⇒ (i).** If the radical of `Q` vanishes and the
 radical of its polar form has dimension at most `1`, then `Q` is non-singular.
 
 If `dim (rad b_Q) = 0` the polar radical stays `0` after base change and there is nothing to
@@ -253,7 +253,7 @@ theorem QuadraticForm.isGPRNonsingular_of_radical_eq_bot_of_finrank_ker_le_one
       · exact mul_self_eq_zero.mp h
     rw [ha, TensorProduct.zero_tmul]
 
-/-- Half of **`EKM 7.16`, (2) ⇒ (3); `GPR 11.37`, (iii) ⇒ (ii)**: the radical of `Q` already
+/-- Half of **`EKM 7.16`, (2) ⇒ (3); `GPR Exc. 11.37`, (iii) ⇒ (ii)**: the radical of `Q` already
 vanishes as soon as it vanishes after *one* base change, algebraically closed or not.
 `(rad Q)_K ⊆ rad Q_K`, and `1 ⊗ u = 0` forces `u = 0`. -/
 theorem QuadraticForm.radical_eq_bot_of_radical_baseChangeOfProjective_eq_bot
@@ -271,8 +271,8 @@ theorem QuadraticForm.radical_eq_bot_of_radical_baseChangeOfProjective_eq_bot
   by_contra hune
   exact QuadraticForm.one_tmul_ne_zero hune hmem
 
-/-- The other half of **`EKM 7.16`, (2) ⇒ (3); `GPR 11.37`, (iii) ⇒ (ii)**: over an algebraically
-closed `K`, vanishing of `rad Q_K` bounds the dimension of the polar radical by `1`.
+/-- The other half of **`EKM 7.16`, (2) ⇒ (3); `GPR Exc. 11.37`, (iii) ⇒ (ii)**: over an
+algebraically closed `K`, vanishing of `rad Q_K` bounds the dimension of the polar radical by `1`.
 
 `Q_K` restricted to `rad b_{Q_K}` is anisotropic — an isotropic vector there would lie in
 `rad Q_K` — and over an algebraically closed field an anisotropic form has dimension at most one
@@ -293,7 +293,7 @@ theorem QuadraticForm.finrank_ker_polarBilin_le_one_of_isAlgClosed
   rw [hK, Submodule.mem_bot] at hmem
   exact Subtype.ext hmem
 
-/-- **`GPR 11.37`, (iii) ⇒ (i).** A single algebraically closed base change suffices: if
+/-- **`GPR Exc. 11.37`, (iii) ⇒ (i).** A single algebraically closed base change suffices: if
 `rad Q_K = 0` for one algebraically closed `K ⊇ F`, then `Q` is non-singular. -/
 theorem QuadraticForm.isGPRNonsingular_of_isAlgClosed {K : Type*} [Field K] [IsAlgClosed K]
     [Algebra F K] (Q : QuadraticForm F V) (hK : (Q.baseChangeOfProjective K).radical = ⊥) :
@@ -357,7 +357,7 @@ theorem QuadraticForm.isGPRNonsingular_tfae (Q : QuadraticForm F V) :
 
 end TFAE
 
-/-! ## Part D: `GPR 11.37`, Remark (1) -/
+/-! ## Part D: `GPR Exc. 11.37`, Remark (1) -/
 
 section Remark
 
@@ -515,7 +515,7 @@ theorem QuadraticForm.exists_isometryEquiv_rankOne_prod (Q : QuadraticForm F V)
       QuadraticMap.polar_smul_left, hpolar, smul_zero, add_zero, smul_eq_mul]
     ring
 
-/-- **`GPR 11.37`, Remark (1)**, assembled — *except* for the parity clause "`dim V` is odd" in
+/-- **`GPR Exc. 11.37`, Remark (1)**, assembled — *except* for the parity clause "`dim V` is odd" in
 case (a), which is not proved here (see the module docstring).
 
 For a non-degenerate `Q` on a finite-dimensional space over a field, exactly one of:

@@ -19,7 +19,7 @@ Let `c` be an idempotent in a unital alternative algebra and put `c₀ = c` and
 `x ↦ (cᵢ * x) * cⱼ`.
 
 The projections are complete, idempotent, and pairwise orthogonal. This is the linear-algebraic
-core of the singular Peirce decomposition [GPR, 14.12]. The range of the `(i, j)` projection is
+core of the singular Peirce decomposition [GPR, Exc. 14.12]. The range of the `(i, j)` projection is
 the Peirce component `Aᵢⱼ`.
 
 ## Main definitions
@@ -42,7 +42,7 @@ the Peirce component `Aᵢⱼ`.
 
 ## References
 
-* [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 14.12.
+* [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, Exc. 14.12.
 -/
 
 universe u v
@@ -199,7 +199,7 @@ theorem mem_peirceComponent_iff {c : A} (hc : c * c = c) {x : A} (i j : Bool) :
     exact ⟨x, hx⟩
 
 /-- The intrinsic characterization of a Peirce component: `x` lies in `Aᵢⱼ` exactly when
-`cᵢ * x = x = x * cⱼ` [GPR, 14.12]. -/
+`cᵢ * x = x = x * cⱼ` [GPR, Exc. 14.12]. -/
 theorem mem_peirceComponent_iff_mul_eq {c : A} (hc : c * c = c) {x : A} (i j : Bool) :
     x ∈ peirceComponent (R := R) c i j ↔
       peirceIdempotent c i * x = x ∧ x * peirceIdempotent c j = x := by
@@ -244,7 +244,7 @@ theorem mul_peirceIdempotent_of_mem {c : A} (hc : c * c = c) {x : A} {k l : Bool
       peirceIdempotent_mul_eq_zero hc (Ne.symm hjl), mul_zero]
 
 /-- Opposite off-diagonal Peirce components multiply into the corresponding diagonal component:
-`Aᵢⱼ Aⱼᵢ ⊆ Aᵢᵢ` for `i ≠ j` [GPR, 14.12]. -/
+`Aᵢⱼ Aⱼᵢ ⊆ Aᵢᵢ` for `i ≠ j` [GPR, Exc. 14.12]. -/
 theorem mul_mem_peirceComponent_of_opposite {c : A} (hc : c * c = c)
     {x y : A} {i j : Bool} (hij : i ≠ j)
     (hx : x ∈ peirceComponent (R := R) c i j)
@@ -268,7 +268,7 @@ theorem mul_mem_peirceComponent_of_opposite {c : A} (hc : c * c = c)
     exact ((associator_eq_zero_iff _ _ _).mp ha).trans (congr_arg (x * ·) hyei)
 
 /-- Multiplying two elements of one off-diagonal Peirce component lands in the opposite
-component: `Aᵢⱼ Aᵢⱼ ⊆ Aⱼᵢ` for `i ≠ j` [GPR, 14.12]. -/
+component: `Aᵢⱼ Aᵢⱼ ⊆ Aⱼᵢ` for `i ≠ j` [GPR, Exc. 14.12]. -/
 theorem mul_mem_peirceComponent_swap {c : A} (hc : c * c = c)
     {x y : A} {i j : Bool} (hij : i ≠ j)
     (hx : x ∈ peirceComponent (R := R) c i j)
@@ -360,7 +360,7 @@ theorem peirceDecompose_recombine {c : A} (hc : c * c = c)
       (j := p.2) (x q)
   · simp
 
-/-- The singular Peirce decomposition of an alternative algebra [GPR, 14.12]. -/
+/-- The singular Peirce decomposition of an alternative algebra [GPR, Exc. 14.12]. -/
 def peirceDecomposition {c : A} (hc : c * c = c) :
     A ≃ₗ[R] ((p : Bool × Bool) → peirceComponent (R := R) c p.1 p.2) where
   __ := peirceDecompose (R := R) c

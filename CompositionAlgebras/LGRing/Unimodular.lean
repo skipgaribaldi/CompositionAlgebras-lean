@@ -39,7 +39,7 @@ For `t c : Fin n → R` set `m := π t` and `l := ∑ᵢ cᵢ · (proj i ∘ σ)
 
   `l m = ∑ᵢ cᵢ · (e t)ᵢ = ∑ᵢ ∑ⱼ Eᵢⱼ tⱼ cᵢ`,
 
-which is exactly `bilinearPairing E` evaluated at the point `(t, c)` — and by `GPR 9.17`
+which is exactly `bilinearPairing E` evaluated at the point `(t, c)` — and by `GPR 9.13`
 (`Module.isUnimodular_of_apply_eq_one`), a value of `1` produces a unimodular element.
 So it suffices to know that `bilinearPairing E` represents a unit over `R`, and by the LG axiom
 that reduces to representing a unit over every residue field `k = R ⧸ 𝔪`.
@@ -73,7 +73,7 @@ polynomial axiom, at the cost of choosing a presentation of `M`.
 
 * [GN] Gille, Neher, *Group schemes over LG-rings and applications to cancellation theorems and
   Azumaya algebras*, European Journal of Mathematics **11** (2025), article 42, Lemma 2.6(a).
-* [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 9.17, 11.24.
+* [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 9.13, 11.24.
 -/
 
 universe u v

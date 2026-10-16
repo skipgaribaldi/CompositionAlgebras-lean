@@ -36,7 +36,7 @@ the proof actually consumes — having isotropic norm, are all the same conditio
 `(i) ↔ (ii)` holds in **every** conic algebra, with no regularity, no projectivity, no
 multiplicativity and no hypothesis on `2`: both directions are a direct computation with `c` and
 `c̄`. `(i) → (iii)` is likewise free — the trace is a functional taking the value `1` at `c`,
-which is exactly unimodularity (`GPR 9.17`). Only `(iii) → (i)` costs anything, and what it
+which is exactly unimodularity (`GPR 9.13`). Only `(iii) → (i)` costs anything, and what it
 costs is `GPR`'s own argument: regularity of the norm and multiplicativity.
 
 ## Main definitions
@@ -81,8 +81,8 @@ the same data, presented once.
 
 ## References
 
-* [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, Exc. 16.23,
-  21.19, 22.6, 22.7, 22.9.
+* [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 9.13,
+  Exc. 16.23, 21.19, 22.6, 22.7, 22.9.
 -/
 
 universe u v
@@ -162,7 +162,7 @@ theorem isHyperbolicPair (hc : C.IsElementaryIdempotent c) :
   polar_eq_one := hc.polar_conj
 
 omit [SMulCommClass k A A] [IsScalarTower k A A] in
-/-- An elementary idempotent is **unimodular** (`GPR 9.17`): the trace is a functional taking the
+/-- An elementary idempotent is **unimodular** (`GPR 9.13`): the trace is a functional taking the
 value `1` on it. -/
 theorem isUnimodular (hc : C.IsElementaryIdempotent c) : Module.IsUnimodular k c :=
   Module.isUnimodular_of_apply_eq_one (f := C.trace) hc.trace_eq_one

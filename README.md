@@ -467,7 +467,7 @@ and §23 is the comparison between those and algebra isomorphisms.
 - **Isotropy, GPR sense (`GPR 11.17`).** `q` is isotropic iff there is a **unimodular** `u` with
   `q(u) = 0`. This is *not* mathlib's notion; see [Boundaries and traps](#boundaries-and-traps).
   Uses mathlib's `Module.IsUnimodular` (a functional takes the value `1` at `u`), which agrees
-  with the definition in `GPR 9.13` (`k·u` a free direct summand) by `GPR 9.17`.
+  with the definition in `GPR 9.13` (`k·u` a free direct summand), as noted there.
 - **`GPR 22.9`.** For rank > 1: reduced ⟺ contains a split quadratic étale subalgebra ⟺ norm
   isotropic ⟺ norm hyperbolic. The first three are **proved** (`Composition/Reduced/Defs.lean`),
   through the equivalent (in rank > 1, `GPR 22.7`) condition *has an elementary idempotent*.
@@ -482,17 +482,17 @@ and §23 is the comparison between those and algebra isomorphisms.
   (`Composition/Reduced/RankTwo.lean`), and for conic algebras, with no regularity or
   multiplicativity hypothesis: constant rank 2 plus an elementary idempotent makes
   `(a, b) ↦ a c + b c̄` an isomorphism `k × k ≅ A`.
-- **Peirce decomposition (`GPR 14.12`, `GPR Exc. 19.35(1)–(6)`).** **Proved.** For an idempotent `c`
-  in an alternative algebra, the four maps `x ↦ (cᵢx)cⱼ` are complete pairwise orthogonal
-  projections and give a linear equivalence with their four ranges
-  (`Nonassociative/Alternative/Peirce.lean`). For an elementary idempotent in a multiplicative
-  conic alternative algebra, the diagonal components are exactly `k c₁` and `k c₂`, every element
-  has Peirce coordinates, and the norm, polar, trace, and conjugation formulas are proved
+- **Peirce decomposition (`GPR Exc. 14.12`, `GPR Exc. 19.35(1)–(6)`).** **Proved.** For an
+  idempotent `c` in an alternative algebra, the four maps `x ↦ (cᵢx)cⱼ` are complete pairwise
+  orthogonal projections and give a linear equivalence with their four ranges
+  (`Nonassociative/Alternative/Peirce.lean`). For an elementary idempotent in a multiplicative conic
+  alternative algebra, the diagonal components are exactly `k c₁` and `k c₂`, every element has
+  Peirce coordinates, and the norm, polar, trace, and conjugation formulas are proved
   (`Composition/Reduced/Peirce.lean`). When the norm is regular, the polar pairing identifies
-  `C₁₂ ≃ C₂₁*`; `GPR 19.11` supplies regularity for constant-rank composition algebras of rank
-  other than one. The trace form `(x, y, z) ↦ t((xy)z)` on either off-diagonal component is also
-  proved alternating, completing the final assertion of `GPR Exc. 19.35`. The Peirce
-  multiplication rules from `GPR 14.12` used downstream are proved as well.
+  `C₁₂ ≃ C₂₁*`; `GPR 19.11` supplies regularity for constant-rank composition algebras of rank other
+  than one. The trace form `(x, y, z) ↦ t((xy)z)` on either off-diagonal component is also proved
+  alternating, completing the final assertion of `GPR Exc. 19.35`. The Peirce multiplication rules
+  from `GPR Exc. 14.12` used downstream are proved as well.
 - **`GPR 22.13`** (Petersson). Reduced quaternion algebras are the `Endₖ(k ⊕ L)` for `L` a line
   bundle; split iff `L` is free. **Proved**
   (`Composition/Reduced/TwistedMatrix.lean`): `GPR 22.12`'s algebra of `L`-twisted matrices is
