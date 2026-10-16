@@ -57,17 +57,17 @@ variable {α : Type u} [NonUnitalNonAssocRing α] [IsAlternative α]
 -/
 theorem pow_assoc (m n : ℕ) (a : α) :
     nonassocPow m a * nonassocPow n a = nonassocPow (m + n + 1) a := by
-  have hpow : ∀ r : ℕ, NonAssocRingClosure ({a, a} : Set α) (nonassocPow r a) := by
+  have hpow : ∀ r : ℕ, nonassocPow r a ∈ NonUnitalSubring.closure ({a, a} : Set α) := by
     intro r
     induction r with
-    | zero => exact NonAssocRingClosure.of a (Or.inl rfl)
-    | succ r hr => exact NonAssocRingClosure.mul (NonAssocRingClosure.of a (Or.inl rfl)) hr
+    | zero => exact NonUnitalSubring.subset_closure (Or.inl rfl)
+    | succ r hr => exact mul_mem (NonUnitalSubring.subset_closure (Or.inl rfl)) hr
   induction m with
   | zero =>
       simpa only [nonassocPow_zero, Nat.zero_add] using (nonassocPow_succ n a).symm
   | succ m ih =>
       rw [nonassocPow_succ]
-      rw [artin_two_generated_assoc a a (NonAssocRingClosure.of a (Or.inl rfl))
+      rw [artin_two_generated_assoc a a (NonUnitalSubring.subset_closure (Or.inl rfl))
         (hpow m) (hpow n), ih]
       rw [← nonassocPow_succ]
       congr 1

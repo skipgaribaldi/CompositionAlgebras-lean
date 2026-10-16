@@ -23,9 +23,12 @@ moves or renames it, fix the import — do not introduce a local copy. See `AGEN
 
 ## TODO
 
-* The nucleus (`LeftNucleus`, `MiddleNucleus`, `RightNucleus`, `Nucleus`) and the centre, as
-  associative sub-structures. These are **not** decoration: the nucleus is the tool used to prove
-  the hard direction of Artin's theorem (`Alternative/Artin.lean`).
+* The nucleus (`LeftNucleus`, `MiddleNucleus`, `RightNucleus`, `Nucleus`), as associative
+  sub-structures. This is **not** decoration: the nucleus is the tool used to prove the hard
+  direction of Artin's theorem (`Alternative/Artin.lean`). The centre needs no local definition:
+  mathlib's `NonUnitalSubring.center` (and `Subring.center`, `NonUnitalSubalgebra.center`) is
+  built on `Set.center`, whose `IsMulCentral` already asks for associativity as well as
+  commutativity, and mathlib makes it a `NonUnitalCommRing`.
 * Bundle the associator `R`-trilinearly (`associatorₗ`) once a base ring is in play.
 
 ## References

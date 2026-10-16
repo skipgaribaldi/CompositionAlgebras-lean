@@ -91,7 +91,7 @@ theorem IsComposition.isSplitOfRank_eight_of_forall_surjective_norm
     intro hzero
     have h1 : ((1 : B) : A) = ((0 : B) : A) :=
       congrArg (fun z : B ↦ (z : A)) (congrArg Prod.snd hzero)
-    simp only [NonAssocSubalgebra.coe_one, ZeroMemClass.coe_zero] at h1
+    simp only [OneMemClass.coe_one, ZeroMemClass.coe_zero] at h1
     exact one_ne_zero h1
   refine h.isSplitOfRank_of_exists_ne_zero_norm_eq_zero hA (Or.inr (Or.inr rfl))
     (x := cayToAlgebra C B v p) ?_ ((hnorm p).trans hpnorm)

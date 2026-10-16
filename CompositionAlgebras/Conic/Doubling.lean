@@ -267,7 +267,7 @@ omit [SMulCommClass k A A] in
 theorem cayToAlgebra_one : cayToAlgebra C B v 1 = 1 := by
   rw [cayToAlgebra_apply]
   change ((1 : B) : A) + ((0 : B) : A) * v = 1
-  rw [NonAssocSubalgebra.coe_one, ZeroMemClass.coe_zero, zero_mul, add_zero]
+  rw [OneMemClass.coe_one, ZeroMemClass.coe_zero, zero_mul, add_zero]
 
 variable (hBv : ∀ b ∈ B, polar C.norm b v = 0)
 include hBv

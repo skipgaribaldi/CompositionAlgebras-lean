@@ -21,7 +21,9 @@ adds the missing one-field wrapper.
 
 ⚠ This is deliberately not named `Subalgebra`: mathlib owns that name for associative algebras.
 The underlying multiplication and scalar-action API is inherited from
-`NonUnitalSubalgebra`; only the unit and its laws are new.
+`NonUnitalSubalgebra`; only the unit is new. With it a `NonAssocSubalgebra` is a `SubringClass`,
+from which mathlib supplies the unit, the casts and the `NonAssocRing` structure on each
+subalgebra (`SubringClass.toNonAssocRing`).
 -/
 
 universe u v
@@ -47,29 +49,14 @@ instance : SetLike (NonAssocSubalgebra R A) A where
         subst T
         rfl
 
-instance : NonUnitalSubsemiringClass (NonAssocSubalgebra R A) A where
+instance : SubringClass (NonAssocSubalgebra R A) A where
   zero_mem {s} := s.toNonUnitalSubalgebra.zero_mem
   add_mem {s} := s.toNonUnitalSubalgebra.add_mem
   mul_mem {s} := s.toNonUnitalSubalgebra.mul_mem
+  one_mem {s} := s.one_mem
+  neg_mem {s} {_} hx := s.toNonUnitalSubalgebra.neg_mem hx
 
 instance : SMulMemClass (NonAssocSubalgebra R A) R A where
   smul_mem {s} r {_} hx := s.toNonUnitalSubalgebra.smul_mem r hx
-
-instance : NegMemClass (NonAssocSubalgebra R A) A where
-  neg_mem {s} {_} hx := s.toNonUnitalSubalgebra.neg_mem hx
-
-instance : NonUnitalSubringClass (NonAssocSubalgebra R A) A where
-
-instance (S : NonAssocSubalgebra R A) : One S := ⟨⟨1, S.one_mem⟩⟩
-
-@[simp, norm_cast] theorem coe_one (S : NonAssocSubalgebra R A) : ((1 : S) : A) = 1 := rfl
-
-instance (S : NonAssocSubalgebra R A) : NatCast S := ⟨Nat.unaryCast⟩
-
-instance (S : NonAssocSubalgebra R A) : IntCast S := ⟨Int.castDef⟩
-
-instance (S : NonAssocSubalgebra R A) : NonAssocRing S :=
-  NonAssocRing.mk (fun x ↦ Subtype.ext (by exact one_mul (x : A)))
-    (fun x ↦ Subtype.ext (by exact mul_one (x : A)))
 
 end NonAssocSubalgebra

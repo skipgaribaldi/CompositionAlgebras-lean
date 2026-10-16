@@ -15,16 +15,14 @@ import Mathlib.RingTheory.LocalRing.MaximalIdeal.Basic
 workhorse instance for the rest of the development — local rings, Artinian rings and fields are
 all semilocal.
 
-## Main definitions
-
-* `IsSemilocalRing R` : `R` has only finitely many maximal ideals.
+Semilocality is expressed in mathlib's way, as `[Finite (MaximalSpectrum R)]`.
 
 ## Main results
 
 * `IsLGRing.of_ringEquiv` : the LG property transfers along a ring isomorphism.
 * `IsLGRing.quotient_span_one_sub_of_isIdempotentElem` : an idempotent factor of an LG ring is
   LG.
-* `IsSemilocalRing.isLGRing` : **`GPR 11.22`**, semilocal implies LG.
+* `isLGRing_of_finite_maximalSpectrum` : **`GPR 11.22`**, semilocal implies LG.
 * `isLGRing_of_isLocalRing` : every commutative local ring is LG.
 
 ## Proof idea
@@ -49,10 +47,6 @@ set `s` of maximal ideals, with the empty set giving the zero ring
 -/
 
 universe u
-
-/-- A commutative ring is **semilocal** if it has only finitely many maximal ideals. -/
-def IsSemilocalRing (R : Type u) [CommRing R] : Prop :=
-  {𝔪 : Ideal R | 𝔪.IsMaximal}.Finite
 
 /-- The LG property transfers along a ring isomorphism: maximal ideals correspond
 (`Ideal.map_isMaximal_of_equiv`), the residue fields correspond (`Ideal.quotientEquiv`), and
@@ -134,10 +128,14 @@ theorem isLGRing_quotient_biInf {R : Type u} [CommRing R] (s : Finset (Ideal R))
     let : Field (R ⧸ 𝔪) := Ideal.Quotient.field 𝔪
     exact isLGRing_of_field _
 
-/-- **`GPR 11.22`**: every semilocal ring is an LG-ring. -/
-theorem IsSemilocalRing.isLGRing {R : Type u} [CommRing R] (h : IsSemilocalRing R) :
-    IsLGRing R := by
+/-- **`GPR 11.22`**: every semilocal ring is an LG-ring. Semilocality is mathlib's
+`[Finite (MaximalSpectrum R)]`: `R` has only finitely many maximal ideals. -/
+theorem isLGRing_of_finite_maximalSpectrum (R : Type u) [CommRing R]
+    [Finite (MaximalSpectrum R)] : IsLGRing R := by
   classical
+  have h : {𝔪 : Ideal R | 𝔪.IsMaximal}.Finite :=
+    (Set.finite_range (MaximalSpectrum.asIdeal : MaximalSpectrum R → Ideal R)).subset
+      fun 𝔪 h𝔪 ↦ ⟨⟨𝔪, h𝔪⟩, rfl⟩
   rw [isLGRing_iff_isLGRing_quotient_jacobson]
   have hjac : Ring.jacobson R = ⨅ 𝔪 ∈ h.toFinset, 𝔪 := by
     rw [Ring.jacobson_eq_sInf_isMaximal]
@@ -149,15 +147,4 @@ theorem IsSemilocalRing.isLGRing {R : Type u} [CommRing R] (h : IsSemilocalRing 
 /-- Every commutative local ring is an LG ring, since it has a unique maximal ideal and hence is
 semilocal. -/
 theorem isLGRing_of_isLocalRing (R : Type u) [CommRing R] [IsLocalRing R] : IsLGRing R :=
-  IsSemilocalRing.isLGRing (by
-    have hset : {P : Ideal R | P.IsMaximal} = {IsLocalRing.maximalIdeal R} := by
-      ext P
-      constructor
-      · intro hP
-        exact Set.mem_singleton_iff.mpr (IsLocalRing.eq_maximalIdeal hP)
-      · intro hP
-        rw [Set.mem_singleton_iff.mp hP]
-        exact IsLocalRing.maximalIdeal.isMaximal R
-    change {P : Ideal R | P.IsMaximal}.Finite
-    rw [hset]
-    exact Set.finite_singleton _)
+  isLGRing_of_finite_maximalSpectrum R

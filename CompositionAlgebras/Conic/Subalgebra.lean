@@ -60,7 +60,7 @@ def restrict : ConicAlgebra k B where
   norm_one := C.norm_one
   mul_self b := by
     apply Subtype.ext
-    simp only [AddSubgroupClass.coe_sub, SetLike.val_smul, NonAssocSubalgebra.coe_one,
+    simp only [AddSubgroupClass.coe_sub, SetLike.val_smul, OneMemClass.coe_one,
       MulMemClass.coe_mul]
     exact C.mul_self (b : A)
 
@@ -75,7 +75,7 @@ omit [SMulCommClass k A A] [IsScalarTower k A A] in
 omit [SMulCommClass k A A] [IsScalarTower k A A] in
 @[simp] theorem coe_restrict_conj (b : B) : ((C.restrict B).conj b : A) = C.conj (b : A) := by
   rw [conj_apply, conj_apply]
-  simp only [AddSubgroupClass.coe_sub, SetLike.val_smul, NonAssocSubalgebra.coe_one,
+  simp only [AddSubgroupClass.coe_sub, SetLike.val_smul, OneMemClass.coe_one,
     restrict_trace_apply]
 
 omit [SMulCommClass k A A] [IsScalarTower k A A] in

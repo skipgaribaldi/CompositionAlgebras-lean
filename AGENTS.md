@@ -66,7 +66,7 @@ local variation. Highlights, since they are the ones most often violated:
 - **100 character line limit.** Hard.
 - **Two-space indentation.** No tabs.
 - Theorem names are `snake_case` descriptions of the statement in terms of the symbols appearing
-  in it, reading left to right: `norm_mul`, `associator_swap`, `isLGRing_of_isSemilocalRing`.
+  in it, reading left to right: `norm_mul`, `associator_swap`, `isLGRing_of_isLocalRing`.
 - Types and structures are `UpperCamelCase`; terms and proofs are `lowerCamelCase` or
   `snake_case` per the mathlib rules (`def`s producing data: `lowerCamelCase`; `theorem`/`lemma`:
   `snake_case`).
@@ -134,7 +134,7 @@ CompositionAlgebras/
                          -- base change of alternating trilinear forms
     VectorProduct.lean   -- vector product pairs (GPR 22.14)
   Nonassociative/        -- layer 0: alternative algebras know nothing about norms
-    Associator.lean      -- associator, nucleus, center
+    Associator.lean      -- associator API, nucleus (the center is mathlib's)
     Subalgebra.lean      -- unital subalgebras of non-associative algebras
     Alternative/
       Defs.lean          -- IsAlternative, associator alternation

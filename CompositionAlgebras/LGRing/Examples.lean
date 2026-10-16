@@ -19,7 +19,7 @@ import CompositionAlgebras.LGRing.Defs
 `GPR 11.22` continues: semilocal rings are LG, via `GPR 11.21` (`R/Jac(R)` is a finite product of
 fields for `R` semilocal, and both the Jacobson-quotient and finite-product cases of the LG
 property transfer). Both halves of `GPR 11.21` are now proved — `LGRing/Jacobson.lean` and
-`LGRing/Products.lean` — and `GPR 11.22` itself is `IsSemilocalRing.isLGRing` in
+`LGRing/Products.lean` — and `GPR 11.22` itself is `isLGRing_of_finite_maximalSpectrum` in
 `LGRing/Semilocal.lean`, which is where this theorem is used.
 
 ## References

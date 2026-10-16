@@ -267,8 +267,9 @@ Foundational quadratic-form theory, absent from mathlib. Independent of everythi
 ### Layer 1 — Associator, nucleus, center
 
 `associator x y z = (x * y) * z - x * (y * z)` on a `NonUnitalNonAssocRing`, bundled trilinearly
-over an algebra. Left/middle/right nuclei and the center as associative sub-structures; the
-nucleus is an associative subring and the center is commutative.
+over an algebra. Left/middle/right nuclei as associative sub-structures; the nucleus is an
+associative subring. The center is mathlib's (`NonUnitalSubring.center`, built on `IsMulCentral`,
+which includes the associativity conditions), and mathlib already proves it commutative.
 
 ### Layer 2 — Alternative algebras
 
