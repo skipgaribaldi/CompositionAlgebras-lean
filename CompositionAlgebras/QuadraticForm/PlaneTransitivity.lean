@@ -80,7 +80,7 @@ universe u v v₁
 
 namespace QuadraticForm
 
-open _root_.QuadraticMap (polar polar_comm polar_zero_left polar_zero_right
+open _root_.QuadraticMap (polar polar_comm polar_zero_left polar_zero_right polar_comp_apply
   IsHyperbolicPair)
 
 /-- **The residue-field core of `Dias II.6.1`.** Let `q` be a quadratic form with vanishing radical
@@ -187,11 +187,6 @@ section LG
 open scoped TensorProduct
 
 variable {R : Type u} [CommRing R] {M : Type v} [AddCommGroup M] [Module R M]
-
-/-- The polar form of a pullback. -/
-theorem polar_comp_apply {P : Type*} [AddCommGroup P] [Module R P] (q : QuadraticForm R M)
-    (f : P →ₗ[R] M) (x y : P) : polar (q.comp f) x y = polar q (f x) (f y) := by
-  simp [QuadraticMap.polar, QuadraticMap.comp_apply]
 
 /-- **`Dias II.6.1`.** Over an LG ring, for `q` non-singular on a finitely generated projective
 module, and `α β m` with `α β + q m = 0` whose reductions never vanish simultaneously, some `y`

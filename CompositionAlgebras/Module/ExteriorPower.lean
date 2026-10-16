@@ -11,19 +11,18 @@ import Mathlib.RingTheory.TensorProduct.Basic
 /-!
 # Exterior powers of finite projective modules
 
-This file proves the perfect-duality statement for exterior powers that is missing from mathlib:
-for a finitely generated projective module `M`, the determinant pairing identifies `⋀ⁿ(M*)`
-with `( ⋀ⁿ M )*`. This is `GPR 21.7`.
+This file proves the perfect-duality statement for exterior powers of projective modules, which
+is missing from mathlib: for a finitely generated projective module `M`, the determinant pairing
+identifies `⋀ⁿ(M*)` with `( ⋀ⁿ M )*`. This is `GPR 21.7`.
 
-The proof first identifies the pairing on a finite free module by comparing the exterior bases.
-For a finite projective module, write `M` as a retract of a finite free module. Naturality of the
+mathlib has the finite free case (`exteriorPower.bijective_pairingDual`). For a finite projective
+module, write `M` as a retract of a finite free module. Naturality of the
 pairing transports the inverse across that retraction, avoiding any choice of local bases.
 
 ## Main results
 
 * `exteriorPower.baseChangeLinear` : the canonical base-change map for exterior powers.
 * `exteriorPower.pairingDual_naturality` : naturality of the determinant pairing.
-* `exteriorPower.pairingDual_bijective_of_basis` : perfect duality for a based finite free module.
 * `exteriorPower.pairingDualEquiv` : perfect duality for every finite projective module.
 
 ## References
@@ -68,34 +67,6 @@ theorem pairingDual_naturality (n : ℕ) (f : M →ₗ[R] N) :
   ext g v
   simp
 
-/-- For a module with a finite basis, the determinant pairing identifies the exterior power of
-the dual with the dual of the exterior power. -/
-theorem pairingDual_bijective_of_basis {I : Type*} [Finite I] [LinearOrder I]
-    (b : Module.Basis I R M) (n : ℕ) : Function.Bijective (pairingDual R M n) := by
-  let := Fintype.ofFinite I
-  let b₁ := b.dualBasis.exteriorPower n
-  let b₂ := (b.exteriorPower n).dualBasis
-  let e : (⋀[R]^n (Module.Dual R M)) ≃ₗ[R] Module.Dual R (⋀[R]^n M) :=
-    b₁.equiv b₂ (Equiv.refl _)
-  have he : pairingDual R M n = e.toLinearMap := by
-    apply b₁.ext
-    intro s
-    change pairingDual R M n (b₁ s) = e (b₁ s)
-    rw [show e (b₁ s) = b₂ s by simp [e]]
-    dsimp only [b₁, b₂]
-    rw [exteriorPower.basis_apply]
-    have hs : exteriorPower.ιMulti_family R n b.dualBasis s =
-        exteriorPower.ιMulti_family R n b.coord s := by
-      congr 1
-      funext i
-      simp
-    rw [hs]
-    change exteriorPower.ιMultiDual R n b s = _
-    rw [← exteriorPower.basis_coord]
-    exact (congrFun (b.exteriorPower n).coe_dualBasis s).symm
-  rw [he]
-  exact e.bijective
-
 /-- **`GPR 21.7`.** For a finitely generated projective module, the canonical determinant
 pairing `⋀ⁿ(M*) → (⋀ⁿ M)*` is bijective. -/
 theorem pairingDual_bijective_of_projective [Module.Finite R M] [Module.Projective R M]
@@ -105,7 +76,7 @@ theorem pairingDual_bijective_of_projective [Module.Finite R M] [Module.Projecti
   let P := Fin d → R
   let eP : (⋀[R]^n (Module.Dual R P)) ≃ₗ[R] Module.Dual R (⋀[R]^n P) :=
     LinearEquiv.ofBijective (pairingDual R P n)
-      (pairingDual_bijective_of_basis (Pi.basisFun R (Fin d)) n)
+      (bijective_pairingDual R P n)
   let inverse : Module.Dual R (⋀[R]^n M) →ₗ[R] ⋀[R]^n (Module.Dual R M) :=
     map n i.dualMap ∘ₗ eP.symm.toLinearMap ∘ₗ (map n r).dualMap
   have hinvRight : Function.RightInverse inverse (pairingDual R M n) := by

@@ -104,15 +104,6 @@ theorem IsLGRing.quotient_span_one_sub_of_isIdempotentElem {R : Type u} [CommRin
     IsLGRing.of_ringEquiv eprod hLG
   exact (isLGRing_prod_iff.mp hprod).1
 
-/-- Two distinct maximal ideals are coprime. -/
-theorem Ideal.isCoprime_of_isMaximal_ne {R : Type u} [CommRing R] {I J : Ideal R}
-    (hI : I.IsMaximal) (hJ : J.IsMaximal) (h : I ≠ J) : IsCoprime I J := by
-  rw [Ideal.isCoprime_iff_sup_eq]
-  by_contra hsup
-  have h1 : I = I ⊔ J := hI.eq_of_le hsup le_sup_left
-  have h2 : J ≤ I := by rw [h1]; exact le_sup_right
-  exact h (hJ.eq_of_le hI.ne_top h2).symm
-
 /-- For any finite set `s` of maximal ideals of `R`, the quotient `R ⧸ (⨅ 𝔪 ∈ s, 𝔪)` is an
 LG-ring. Induction on `s`: the empty set gives the zero ring, and the induction step splits off
 one maximal ideal by the Chinese Remainder Theorem and applies `isLGRing_prod_iff`. -/
@@ -131,7 +122,8 @@ theorem isLGRing_quotient_biInf {R : Type u} [CommRing R] (s : Finset (Ideal R))
       fun 𝔫 h𝔫 ↦ hs 𝔫 (Finset.mem_insert_of_mem h𝔫)
     have hcop : IsCoprime 𝔪 (⨅ 𝔫 ∈ t, 𝔫) :=
       Ideal.isCoprime_biInf fun 𝔫 h𝔫 ↦
-        Ideal.isCoprime_of_isMaximal_ne h𝔪 (ht 𝔫 h𝔫) (by rintro rfl; exact h𝔪t h𝔫)
+        have := ht 𝔫 h𝔫
+        Ideal.isCoprime_of_isMaximal (by rintro rfl; exact h𝔪t h𝔫)
     have hinsert : (⨅ 𝔫 ∈ insert 𝔪 t, 𝔫) = 𝔪 ⊓ (⨅ 𝔫 ∈ t, 𝔫) := by
       rw [Finset.iInf_insert]
     rw [hinsert]

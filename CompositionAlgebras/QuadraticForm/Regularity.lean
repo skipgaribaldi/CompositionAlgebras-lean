@@ -1024,45 +1024,27 @@ theorem QuadraticMap.radical_prod_eq_bot {Q₁ : QuadraticForm R M₁} {Q₂ : Q
   rw [h₂, Submodule.mem_bot] at hmem
   exact Prod.ext hx1 hmem
 
-/-- The polar form of a precomposition is the precomposed polar form. -/
-theorem QuadraticMap.polar_comp_linearEquiv {M' : Type*} [AddCommGroup M'] [Module R M']
-    (Q : QuadraticMap R M N) (e : M' ≃ₗ[R] M) (x y : M') :
-    QuadraticMap.polar (Q.comp e.toLinearMap) x y = QuadraticMap.polar Q (e x) (e y) := by
-  simp [QuadraticMap.polar, QuadraticMap.comp_apply, map_add]
+/-- The polar form of a precomposition is the precomposed polar form: the pointwise form of
+mathlib's `QuadraticMap.polarBilin_comp`. -/
+theorem QuadraticMap.polar_comp_apply {M' : Type*} [AddCommGroup M'] [Module R M']
+    (Q : QuadraticMap R M N) (f : M' →ₗ[R] M) (x y : M') :
+    QuadraticMap.polar (Q.comp f) x y = QuadraticMap.polar Q (f x) (f y) := by
+  simpa using LinearMap.congr_fun₂ (Q.polarBilin_comp f) x y
 
-/-- Radical membership transports along a linear equivalence. -/
+/-- Radical membership transports along a linear equivalence: mathlib's
+`QuadraticMap.IsometryEquiv.map_radical` for the isometry `Q ≅ Q ∘ e`. -/
 theorem QuadraticMap.mem_radical_comp_linearEquiv {M' : Type*} [AddCommGroup M'] [Module R M']
     (Q : QuadraticMap R M N) (e : M' ≃ₗ[R] M) {x : M'} :
     x ∈ (Q.comp e.toLinearMap).radical ↔ e x ∈ Q.radical := by
-  constructor
-  · rintro ⟨h1, h2⟩
-    refine ⟨h1, LinearMap.ext fun z ↦ ?_⟩
-    have h := DFunLike.congr_fun h2 (e.symm z)
-    rw [QuadraticMap.polarBilin_apply_apply, QuadraticMap.polar_comp_linearEquiv,
-      e.apply_symm_apply, LinearMap.zero_apply] at h
-    rw [QuadraticMap.polarBilin_apply_apply, h, LinearMap.zero_apply]
-  · rintro ⟨h1, h2⟩
-    refine ⟨h1, LinearMap.ext fun z ↦ ?_⟩
-    have h := DFunLike.congr_fun h2 (e z)
-    rw [QuadraticMap.polarBilin_apply_apply, LinearMap.zero_apply] at h
-    rw [QuadraticMap.polarBilin_apply_apply, QuadraticMap.polar_comp_linearEquiv, h,
-      LinearMap.zero_apply]
+  rw [← (Q.isometryEquivOfCompLinearEquiv e).map_radical]
+  exact Submodule.mem_map_equiv (e := (Q.isometryEquivOfCompLinearEquiv e).toLinearEquiv) _
 
 /-- Transporting a vanishing radical along a linear equivalence. -/
 theorem QuadraticMap.radical_comp_linearEquiv_eq_bot_iff {M' : Type*} [AddCommGroup M']
     [Module R M'] (Q : QuadraticMap R M N) (e : M' ≃ₗ[R] M) :
     (Q.comp e.toLinearMap).radical = ⊥ ↔ Q.radical = ⊥ := by
-  constructor
-  · intro h
-    refine (Submodule.eq_bot_iff _).mpr fun y hy ↦ ?_
-    have hx : e.symm y ∈ (Q.comp e.toLinearMap).radical := by
-      rw [QuadraticMap.mem_radical_comp_linearEquiv, e.apply_symm_apply]; exact hy
-    rw [h, Submodule.mem_bot] at hx
-    rw [← e.apply_symm_apply y, hx, map_zero]
-  · intro h
-    refine (Submodule.eq_bot_iff _).mpr fun x hx ↦ ?_
-    rw [QuadraticMap.mem_radical_comp_linearEquiv, h, Submodule.mem_bot] at hx
-    exact e.injective (by rw [hx, map_zero])
+  rw [← (Q.isometryEquivOfCompLinearEquiv e).map_radical]
+  exact Submodule.map_eq_bot_iff (e := (Q.isometryEquivOfCompLinearEquiv e).toLinearEquiv)
 
 /-- **Base change of an orthogonal sum is the orthogonal sum of the base changes**, along the
 canonical `A ⊗[R] (M₁ × M₂) ≃ (A ⊗[R] M₁) × (A ⊗[R] M₂)`. Checked on pure tensors `1 ⊗ₜ m`,

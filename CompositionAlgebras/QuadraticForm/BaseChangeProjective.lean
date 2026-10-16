@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
 import Mathlib.LinearAlgebra.QuadraticForm.TensorProduct
+import Mathlib.LinearAlgebra.QuadraticForm.Basis
 import Mathlib.LinearAlgebra.QuadraticForm.IsometryEquiv
 import Mathlib.LinearAlgebra.Pi
 import Mathlib.RingTheory.Finiteness.Cardinality
@@ -47,12 +48,10 @@ by `baseChange_ext`.
 
 ## Implementation notes
 
-The construction of a bilinear representative proceeds by:
-`R` (rank one) → binary products → `Fin n → R` by induction → finite free by transport →
-finitely generated projective by retract.  This avoids any expansion of `Q (∑ i, x i • b i)`
-over a basis (and hence avoids `QuadraticMap.map_sum` and its `Sym2` bookkeeping); the only
-ingredient is that `Q (x, y) = Q (x, 0) + Q (0, y) + polar Q (x, 0) (0, y)`, which is just the
-definition of `polar`.
+A bilinear representative exists on every free module: that is mathlib's
+`LinearMap.BilinMap.toQuadraticMap_surjective`. A finitely generated projective module is a
+retract of some `Fin n → R`, and representatives transport along retracts
+(`QuadraticMap.HasBilinRepr.of_retract`), which gives the projective case.
 
 `QuadraticForm` and `LinearMap.BilinForm` are `abbrev`s for `QuadraticMap R M R` and
 `LinearMap.BilinMap R M R`, so dot notation such as `Q.baseChange A` can resolve ambiguously
@@ -94,30 +93,13 @@ Beware the clash of terminology with `QuadraticMap.exists_companion`, whose comp
 satisfies `Q (x + y) = Q x + Q y + B x y` (so that `B x x = 2 • Q x`).  Here we ask instead for
 `B x x = Q x`, which is a genuine extra condition in characteristic two. -/
 def HasBilinRepr : Prop :=
-  ∀ Q : QuadraticMap R M N, ∃ B : BilinMap R M N, B.toQuadraticMap = Q
+  Function.Surjective (LinearMap.BilinMap.toQuadraticMap : BilinMap R M N → QuadraticMap R M N)
 
 variable {R M N}
 
 theorem apply_self_of_toQuadraticMap_eq {B : BilinMap R M N} {Q : QuadraticMap R M N}
     (hB : B.toQuadraticMap = Q) (x : M) : B x x = Q x :=
   QuadraticMap.congr_fun hB x
-
-variable (R N) in
-/-- A quadratic map out of a subsingleton module is the diagonal of the zero bilinear map. -/
-theorem hasBilinRepr_of_subsingleton [Subsingleton M] : HasBilinRepr R M N := fun Q ↦
-  ⟨0, QuadraticMap.ext fun x ↦ by
-    rw [Subsingleton.elim x 0]
-    simp⟩
-
-variable (R N) in
-/-- Rank one: `Q` is the diagonal of `(x, y) ↦ (x * y) • Q 1`. -/
-theorem hasBilinRepr_self : HasBilinRepr R R N := by
-  intro Q
-  refine ⟨LinearMap.toSpanSingleton R (R →ₗ[R] N) (LinearMap.toSpanSingleton R N (Q 1)), ?_⟩
-  refine QuadraticMap.ext fun x ↦ ?_
-  rw [LinearMap.BilinMap.toQuadraticMap_apply]
-  simp only [LinearMap.toSpanSingleton_apply, LinearMap.smul_apply, smul_smul]
-  rw [← Q.map_smul, smul_eq_mul, mul_one]
 
 /-- Transport along a retract: if `M` is a direct summand of `P` (witnessed by `r ∘ₗ i = id`)
 and every quadratic map on `P` has a bilinear representative, then so does every quadratic map
@@ -133,61 +115,16 @@ theorem HasBilinRepr.of_retract {P : Type*} [AddCommGroup P] [Module R P]
     apply_self_of_toQuadraticMap_eq hB (i x),
     QuadraticMap.comp_apply, hx]
 
-/-- Transport along a linear equivalence. -/
-theorem HasBilinRepr.of_linearEquiv {P : Type*} [AddCommGroup P] [Module R P]
-    (h : HasBilinRepr R P N) (e : P ≃ₗ[R] M) : HasBilinRepr R M N :=
-  h.of_retract (e.symm : M →ₗ[R] P) (e : P →ₗ[R] M) (by ext x; simp)
-
-/-- Binary products.  The point is the identity
-`Q (x, y) = Q (x, 0) + Q (0, y) + polar Q (x, 0) (0, y)`, whose last term is bilinear. -/
-theorem HasBilinRepr.prod {M₁ : Type*} {M₂ : Type*} [AddCommGroup M₁] [Module R M₁]
-    [AddCommGroup M₂] [Module R M₂]
-    (h₁ : HasBilinRepr R M₁ N) (h₂ : HasBilinRepr R M₂ N) :
-    HasBilinRepr R (M₁ × M₂) N := by
-  intro Q
-  obtain ⟨B₁, hB₁⟩ := h₁ (Q.comp (LinearMap.inl R M₁ M₂))
-  obtain ⟨B₂, hB₂⟩ := h₂ (Q.comp (LinearMap.inr R M₁ M₂))
-  refine ⟨B₁.compl₁₂ (LinearMap.fst R M₁ M₂) (LinearMap.fst R M₁ M₂) +
-      B₂.compl₁₂ (LinearMap.snd R M₁ M₂) (LinearMap.snd R M₁ M₂) +
-      (QuadraticMap.polarBilin Q).compl₁₂
-        ((LinearMap.inl R M₁ M₂) ∘ₗ (LinearMap.fst R M₁ M₂))
-        ((LinearMap.inr R M₁ M₂) ∘ₗ (LinearMap.snd R M₁ M₂)), ?_⟩
-  refine QuadraticMap.ext fun x ↦ ?_
-  obtain ⟨x₁, x₂⟩ := x
-  have e₁ : B₁ x₁ x₁ = Q (x₁, 0) := apply_self_of_toQuadraticMap_eq hB₁ x₁
-  have e₂ : B₂ x₂ x₂ = Q (0, x₂) := apply_self_of_toQuadraticMap_eq hB₂ x₂
-  have hsum : ((x₁, x₂) : M₁ × M₂) = (x₁, 0) + (0, x₂) := by simp
-  simp only [LinearMap.BilinMap.toQuadraticMap_apply, LinearMap.add_apply,
-    LinearMap.compl₁₂_apply, LinearMap.fst_apply, LinearMap.snd_apply, LinearMap.comp_apply,
-    LinearMap.inl_apply, LinearMap.inr_apply, QuadraticMap.polarBilin_apply_apply, e₁, e₂]
-  rw [hsum]
-  exact (QuadraticMap.map_add _ _ _).symm
-
-variable (R N) in
-/-- Finite free modules of the standard shape `Fin n → R`, by induction on `n`. -/
-theorem hasBilinRepr_fin (n : ℕ) : HasBilinRepr R (Fin n → R) N := by
-  induction n with
-  | zero =>
-    have : Subsingleton (Fin 0 → R) := ⟨fun f g ↦ funext fun i ↦ i.elim0⟩
-    exact hasBilinRepr_of_subsingleton R N
-  | succ n ih =>
-    have e : (R × (Fin n → R)) ≃ₗ[R] (Fin (n + 1) → R) :=
-      Fin.consLinearEquiv R (fun _ : Fin (n + 1) ↦ R)
-    exact ((hasBilinRepr_self R N).prod ih).of_linearEquiv e
-
 variable (R M N) in
 /-- **Existence of bilinear representatives over finitely generated projective modules.**
-Every finitely generated projective module is a retract of some `Fin n → R`. -/
+Every finitely generated projective module is a retract of some `Fin n → R`, which is free, and
+on a free module every quadratic map has a bilinear representative
+(`LinearMap.BilinMap.toQuadraticMap_surjective`). -/
 theorem hasBilinRepr_of_projective [Module.Finite R M] [Module.Projective R M] :
     HasBilinRepr R M N := by
   obtain ⟨n, f, hf⟩ := Module.Finite.exists_fin' R M
   obtain ⟨g, hg⟩ := f.exists_rightInverse_of_surjective (LinearMap.range_eq_top.2 hf)
-  exact (hasBilinRepr_fin R N n).of_retract g f hg
-
-variable (R M N) in
-/-- Free modules are projective. -/
-theorem hasBilinRepr_of_free [Module.Finite R M] [Module.Free R M] : HasBilinRepr R M N :=
-  hasBilinRepr_of_projective R M N
+  exact HasBilinRepr.of_retract LinearMap.BilinMap.toQuadraticMap_surjective g f hg
 
 /-- For `M` finitely generated projective, `LinearMap.BilinMap.toQuadraticMap` is surjective:
 every quadratic map is `x ↦ B x x` for some, generally non-symmetric, bilinear `B`.

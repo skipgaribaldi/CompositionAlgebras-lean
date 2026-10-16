@@ -19,7 +19,7 @@ Each row names a result, its citation, and the Lean that proves it.
 | Result | Status |
 |---|---|
 | Associator API, alternating property, flexible law | proved |
-| Teichmüller identity | proved |
+| Teichmüller identity | in mathlib as `associator_cocycle`, used directly (`IsNuclearIn.mul`) |
 | Moufang identities (left, right, middle) | proved |
 | Artin's theorem, easy direction | proved |
 | Artin's theorem, hard direction | proved |

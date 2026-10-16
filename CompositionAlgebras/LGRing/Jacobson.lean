@@ -21,16 +21,15 @@ The other half of `GPR 11.21` (finite products of LG-rings are LG) is not covere
 ## Proof idea
 
 Every maximal ideal `𝔪` of `R` **contains** `Jac(R)` (it is the intersection of all of them), so
-maximal ideals of `R` correspond exactly to maximal ideals of `R ⧸ Jac(R)`, via
-`𝔪 ↦ 𝔪.map π` and back via `comap π`, where `π : R → R ⧸ Jac(R)` is the quotient map — and the
-residue fields agree on the nose: `R ⧸ 𝔪 ≅ (R ⧸ Jac(R)) ⧸ 𝔪.map π`
-(`residueFieldQuotientJacobsonEquiv`, by the first isomorphism theorem applied to the composite
-`R → R ⧸ Jac(R) → (R ⧸ Jac(R)) ⧸ 𝔪.map π`, whose kernel works out to be `𝔪` exactly because
-`Jac(R) ≤ 𝔪`). Transporting a witness for `p.RepresentsUnit` back and forth along this
-isomorphism and along `MvPolynomial.map π` (`aeval_comp_residueFieldQuotientJacobsonEquiv`,
-`aeval_map_quotient`) turns "`p` represents a unit at every residue field of `R`" into "`p`'s
-image represents a unit at every residue field of `R ⧸ Jac(R)`" and back
-(`represents_unit_quotient_jacobson_of_forall`, `represents_unit_of_forall_quotient_jacobson`).
+maximal ideals of `R` correspond exactly to maximal ideals of `R ⧸ Jac(R)`, via `𝔪 ↦ 𝔪.map π` and
+back via `comap π`, where `π : R → R ⧸ Jac(R)` is the quotient map — and the residue fields agree on
+the nose: `R ⧸ 𝔪 ≅ (R ⧸ Jac(R)) ⧸ 𝔪.map π` (`residueFieldQuotientJacobsonEquiv`, which is mathlib's
+third isomorphism theorem `DoubleQuot.quotQuotEquivQuotOfLE`, applicable because `Jac(R) ≤ 𝔪`).
+Transporting a witness for `p.RepresentsUnit` back and forth along this isomorphism and along
+`MvPolynomial.map π` (`aeval_comp_residueFieldQuotientJacobsonEquiv`, `aeval_map_quotient`) turns
+"`p` represents a unit at every residue field of `R`" into "`p`'s image represents a unit at every
+residue field of `R ⧸ Jac(R)`" and back (`represents_unit_quotient_jacobson_of_forall`,
+`represents_unit_of_forall_quotient_jacobson`).
 
 The one place this needs more than bookkeeping: going from "`p`'s image represents a unit over
 `R ⧸ Jac(R)`" back to "`p` represents a unit over `R`" needs that a witness whose *image* is a
@@ -62,42 +61,23 @@ theorem isUnit_of_isUnit_image_jacobson {R : Type u} [CommRing R] (x : R)
   exact isUnit_of_mul_isUnit_left hunit_xz
 
 /-- The residue field of `R` at a maximal ideal `𝔪` agrees with the residue field of
-`R ⧸ Jac(R)` at the corresponding maximal ideal `𝔪.map π` (`π` the quotient-by-`Jac(R)` map):
-both are `R ⧸ 𝔪`, since `𝔪 = comap π (𝔪.map π)` — this uses `Jac(R) ≤ 𝔪`, so the general
-`comap (map f I) = I ⊔ ker f` collapses to `I`. -/
+`R ⧸ Jac(R)` at the corresponding maximal ideal `𝔪.map π` (`π` the quotient-by-`Jac(R)` map).
+This is mathlib's third isomorphism theorem `DoubleQuot.quotQuotEquivQuotOfLE`, which applies
+because `Jac(R) ≤ 𝔪`. -/
 noncomputable def residueFieldQuotientJacobsonEquiv {R : Type u} [CommRing R] (𝔪 : Ideal R)
     [h𝔪 : 𝔪.IsMaximal] :
     R ⧸ 𝔪 ≃+*
       (R ⧸ Ring.jacobson R) ⧸ Ideal.map (Ideal.Quotient.mk (Ring.jacobson R)) 𝔪 :=
-  have hJm : Ring.jacobson R ≤ 𝔪 := by
-    rw [Ring.jacobson_eq_sInf_isMaximal]; exact sInf_le h𝔪
-  have hsurj : Function.Surjective (Ideal.Quotient.mk (Ring.jacobson R)) :=
-    Ideal.Quotient.mk_surjective
-  have hker : RingHom.ker (Ideal.Quotient.mk (Ring.jacobson R)) = Ring.jacobson R := Ideal.mk_ker
-  have hkerle : RingHom.ker (Ideal.Quotient.mk (Ring.jacobson R)) ≤ 𝔪 := by
-    rw [hker]; exact hJm
-  have hmax : (𝔪.map (Ideal.Quotient.mk (Ring.jacobson R))).IsMaximal :=
-    Ideal.IsMaximal.map_of_surjective_of_ker_le hsurj hkerle
-  have hgsurj : Function.Surjective
-      ((Ideal.Quotient.mk (𝔪.map (Ideal.Quotient.mk (Ring.jacobson R)))).comp
-        (Ideal.Quotient.mk (Ring.jacobson R))) :=
-    (Ideal.Quotient.mk_surjective).comp hsurj
-  have hgker :
-      RingHom.ker ((Ideal.Quotient.mk (𝔪.map (Ideal.Quotient.mk (Ring.jacobson R)))).comp
-        (Ideal.Quotient.mk (Ring.jacobson R))) = 𝔪 := by
-    rw [← RingHom.comap_ker, Ideal.mk_ker,
-      Ideal.comap_map_of_surjective (Ideal.Quotient.mk (Ring.jacobson R)) hsurj,
-      ← RingHom.ker_eq_comap_bot, hker, sup_eq_left.mpr hJm]
-  (Ideal.quotEquivOfEq hgker.symm).trans (RingHom.quotientKerEquivOfSurjective hgsurj)
+  (DoubleQuot.quotQuotEquivQuotOfLE <| by
+    rw [Ring.jacobson_eq_sInf_isMaximal]; exact sInf_le h𝔪).symm
 
 @[simp]
 theorem residueFieldQuotientJacobsonEquiv_apply {R : Type u} [CommRing R] (𝔪 : Ideal R)
     [𝔪.IsMaximal] (r : R) :
     residueFieldQuotientJacobsonEquiv 𝔪 (Ideal.Quotient.mk 𝔪 r) =
       Ideal.Quotient.mk (Ideal.map (Ideal.Quotient.mk (Ring.jacobson R)) 𝔪)
-        (Ideal.Quotient.mk (Ring.jacobson R) r) := by
-  simp only [residueFieldQuotientJacobsonEquiv, RingEquiv.trans_apply, Ideal.quotEquivOfEq_mk,
-    RingHom.quotientKerEquivOfSurjective_apply_mk, RingHom.comp_apply]
+        (Ideal.Quotient.mk (Ring.jacobson R) r) :=
+  rfl
 
 /-- `aeval` commutes with `residueFieldQuotientJacobsonEquiv`: evaluating `p` at a point of
 `R ⧸ 𝔪` and transporting the result along the equivalence agrees with reducing `p`'s coefficients

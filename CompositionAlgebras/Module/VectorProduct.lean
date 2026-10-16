@@ -210,8 +210,8 @@ variable {k M} {ι : Type*} [Fintype ι] [DecidableEq ι] (b : Module.Basis ι k
 canonical pairing becomes the dot product (`Module.Basis.apply_eq_dotProduct`). -/
 noncomputable def dualCoord : Module.Dual k M ≃ₗ[k] (ι → k) := b.dualBasis.equivFun
 
-@[simp] theorem dualCoord_apply (φ : Module.Dual k M) (i : ι) : b.dualCoord φ i = φ (b i) := by
-  rw [dualCoord, Module.Basis.equivFun_apply, Module.Basis.dualBasis_repr]
+@[simp] theorem dualCoord_apply (φ : Module.Dual k M) (i : ι) : b.dualCoord φ i = φ (b i) :=
+  b.dualBasis_equivFun φ i
 
 /-- **In the coordinates of a finite basis and its dual basis, the canonical pairing is the dot
 product.** -/

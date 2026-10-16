@@ -99,9 +99,9 @@ import mathlib only, and nothing composition-algebra-specific (see
   (`IsJordan`), but **no alternative rings at all**: no `IsAlternative`, no Moufang identities, no
   Artin. Anyone interested in Moufang loops, Jordan and alternative algebra generally, or the
   nonassociative side of ring theory needs this material and would otherwise have to build it from
-  scratch. Along the way we prove the **Teichmüller identity** (valid in *any* non-associative
-  ring), the alternating property of the associator (characteristic-2-safe), the three **Moufang
-  identities**, and the nucleus API. *(Layers 1–4.)*
+  scratch. Along the way we prove the alternating property of the associator
+  (characteristic-2-safe), the three **Moufang identities**, and the nucleus API, building on
+  mathlib's associator and its Teichmüller identity (`associator_cocycle`). *(Layers 1–4.)*
 
 - **LG (local–global) rings.** The `IsLGRing` predicate with its examples (fields, semilocal rings,
   the ring of all algebraic integers) and non-examples (`ℤ`, `R[X]`), and the theorem that a
@@ -149,10 +149,10 @@ Four bodies of material, in dependency order:
    non-examples, constant-rank projective ⇒ free, the representation lemma, and **Witt
    cancellation**. Much of this is of independent interest and has no composition algebras in it —
    see [Results of independent interest](#results-of-independent-interest).
-2. **Alternative algebras.** Associators, the nucleus, the `IsAlternative` predicate, the Teichmüller
-   identity, the Moufang identities, and **Artin's theorem**. Prerequisite structure theory for
-   composition algebras, and the largest block here that is of independent interest — mathlib has
-   no alternative rings at all.
+2. **Alternative algebras.** Associators and the Teichmüller identity (both from mathlib:
+   `associator`, `associator_cocycle`), the nucleus, the `IsAlternative` predicate, the Moufang
+   identities, and **Artin's theorem**. Prerequisite structure theory for composition algebras, and
+   the largest block here that is of independent interest — mathlib has no alternative rings at all.
 3. **Conic and composition algebras.** The conic-algebra structure (norm, trace, conjugation),
    the Cayley–Dickson doubling construction, composition algebras, octonions, worked examples and
    non-examples.

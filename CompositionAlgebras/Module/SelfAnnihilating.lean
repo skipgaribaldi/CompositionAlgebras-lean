@@ -3,6 +3,7 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
+import Mathlib.LinearAlgebra.Dual.BaseChange
 import Mathlib.LinearAlgebra.TensorProduct.Tower
 import Mathlib.Tactic.LinearCombination
 import Mathlib.Tactic.Module
@@ -71,14 +72,6 @@ section BaseChange
 
 variable (S : Type*) [CommRing S] [Algebra R S]
 
-/-- The base change of a functional `M → R` to a functional `S ⊗[R] M → S`. -/
-noncomputable def baseChangeToBase (φ : M →ₗ[R] R) : (S ⊗[R] M) →ₗ[S] S :=
-  (TensorProduct.AlgebraTensorModule.rid R S S).toLinearMap ∘ₗ φ.baseChange S
-
-@[simp] theorem baseChangeToBase_tmul (φ : M →ₗ[R] R) (s : S) (x : M) :
-    baseChangeToBase S φ (s ⊗ₜ[R] x) = φ x • s := by
-  simp [baseChangeToBase, Algebra.smul_def, mul_comm]
-
 variable {S}
 
 /-- Moving a scalar of `R` out of the `S`-action on a pure tensor. -/
@@ -91,7 +84,7 @@ private theorem smul_smul_tmul (c : R) (s s' : S) (x : M) :
 check it on pure tensors. -/
 theorem smul_add_smul_baseChange_eq_zero {φ : M →ₗ[R] R} (h : ∀ x : M, φ x • x = 0)
     (z w : S ⊗[R] M) :
-    baseChangeToBase S φ z • w + baseChangeToBase S φ w • z = 0 := by
+    Module.Dual.baseChange S φ z • w + Module.Dual.baseChange S φ w • z = 0 := by
   induction z with
   | add z₁ z₂ h₁ h₂ =>
     simp only [map_add, add_smul, smul_add]
@@ -102,16 +95,16 @@ theorem smul_add_smul_baseChange_eq_zero {φ : M →ₗ[R] R} (h : ∀ x : M, φ
       simp only [map_add, add_smul, smul_add]
       linear_combination (norm := module) h₁ + h₂
     | tmul s' x' =>
-      rw [baseChangeToBase_tmul, baseChangeToBase_tmul, smul_smul_tmul, smul_smul_tmul,
-        mul_comm s' s, ← TensorProduct.tmul_add,
+      rw [Module.Dual.baseChange_apply_tmul, Module.Dual.baseChange_apply_tmul, smul_smul_tmul,
+        smul_smul_tmul, mul_comm s' s, ← TensorProduct.tmul_add,
         smul_add_smul_eq_zero_of_smul_self_eq_zero h, TensorProduct.tmul_zero]
 
 /-- Self-annihilation transfers to the base change. -/
 theorem smul_self_baseChange_eq_zero {φ : M →ₗ[R] R} (h : ∀ x : M, φ x • x = 0)
-    (z : S ⊗[R] M) : baseChangeToBase S φ z • z = 0 := by
+    (z : S ⊗[R] M) : Module.Dual.baseChange S φ z • z = 0 := by
   induction z with
   | tmul s x =>
-    rw [baseChangeToBase_tmul, smul_smul_tmul, h x, TensorProduct.tmul_zero]
+    rw [Module.Dual.baseChange_apply_tmul, smul_smul_tmul, h x, TensorProduct.tmul_zero]
   | add z w hz hw =>
     have hlin := smul_add_smul_baseChange_eq_zero (S := S) h z w
     simp only [map_add, add_smul, smul_add]
@@ -130,7 +123,7 @@ theorem eq_zero_of_smul_self_eq_zero [Module.Finite R M] [Module.Projective R M]
   refine eq_zero_of_localization (φ x) fun J hJ ↦ ?_
   set S := Localization.AtPrime J with hS
   have : Module.Free S (S ⊗[R] M) := Module.free_of_flat_of_isLocalRing
-  have hψ : baseChangeToBase S φ = 0 :=
+  have hψ : Module.Dual.baseChange S φ = 0 :=
     eq_zero_of_smul_self_eq_zero_of_free _ (smul_self_baseChange_eq_zero h)
   have := congrArg (fun ψ ↦ ψ ((1 : S) ⊗ₜ[R] x)) hψ
   simpa [Algebra.smul_def] using this

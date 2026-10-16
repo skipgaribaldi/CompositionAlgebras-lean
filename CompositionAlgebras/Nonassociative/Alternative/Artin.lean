@@ -24,14 +24,14 @@ monomials. Trilinearity of the associator therefore extends the monomial result 
 
 ## The reduction
 
-`teichmuller` holds in *any* non-associative ring:
+The Teichmüller identity, mathlib's `associator_cocycle`, holds in *any* non-associative ring:
 
-`[wx, y, z] - [w, xy, z] + [w, x, yz] = w * [x,y,z] + [w,x,y] * z`
+`w * [x,y,z] - [wx, y, z] + [w, xy, z] - [w, x, yz] + [w,x,y] * z = 0`
 
 Say `n` is **nuclear in** `S` when `[n, y, z] = 0` for all `y, z ∈ S`. If `S` is closed under
 multiplication, then the elements of `S` nuclear in `S` are closed under `0`, `+`, `-` (associator
-additivity) and under `*` (Teichmüller — see `IsNuclearIn.mul`, where all four right-hand terms
-vanish). So the nucleus of `S` is a subring of `S`.
+additivity) and under `*` (Teichmüller — see `IsNuclearIn.mul`, where every term but `[wx, y, z]`
+vanishes). So the nucleus of `S` is a subring of `S`.
 
 Consequently, if the generators `a, b` are nuclear in `S = ⟨a, b⟩`, the nucleus contains
 `{a, b}`, hence contains the whole closure, hence equals `S` — exactly associativity of `S`.
@@ -128,23 +128,6 @@ def TwoGeneratedAssoc (α : Type u) [NonUnitalNonAssocRing α] : Prop :=
     NonAssocRingClosure ({a, b} : Set α) z →
     (x * y) * z = x * (y * z)
 
-section Teichmuller
-
-variable {α : Type u} [NonUnitalNonAssocRing α]
-
-/-- **The Teichmüller identity**, valid in every non-associative ring:
-
-`[wx, y, z] - [w, xy, z] + [w, x, yz] = w * [x,y,z] + [w,x,y] * z`.
-
-Both sides expand to `((wx)y)z - (w(xy))z + w((xy)z) - w(x(yz))`. -/
-theorem teichmuller (w x y z : α) :
-    associator (w * x) y z - associator w (x * y) z + associator w x (y * z)
-      = w * associator x y z + associator w x y * z := by
-  simp only [associator, mul_sub, sub_mul]
-  abel
-
-end Teichmuller
-
 /-! ## Nuclearity relative to a set -/
 
 section Nucleus
@@ -173,15 +156,15 @@ theorem neg (hm : IsNuclearIn S m) : IsNuclearIn S (-m) := by
   intro y hy z hz
   rw [associator_neg_left, hm y hy z hz, neg_zero]
 
-/-- The nucleus is closed under multiplication. This is the Teichmüller identity: with `w = m`
-and `x = n`, all four terms on the right vanish.
+/-- The nucleus is closed under multiplication. This is the Teichmüller identity
+(`associator_cocycle`): with `w = m` and `x = n`, every term but `[mn, y, z]` vanishes.
 
 Requires `S` closed under multiplication, and `m, n ∈ S` (not merely nuclear in `S`). -/
 theorem mul (hS : ∀ x ∈ S, ∀ y ∈ S, x * y ∈ S)
     (hm : IsNuclearIn S m) (hn : IsNuclearIn S n) (_hmS : m ∈ S) (hnS : n ∈ S) :
     IsNuclearIn S (m * n) := by
   intro y hy z hz
-  have key := teichmuller m n y z
+  have key := associator_cocycle m n y z
   have h1 : associator m (n * y) z = 0 := hm _ (hS _ hnS _ hy) _ hz
   have h2 : associator m n (y * z) = 0 := hm _ hnS _ (hS _ hy _ hz)
   have h3 : associator n y z = 0 := hn _ hy _ hz
