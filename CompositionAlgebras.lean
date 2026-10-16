@@ -61,6 +61,7 @@ public import CompositionAlgebras.Conic.Doubling
 public import CompositionAlgebras.Conic.Kirmse
 public import CompositionAlgebras.Conic.Multiplicative
 public import CompositionAlgebras.Conic.Projective
+public import CompositionAlgebras.Conic.QuadraticAlgebra
 public import CompositionAlgebras.Conic.Recognition
 public import CompositionAlgebras.Conic.Subalgebra
 public import CompositionAlgebras.Conic.TraceDefectCounterexample

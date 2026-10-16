@@ -7,6 +7,7 @@ module
 
 public import CompositionAlgebras.Composition.NormEquivalence
 public import CompositionAlgebras.Composition.RankOneTwoFourEight
+public import CompositionAlgebras.Conic.QuadraticAlgebra
 public import CompositionAlgebras.LGRing.ConstantRank
 
 /-!
@@ -44,10 +45,13 @@ norm (`ConicAlgebra.norm_eq_of_projective`, `GPR 16.16`), so whatever conic stru
 its norm is the norm of `GPR 16.4`, and "`e` is a unital norm equivalence" means exactly what it
 means in `GPR`. Only `A` is assumed finitely generated projective of constant rank two; for `B` this
 follows from the linear equivalence, so `B` is only assumed to be conic. Neither algebra is assumed
-associative or commutative — both are consequences (`GPR 16.4`).
+associative or commutative; `GPR 16.4` shows both, but they are not needed here.
 
-⚠ The existence half of `GPR 16.4`, that every unital algebra which is projective of rank two
-admits a conic norm, is not formalized here; the conic structure is an input.
+The existence half of `GPR 16.4` — every unital algebra that is finitely generated projective of
+rank two admits a conic norm — is `ConicAlgebra.nonempty_of_rankAtStalk_eq_two`
+(`Conic/QuadraticAlgebra.lean`). With it, `ConicAlgebra.map_mul_of_norm_map_of_rankAtStalk_eq_two`
+states `GPR 23.4(b)` for quadratic algebras exactly as `GPR` does, with no conic structure
+supplied.
 
 ## Main results
 
@@ -59,6 +63,8 @@ admits a conic norm, is not formalized here; the conic structure is an input.
 * `ConicAlgebra.map_mul_iff_norm_map_of_rankAtStalk_eq_two` : **`GPR 23.4`** for quadratic
   algebras, both directions: a unital linear equivalence is multiplicative if and only if it
   preserves the norm.
+* `ConicAlgebra.map_mul_of_norm_map_of_rankAtStalk_eq_two` : **`GPR 23.4(b)`** for quadratic
+  algebras with their norms from `GPR 16.4`, no conic structure supplied.
 
 ## References
 
@@ -173,5 +179,18 @@ theorem map_mul_iff_norm_map_of_rankAtStalk_eq_two (C : ConicAlgebra k A) (D : C
   ⟨fun hmul x ↦ norm_map_of_linearEquiv C D e h1 hmul x, fun hnorm ↦
     map_mul_of_isometryEquiv_map_one_of_rankAtStalk_eq_two C D hA
       { toLinearEquiv := e, map_app' := hnorm } h1⟩
+
+/-- **`GPR 23.4(b)` for quadratic algebras as `GPR 16.4` defines them**: unital algebras that are
+finitely generated projective of constant rank two, each with its conic norm — which exists by
+`GPR 16.4` (`ConicAlgebra.ofRankTwo`) and is unique by `GPR 16.16`
+(`ConicAlgebra.eq_ofRankTwo`). A unital norm equivalence between them is an algebra isomorphism;
+no conic structure needs to be supplied. -/
+theorem map_mul_of_norm_map_of_rankAtStalk_eq_two [Module.Finite k B] [Module.Projective k B]
+    (hA : Module.rankAtStalk (R := k) A = fun _ ↦ 2)
+    (hB : Module.rankAtStalk (R := k) B = fun _ ↦ 2) (e : A ≃ₗ[k] B) (h1 : e (1 : A) = 1)
+    (hnorm : ∀ x, (ofRankTwo hB).norm (e x) = (ofRankTwo hA).norm x) (x y : A) :
+    e (x * y) = e x * e y :=
+  map_mul_of_isometryEquiv_map_one_of_rankAtStalk_eq_two (ofRankTwo hA) (ofRankTwo hB) hA
+    { toLinearEquiv := e, map_app' := hnorm } h1 x y
 
 end ConicAlgebra

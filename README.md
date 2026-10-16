@@ -467,8 +467,10 @@ and §23 is the comparison between those and algebra isomorphisms.
   `GPR`'s generality — every conic algebra of constant rank two over every commutative ring, with
   the generator found locally — it is
   `ConicAlgebra.map_mul_of_isometryEquiv_map_one_of_rankAtStalk_eq_two`
-  (`Composition/QuadraticNormEquivalence.lean`). The conic structure is taken as given there; that
-  every unital projective algebra of rank two carries one (`GPR 16.4`) is not formalized.
+  (`Composition/QuadraticNormEquivalence.lean`). Every unital finite projective algebra of rank two
+  carries a conic structure (`GPR 16.4`, `ConicAlgebra.nonempty_of_rankAtStalk_eq_two` in
+  `Conic/QuadraticAlgebra.lean`), so `map_mul_of_norm_map_of_rankAtStalk_eq_two` states
+  `GPR 23.4(b)` for quadratic algebras exactly as `GPR` does.
   ⚠ The converse genuinely needs rank two: conjugation on a quaternion algebra is a unital norm
   equivalence and an anti-automorphism.
 - **`GPR 23.5`, the norm equivalence theorem: converse over LG rings.** Isometric norm forms imply

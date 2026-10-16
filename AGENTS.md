@@ -213,6 +213,8 @@ CompositionAlgebras/
     Kirmse.lean          -- Kirmse's identities; alternativity under weak regularity
     Recognition.lean     -- GPR 19.3: a non-degenerate multiplicative form makes a unital
                          -- algebra conic alternative; the polar radical is central
+    QuadraticAlgebra.lean
+                         -- GPR 16.4: a unital projective algebra of rank two is conic
     CayleyDickson.lean   -- Cay(B, μ) (GPR 18.3, 18.4, 18.11)
     CayleyDicksonAssociative.lean
                          -- B commutative associative ⇒ Cay(B, μ) associative (GPR 18.14(b)),
