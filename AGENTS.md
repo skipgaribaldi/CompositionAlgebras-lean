@@ -127,7 +127,8 @@ CompositionAlgebras/
     IdempotentDecomposition.lean
                          -- M ≃ ∏ M ⧸ (1-eᵢ)M for complete orthogonal idempotents
     RankDecomposition.lean
-                         -- GPR Exc. 9.31; rankIdempotent, and what the rank-zero one does
+                         -- GPR Exc. 9.31; rankIdempotent, and what the rank-zero one does;
+                         -- constant rank is stable under base change and locally free
     IdempotentFactor.lean
                          -- modules over an idempotent factor k ⧸ (1 - e); freeness of
                          -- constant-rank projectives passes to the factors (GPR 22.16)

@@ -560,8 +560,7 @@ and `ker l` is projective of constant rank one, hence free (`GPR 11.24`); its ge
 `GPR 23.4` uses this over a local ring, extending `1` to a basis of `A`. No composition,
 regularity or nontriviality hypothesis is needed. -/
 theorem exists_forall_mem_adjoinElement_of_isLGRing_of_rankAtStalk_eq_two (hLG : IsLGRing k)
-    (hA : Module.rankAtStalk (R := k) A = fun _ ↦ 2) :
-    ∃ u : A, ∀ x : A, x ∈ C.adjoinElement u := by
+    (hA : Module.rankAtStalk (R := k) A = fun _ ↦ 2) : ∃ u : A, ∀ x : A, x ∈ C.adjoinElement u := by
   rcases subsingleton_or_nontrivial k with hk | hk
   · have : Subsingleton A := Module.subsingleton k A
     exact ⟨0, fun x ↦ (C.mem_adjoinElement_iff 0 x).mpr ⟨0, 0, Subsingleton.elim _ _⟩⟩
@@ -585,7 +584,7 @@ theorem exists_forall_mem_adjoinElement_of_isLGRing_of_rankAtStalk_eq_two (hLG :
   let b := Module.finBasisOfFinrankEq k (LinearMap.ker l) hfin
   refine ⟨(b 0 : A), fun x ↦ (C.mem_adjoinElement_iff _ x).mpr ?_⟩
   have hx : x - l x • (1 : A) ∈ LinearMap.ker l := by
-    simp [LinearMap.mem_ker, hl]
+    simp only [LinearMap.mem_ker, map_sub, map_smul, hl, smul_eq_mul, mul_one, sub_self]
   refine ⟨l x, b.repr ⟨_, hx⟩ 0, ?_⟩
   have hsum := b.sum_repr ⟨_, hx⟩
   rw [Fin.sum_univ_one] at hsum
@@ -605,11 +604,9 @@ include C in
 /-- A finitely generated projective conic algebra of constant rank two over an LG ring is
 associative, being `k[u]` (`GPR 16.4`). -/
 theorem mul_assoc_of_isLGRing_of_rankAtStalk_eq_two (hLG : IsLGRing k)
-    (hA : Module.rankAtStalk (R := k) A = fun _ ↦ 2) (x y z : A) :
-    x * y * z = x * (y * z) := by
+    (hA : Module.rankAtStalk (R := k) A = fun _ ↦ 2) (x y z : A) : x * y * z = x * (y * z) := by
   obtain ⟨u, hmem⟩ := C.exists_forall_mem_adjoinElement_of_isLGRing_of_rankAtStalk_eq_two hLG hA
-  exact congrArg Subtype.val
-    (C.adjoinElement_mul_assoc u ⟨x, hmem x⟩ ⟨y, hmem y⟩ ⟨z, hmem z⟩)
+  exact congrArg Subtype.val (C.adjoinElement_mul_assoc u ⟨x, hmem x⟩ ⟨y, hmem y⟩ ⟨z, hmem z⟩)
 
 end ConstantRankTwo
 

@@ -392,9 +392,7 @@ theorem mul_comm_of_rankAtStalk_eq_two (C : ConicAlgebra k A)
   apply eq_of_forall_localization_maximal (k := k)
   intro P hP
   let S := Localization.AtPrime P
-  have hSrank : Module.rankAtStalk (R := S) (S ⊗[k] A) = fun _ ↦ 2 := by
-    funext q
-    rw [Module.rankAtStalk_baseChange, hA]
+  have hSrank := Module.rankAtStalk_baseChange_of_eq S hA
   have hLG : IsLGRing S := isLGRing_of_isLocalRing S
   simpa only [one_tmul_mul] using
     (C.baseChangeOfProjective S).mul_comm_of_isLGRing_of_rankAtStalk_eq_two hLG hSrank
@@ -409,9 +407,7 @@ theorem mul_assoc_of_rankAtStalk_eq_two (C : ConicAlgebra k A)
   apply eq_of_forall_localization_maximal (k := k)
   intro P hP
   let S := Localization.AtPrime P
-  have hSrank : Module.rankAtStalk (R := S) (S ⊗[k] A) = fun _ ↦ 2 := by
-    funext q
-    rw [Module.rankAtStalk_baseChange, hA]
+  have hSrank := Module.rankAtStalk_baseChange_of_eq S hA
   have hLG : IsLGRing S := isLGRing_of_isLocalRing S
   simpa only [one_tmul_mul] using
     (C.baseChangeOfProjective S).mul_assoc_of_isLGRing_of_rankAtStalk_eq_two hLG hSrank
@@ -425,9 +421,7 @@ theorem IsComposition.mul_assoc_of_rankAtStalk_eq_four
   apply eq_of_forall_localization_maximal (k := k)
   intro P hP
   let S := Localization.AtPrime P
-  have hSrank : Module.rankAtStalk (R := S) (S ⊗[k] A) = fun _ ↦ 4 := by
-    funext q
-    rw [Module.rankAtStalk_baseChange, hA]
+  have hSrank := Module.rankAtStalk_baseChange_of_eq S hA
   have hLG : IsLGRing S := isLGRing_of_isLocalRing S
   simpa only [one_tmul_mul] using
     (h.baseChangeOfProjective S).mul_assoc_of_isLGRing_of_rankAtStalk_eq_four hLG hSrank

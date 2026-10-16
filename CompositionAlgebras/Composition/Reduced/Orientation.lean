@@ -44,8 +44,6 @@ mathlib's `Orientation`, which is a ray of volume forms.
 
 * `Module.VectorProductPair.ofOrientation` : the pair of associated vector products induced by
   an orientation of a constant-rank-three finite projective module.
-* `Module.VectorProductPair.ofOrientationOfIsLGRing` : compatibility alias for the earlier
-  LG-ring API.
 * `Module.VectorProductPair.baseChange` : the scalar extension of a vector-product pair on a
   finite projective module.
 * `Module.VectorProductPair.orientation` : the orientation `⋀³ M ≃ k` of a vector-product pair on
@@ -79,9 +77,16 @@ open scoped TensorProduct
 
 namespace Module
 
+section OfOrientation
+
 variable {k : Type u} {M : Type v} [CommRing k] [AddCommGroup M] [Module k M]
   [Module.Finite k M] [Module.Projective k M]
 
+/-- **Binet–Cauchy for an orientation.** The vector products induced by an orientation `θ` of a
+finite projective module of constant rank three (`GPR 22.14`) satisfy
+`⟨v × w, f × g⟩ = ⟨f, v⟩⟨g, w⟩ - ⟨f, w⟩⟨g, v⟩`. It is checked at every maximal ideal, where the
+module is free of rank three: the primal and dual volume coefficients of a basis are inverse
+(`GPR (22.14.1)`, via the duality `GPR 21.7`), so the based calculation applies. -/
 theorem cross_apply_crossDual_of_orientation
     (hM : Module.rankAtStalk (R := k) M = fun _ ↦ 3)
     (theta : (⋀[k]^3 M) ≃ₗ[k] k) (v w : M) (f g : Module.Dual k M) :
@@ -228,28 +233,32 @@ noncomputable def VectorProductPair.ofOrientation
     (VectorProductPair.ofOrientation hM theta).crossDual =
       crossDualOfOrientation theta := rfl
 
-/-- Compatibility alias for the former LG-ring-specific orientation construction. The
+/-- Deprecated compatibility alias for the former LG-ring-specific orientation construction. The
 construction now works over every commutative ring by `VectorProductPair.ofOrientation`. -/
+@[deprecated "use `VectorProductPair.ofOrientation`, which needs no LG hypothesis"
+  (since := "2026-10-16")]
 noncomputable def VectorProductPair.ofOrientationOfIsLGRing
     (_hLG : IsLGRing k) (hM : Module.rankAtStalk (R := k) M = fun _ ↦ 3)
     (theta : (⋀[k]^3 M) ≃ₗ[k] k) : VectorProductPair k M :=
   VectorProductPair.ofOrientation hM theta
 
-@[simp] theorem VectorProductPair.ofOrientationOfIsLGRing_cross
+@[deprecated "use `VectorProductPair.ofOrientation_cross`, which needs no LG hypothesis"
+  (since := "2026-10-16")]
+theorem VectorProductPair.ofOrientationOfIsLGRing_cross
     (hLG : IsLGRing k) (hM : Module.rankAtStalk (R := k) M = fun _ ↦ 3)
     (theta : (⋀[k]^3 M) ≃ₗ[k] k) :
     (VectorProductPair.ofOrientationOfIsLGRing hLG hM theta).cross =
       crossOfOrientation theta := rfl
 
-@[simp] theorem VectorProductPair.ofOrientationOfIsLGRing_crossDual
+@[deprecated "use `VectorProductPair.ofOrientation_crossDual`, which needs no LG hypothesis"
+  (since := "2026-10-16")]
+theorem VectorProductPair.ofOrientationOfIsLGRing_crossDual
     (hLG : IsLGRing k) (hM : Module.rankAtStalk (R := k) M = fun _ ↦ 3)
     (theta : (⋀[k]^3 M) ≃ₗ[k] k) :
     (VectorProductPair.ofOrientationOfIsLGRing hLG hM theta).crossDual =
       crossDualOfOrientation theta := rfl
 
-end Module
-
-namespace Module
+end OfOrientation
 
 namespace VectorProductPair
 
@@ -399,8 +408,7 @@ theorem crossAlternating_baseChange_one_tmul (x : Fin 3 → M) :
 
 /-- The dual volume form of the base change on scalar extensions of functionals on `M`. -/
 theorem crossDualAlternating_baseChange_one_tmul (f : Fin 3 → Module.Dual k M) :
-    (P.baseChange S).crossDualAlternating
-        (fun i ↦ Module.Dual.baseChangeTensor S (1 ⊗ₜ[k] f i)) =
+    (P.baseChange S).crossDualAlternating (fun i ↦ Module.Dual.baseChangeTensor S (1 ⊗ₜ[k] f i)) =
       algebraMap k S (P.crossDualAlternating f) := by
   rw [crossDualAlternating_apply, baseChange_crossDual, baseChangeCrossDual_tmul,
     Module.Dual.baseChangeTensor_tmul, crossDualAlternating_apply]
@@ -418,20 +426,14 @@ theorem crossAlternating_mul_crossDualAlternating_of_basis (b : Module.Basis (Fi
   rw [VectorProductPair.crossAlternating_ofBasis, VectorProductPair.crossDualAlternating_ofBasis]
   exact b'.det_mul_det_dualBasis x f
 
-end VectorProductPair
-
-namespace VectorProductPair
-
-variable {k : Type u} {M : Type v} [CommRing k] [AddCommGroup M] [Module k M]
-  [Module.Finite k M] [Module.Projective k M] (P : VectorProductPair k M)
+variable [Module.Finite k M] [Module.Projective k M]
 
 /-- **The triple identity**, `GPR (22.14.1)` for a vector-product pair on a constant-rank-three
 finite projective module: `⟨u × v, w⟩ · ⟨φ, ψ × χ⟩ = det (⟨φᵢ, vⱼ⟩)`. It is checked at every
 maximal ideal, where the module is free and the based case
 `crossAlternating_mul_crossDualAlternating_of_basis` applies to the base-changed pair. -/
 theorem crossAlternating_mul_crossDualAlternating
-    (hM : Module.rankAtStalk (R := k) M = fun _ ↦ 3) (x : Fin 3 → M)
-    (f : Fin 3 → Module.Dual k M) :
+    (hM : Module.rankAtStalk (R := k) M = fun _ ↦ 3) (x : Fin 3 → M) (f : Fin 3 → Module.Dual k M) :
     P.crossAlternating x * P.crossDualAlternating f = Matrix.det (.of fun i j ↦ f i (x j)) := by
   apply sub_eq_zero.mp
   apply eq_zero_of_localization
@@ -543,8 +545,7 @@ theorem dualOrientationAlternating_orientation
       (P.orientation hM).toLinearMap = 0 := by
     ext x
     have h₁ : orientationAlternating (P.orientation hM) x *
-        dualOrientationAlternating (P.orientation hM) f =
-          Matrix.det (.of fun i j ↦ f i (x j)) :=
+        dualOrientationAlternating (P.orientation hM) f = Matrix.det (.of fun i j ↦ f i (x j)) :=
       orientationAlternating_mul_dualOrientationAlternating_apply (P.orientation hM) x f
     have h₂ := P.crossAlternating_mul_crossDualAlternating hM x f
     rw [orientationAlternating_orientation] at h₁
@@ -575,8 +576,7 @@ itself. -/
 
 /-- The orientation of the pair induced by an orientation is the orientation itself. -/
 @[simp] theorem orientation_ofOrientation (hM : Module.rankAtStalk (R := k) M = fun _ ↦ 3)
-    (θ : (⋀[k]^3 M) ≃ₗ[k] k) :
-    (VectorProductPair.ofOrientation hM θ).orientation hM = θ := by
+    (θ : (⋀[k]^3 M) ≃ₗ[k] k) : (VectorProductPair.ofOrientation hM θ).orientation hM = θ := by
   apply LinearEquiv.toLinearMap_injective
   ext x
   have hx : ![x 0, x 1, x 2] = x := by
@@ -595,8 +595,7 @@ noncomputable def orientationEquiv (hM : Module.rankAtStalk (R := k) M = fun _ �
   right_inv P := P.ofOrientation_orientation hM
 
 @[simp] theorem orientationEquiv_apply (hM : Module.rankAtStalk (R := k) M = fun _ ↦ 3)
-    (θ : (⋀[k]^3 M) ≃ₗ[k] k) :
-    orientationEquiv hM θ = VectorProductPair.ofOrientation hM θ := rfl
+    (θ : (⋀[k]^3 M) ≃ₗ[k] k) : orientationEquiv hM θ = VectorProductPair.ofOrientation hM θ := rfl
 
 @[simp] theorem orientationEquiv_symm_apply (hM : Module.rankAtStalk (R := k) M = fun _ ↦ 3) :
     (orientationEquiv hM).symm P = P.orientation hM := rfl

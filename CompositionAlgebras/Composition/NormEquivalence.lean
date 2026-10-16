@@ -159,15 +159,12 @@ multiplication in `k_𝔪[u]` is determined by `t(u)` and `n(u)` (`GPR 19.8`), b
 unital norm equivalence (`GPR 23.2`). -/
 theorem map_mul_of_isometryEquiv_map_one_of_rankAtStalk_eq_two (C : ConicAlgebra k A)
     (D : ConicAlgebra k B) (hA : Module.rankAtStalk (R := k) A = fun _ ↦ 2)
-    (e : C.norm.IsometryEquiv D.norm) (h1 : e (1 : A) = 1) (x y : A) :
-    e (x * y) = e x * e y := by
+    (e : C.norm.IsometryEquiv D.norm) (h1 : e (1 : A) = 1) (x y : A) : e (x * y) = e x * e y := by
   have : Module.Finite k B := Module.Finite.equiv e.toLinearEquiv
   have : Module.Projective k B := Module.Projective.of_equiv' e.toLinearEquiv
   refine eq_of_forall_localization_maximal (k := k) _ _ fun P _ ↦ ?_
   let S := Localization.AtPrime P
-  have hSrank : Module.rankAtStalk (R := S) (S ⊗[k] A) = fun _ ↦ 2 := by
-    funext q
-    rw [Module.rankAtStalk_baseChange, hA]
+  have hSrank := Module.rankAtStalk_baseChange_of_eq S hA
   obtain ⟨u, hu⟩ := (C.baseChangeOfProjective S)
     |>.exists_forall_mem_adjoinElement_of_isLGRing_of_rankAtStalk_eq_two
       (isLGRing_of_isLocalRing S) hSrank
