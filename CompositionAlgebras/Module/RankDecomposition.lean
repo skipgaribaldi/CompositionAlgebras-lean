@@ -37,6 +37,8 @@ algebra `C`) has constant rank `r`".
   (`Module/IdempotentDecomposition.lean`) the module decomposition (2).
 * `Module.rankAtStalk_quotientTensor_rankIdempotent` : on the `i`th factor, `M` has constant
   rank `i`. This is the point of the whole construction.
+* `Module.nonempty_basis_atPrime_of_rankAtStalk_eq` : a module of constant rank `n` is free of
+  rank `n` at every prime.
 * `Module.eq_rankIdempotent_of_completeOrthogonalIdempotents` : **uniqueness** — any complete
   orthogonal system with pairwise distinct constant ranks on its factors is the one above.
 
@@ -408,3 +410,20 @@ theorem Module.rankIdempotent_smul_eq_zero_of_one_tmul_eq_zero (i : ℕ) {x : M}
       zero_smul]
   · intro a b ha hb
     rw [smul_add, ha, hb, add_zero]
+
+/-! ### Constant rank means locally free of that rank -/
+
+/-- A finitely generated projective module of constant rank `n` becomes free of rank `n` at every
+prime. -/
+theorem Module.nonempty_basis_atPrime_of_rankAtStalk_eq {R : Type u} {M : Type v} [CommRing R]
+    [AddCommGroup M] [Module R M] [Module.Finite R M] [Module.Projective R M] {n : ℕ}
+    (hM : Module.rankAtStalk (R := R) M = fun _ ↦ n) (J : Ideal R) [J.IsPrime] :
+    Nonempty (Module.Basis (Fin n) (Localization.AtPrime J)
+      (Localization.AtPrime J ⊗[R] M)) := by
+  let S := Localization.AtPrime J
+  let : Module.Free S (S ⊗[R] M) := Module.free_of_flat_of_isLocalRing
+  have hfin : Module.finrank S (S ⊗[R] M) = n := by
+    have h := congrFun hM ⟨J, inferInstance⟩
+    rw [Module.rankAtStalk_eq_finrank_tensorProduct] at h
+    simpa [S] using h
+  exact ⟨Module.finBasisOfFinrankEq S (S ⊗[R] M) hfin⟩

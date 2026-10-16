@@ -8,6 +8,7 @@ module
 public import CompositionAlgebras.LGRing.ConstantRank
 public import CompositionAlgebras.Module.AlternatingBaseChange
 public import CompositionAlgebras.Module.ExteriorPower
+public import CompositionAlgebras.Module.RankDecomposition
 public import CompositionAlgebras.Module.VectorProduct
 public import CompositionAlgebras.QuadraticForm.Regularity
 public import Mathlib.LinearAlgebra.ExteriorPower.Basis
@@ -100,12 +101,7 @@ theorem cross_apply_crossDual_of_orientation
       (dualOrientationAlternating theta)
   let Dt : Module.Dual S MS [⋀^Fin 3]→ₗ[S] S :=
     D.compLinearMap e.symm.toLinearMap
-  let : Module.Free S MS := Module.free_of_flat_of_isLocalRing
-  have hfin : Module.finrank S MS = 3 := by
-    have h := congrFun hM ⟨J, hJ.isPrime⟩
-    rw [Module.rankAtStalk_eq_finrank_tensorProduct] at h
-    simpa [S, MS] using h
-  let b : Module.Basis (Fin 3) S MS := Module.finBasisOfFinrankEq S MS hfin
+  obtain ⟨b⟩ := nonempty_basis_atPrime_of_rankAtStalk_eq hM J
   let P : VectorProductPair S MS := VectorProductPair.ofBasis b
   let vS : MS := 1 ⊗ₜ[k] v
   let wS : MS := 1 ⊗ₜ[k] w
@@ -423,21 +419,6 @@ theorem crossAlternating_mul_crossDualAlternating_of_basis (b : Module.Basis (Fi
   exact b'.det_mul_det_dualBasis x f
 
 end VectorProductPair
-
-/-- A finitely generated projective module of constant rank `n` becomes free of rank `n` at every
-prime. -/
-theorem nonempty_basis_atPrime_of_rankAtStalk_eq {k : Type u} {M : Type v} [CommRing k]
-    [AddCommGroup M] [Module k M] [Module.Finite k M] [Module.Projective k M] {n : ℕ}
-    (hM : Module.rankAtStalk (R := k) M = fun _ ↦ n) (J : Ideal k) [J.IsPrime] :
-    Nonempty (Module.Basis (Fin n) (Localization.AtPrime J)
-      (Localization.AtPrime J ⊗[k] M)) := by
-  let S := Localization.AtPrime J
-  let : Module.Free S (S ⊗[k] M) := Module.free_of_flat_of_isLocalRing
-  have hfin : Module.finrank S (S ⊗[k] M) = n := by
-    have h := congrFun hM ⟨J, inferInstance⟩
-    rw [Module.rankAtStalk_eq_finrank_tensorProduct] at h
-    simpa [S] using h
-  exact ⟨Module.finBasisOfFinrankEq S (S ⊗[k] M) hfin⟩
 
 namespace VectorProductPair
 
