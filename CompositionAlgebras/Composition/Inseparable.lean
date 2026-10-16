@@ -187,7 +187,8 @@ because the cross term is `2ab = 0`. They show the configuration is not empty.
 
 ⚠ They are **not** anisotropic (`ConicAlgebra.not_anisotropic_dualNumberInseparable`), so they
 witness the vanishing polar form and the failure of composition but not the sharpness claim about
-anisotropy; that needs a genuine purely inseparable field extension, hence an imperfect base. -/
+anisotropy; that needs a genuine purely inseparable field extension, hence an imperfect base, and
+is supplied by `Composition/InseparableAnisotropic.lean`. -/
 
 section DualNumber
 
@@ -250,7 +251,8 @@ theorem not_isComposition_dualNumberInseparable :
 
 /-- ⚠ The witness is **not** anisotropic: `ε² = 0` with `ε ≠ 0`. Anisotropy in the presence of a
 vanishing polar form — the sharp form of `GPR 19.4` — needs a purely inseparable field extension,
-which requires an imperfect base field and is not built here. -/
+which requires an imperfect base field. That witness is `𝔽₂(t)(√t)`, in
+`Composition/InseparableAnisotropic.lean` (`ConicAlgebra.anisotropic_insepSqrtConic`). -/
 theorem not_anisotropic_dualNumberInseparable :
     ¬ dualNumberInseparable.norm.Anisotropic := by
   intro hani

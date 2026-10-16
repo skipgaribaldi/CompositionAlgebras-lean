@@ -119,7 +119,8 @@ end OrderedField
 /-! ### The real octonions
 
 ⚠ `RealComplex` and `RealQuaternion` are the Cayley–Dickson doubles, not mathlib's `Complex` and
-`Quaternion ℝ`; the identifying `AlgEquiv`s are not built here. -/
+`Quaternion ℝ`. The identifying `AlgEquiv`s are `ConicAlgebra.realComplexAlgEquiv` and
+`ConicAlgebra.realQuaternionAlgEquiv`, in `Composition/ComplexQuaternion.lean`. -/
 
 /-- `ℂ` as a Cayley–Dickson double, `Cay(ℝ, -1)`. -/
 abbrev RealComplex : Type := Cay₂ ℝ (-1)

@@ -215,13 +215,15 @@ Foundational quadratic-form theory, absent from mathlib. Independent of everythi
   equivalently over every field in `R`-alg). The three formulations and their equivalence.
   Immediate consequences worth having: `GN 2.1(a)` (a finite direct product is LG iff each factor
   is) and `GN 2.1(b)` (`R` is LG ⟺ `R/Jac(R)` is LG).
-- **Examples (`GN 2.2`).** The **zero ring** — *proved* (`isLGRing_of_subsingleton`). Every field.
-  Every **semilocal** ring — the workhorse instance, via `GN 2.1(a)`/`2.1(b)`: `R/Jac(R)` is a
-  finite product of fields — hence every local, Artinian, and finite ring. The ring of **all
-  algebraic integers** `ℤ̄` (and of all real algebraic integers), via the primitive criterion
-  `GN 2.2(e)` (LG with all residue fields infinite; `ℤ̄` has no finite non-zero homomorphic images)
-  — *not formalized*: neither the criterion nor the LG property of `ℤ̄` is proved here. Also
-  *proved*: `R` with `R/Jac(R)` **von Neumann regular** (`GN 2.2(c)`,
+- **Examples (`GN 2.2`).** The **zero ring** — *proved* (`isLGRing_of_subsingleton`). Every
+  field. Every **semilocal** ring — the workhorse instance, via `GN 2.1(a)`/`2.1(b)`: `R/Jac(R)` is
+  a finite product of fields — hence every local, Artinian, and finite ring. The ring of **all
+  algebraic integers** `ℤ̄` (and of all real algebraic integers), via the primitive criterion of
+  `GN 2.2(e)`: every primitive polynomial represents a unit, which holds exactly when the ring is LG
+  **and** has no finite residue fields (`ℤ̄` has no finite non-zero homomorphic images). ⚠ Infinite
+  residue fields alone do not make a ring LG: `ℚ[t]` is a counterexample, by the non-examples below.
+  *Not formalized*: neither the criterion nor the LG property of `ℤ̄` is proved here. Also *proved*:
+  `R` with `R/Jac(R)` **von Neumann regular** (`GN 2.2(c)`,
   `isLGRing_of_isVonNeumannRegular_quotient_jacobson`); **zero-dimensional** rings (`GN 2.2(d)`,
   `isLGRing_of_krullDimLE_zero`); **direct limits** (`isLGRing_directLimit`, with the directed-union
   form `isLGRing_of_directed_subring`); arbitrary **products of fields** `∏ᵢ Kᵢ`, in particular
@@ -243,9 +245,12 @@ Foundational quadratic-form theory, absent from mathlib. Independent of everythi
   our purposes — the composition-algebra results can be reached without the scheme language — but
   it is the conceptually right statement and worth recording even if not formalized.
 - **Unimodular elements and constant-rank projectives (`GN 2.5`–`2.6`, `GPR 11.24`).** `m ∈ M` is
-  **unimodular** if `m ⊗ 1_{κ(𝔭)} ≠ 0` for all `𝔭 ∈ Spec R`; equivalently `R·m` is free of rank 1
-  and a direct summand of `M`; equivalently some linear functional takes the value `1` at `m`
-  (`GPR 9.17`). The last form is mathlib's `Module.IsUnimodular`, which we use. Then: over an LG
+  **unimodular** if some linear functional takes the value `1` at `m` — mathlib's
+  `Module.IsUnimodular`, which we use — equivalently if `R·m` is free of rank 1 and a direct
+  summand of `M`, which is the definition in `GPR 9.13`. When `M` is finitely generated projective
+  this is also equivalent to `m ⊗ 1_{κ(𝔭)} ≠ 0` for every `𝔭 ∈ Spec R` (`GPR 9.17`). ⚠ Not in
+  general: in the `ℤ`-module `ℤ ⊕ ℤ/2` the element `(2, 1̄)` survives in every residue field but no
+  functional takes it to `1` (`Module/Unimodular.lean`). Then: over an LG
   ring a **faithfully projective** module contains a unimodular element (`GN 2.6(a)`), and a finite
   projective module of **constant rank is free** (`GN 2.6(b)`, also stated in `GN 2.1(c)`) — the
   motto, made precise — whence `Pic(R) = 0` (`GN (2.1.1)`). *Both are formalized*: 2.6(a) in
@@ -311,14 +316,17 @@ degree-two identity `xy + yx = t(x)·y + t(y)·x − n(x,y)·1`, which is the wo
 conic calculus.
 
 Conic algebras are stable under base change (the final paragraph of `GPR 16.1`). ⚠ What is
-formalized here is
-`ConicAlgebra.baseChangeOfProjective`, which assumes the module **finitely generated projective** —
-the name carries the restriction rather than hiding it. The hypothesis is inherited from the norm:
-base change of a quadratic form over an arbitrary module needs quadratic maps as degree-two
-polynomial laws, which mathlib does not have, so this repository only has it for projective modules
-(`QuadraticForm.baseChangeOfProjective`, which in exchange assumes nothing about `2`). Nothing in
-Layers 6–8 needs the general case: composition algebras are finitely generated projective by
-definition, and Cayley–Dickson doubling preserves that.
+formalized here is `ConicAlgebra.baseChangeOfProjective`, which assumes the module **finitely
+generated projective** — the name carries the restriction rather than hiding it. The hypothesis is
+inherited from the norm: base change of a quadratic form over an arbitrary module needs quadratic
+maps as degree-two polynomial laws. mathlib has the polynomial-law and divided-power infrastructure
+(`PolynomialLaw`, `DividedPowerAlgebra`) but not the bridge from it to `QuadraticMap` — neither
+`Γ₂(M)` as the universal quadratic map nor an identification of quadratic maps with degree-two laws
+— so this repository only has base change for projective modules
+(`QuadraticForm.baseChangeOfProjective`, which in exchange assumes nothing about `2`; see the TODO
+in `QuadraticForm/BaseChangeProjective.lean`). Nothing in Layers 6–8 needs the general case:
+composition algebras are finitely generated projective by definition, and Cayley–Dickson doubling
+preserves that.
 
 ⚠ **Conjugation is *not* an anti-homomorphism merely because the algebra is alternative** — see
 [Boundaries and traps](#boundaries-and-traps), trap 6. What is true in every conic algebra is the
@@ -560,8 +568,9 @@ This implication is **proved** in `Composition/Reduced/Capstone.lean`, with the 
 exactly for the regular quadratic subalgebras produced by `GPR 19.16(b)`.
 The instance is `R = ℤ̄`, the ring of all algebraic integers, which is LG (`GN 2.2(e)`) and simply
 connected — **not** `ℤ`, which is not LG. We state the hypothesis as "every quadratic étale algebra
-splits" rather than "simply connected", because that is what the proof consumes; discharging it for
-`ℤ̄` is the one input from outside this development.
+splits" rather than "simply connected", because that is what the proof consumes. The concrete `ℤ̄`
+statement therefore needs **two** inputs from outside this development, neither formalized: that
+`ℤ̄` is LG (`GN 2.2(e)`; see Layer 0), and that every quadratic étale `ℤ̄`-algebra splits.
 
 ⚠ `GN Example 3.15` gives **several** proofs of the `ℤ̄` statement — via Rumely's theorem on points
 of schemes over `ℤ̄`, via strong approximation, and via `GN Cor. 3.14` (every semisimple group
@@ -605,7 +614,8 @@ that the split algebra of a given dimension is unique.
   `u` exists because the norm is regular (`GPR 19.11`) — otherwise `1` would lie in the kernel of
   the polar form. ⚠ Separable, not algebraic, closure is what the proof consumes, which is the
   point of `GPR 23.12`: over a separably closed field of characteristic 2 there are still
-  inseparable quadratic algebras, and they are not conic norms (`Composition/Inseparable.lean`).
+  inseparable quadratic algebras; they are conic algebras, but not composition algebras
+  (`Composition/Inseparable.lean`).
 - **The reals.** By Sylvester's law of inertia, exactly one composition **division** algebra in each
   dimension 1, 2, 4, 8 — namely `ℝ, ℂ, ℍ, 𝕆` — plus the split one in dimensions 2, 4, 8. **Proved**
   (`Composition/Fields/Real.lean`), on the quadratic-form input
@@ -723,19 +733,28 @@ separate. The reduced-algebra layer must use the GPR notion, which is named afte
 (`QuadraticMap.IsGPRIsotropic`), never left as a bare `IsIsotropic`.
 
 **3. `QuaternionAlgebra` is a free rank-4 presentation, not "the rank-4 composition algebras".**
-The two notions are incomparable over a general base:
+The two notions do not line up over a general base:
 - *Too wide:* `QuaternionAlgebra k c₁ c₂ c₃` accepts arbitrary structure constants, so its norm
   need not be non-singular. Some `QuaternionAlgebra`s are not composition algebras.
-- *Too narrow:* it only ever produces **free** modules, whereas composition algebras are merely
-  projective of constant rank. Over a ring with non-free rank-4 projectives (a Dedekind domain
-  with nontrivial class group, say) there are rank-4 composition algebras isomorphic to no
+- *Too narrow:* it is a **presentation** — a basis `1, i, j, k` with a fixed multiplication table
+  — so it only ever produces free modules, whereas a composition algebra is only required to be
+  projective of constant rank. Nothing in the definitions makes every rank-4 composition algebra a
   `QuaternionAlgebra`.
+
+  ⚠ Keep two questions apart: whether the underlying module is free, and whether a presentation of
+  this shape exists. Freeness is necessary for a presentation but is not the same statement, and in
+  rank four it is often automatic. A rank-4 composition algebra is an Azumaya algebra, étale-locally
+  `M₂`, and conjugation `x ↦ g x g⁻¹` on `Mₙ` has determinant `det(g)ⁿ det(g)⁻ⁿ = 1`, so its
+  determinant module is trivial. Over a Dedekind domain a projective module of rank four with
+  trivial determinant is free (Steinitz), so a nontrivial class group does **not** produce
+  rank-4 composition algebras with non-free modules.
 
   The correct statements are two asymmetric lemmas: a `QuaternionAlgebra` with non-singular norm is
   a rank-4 composition algebra (any commutative ring); and every constant-rank-4 composition algebra
-  is a `QuaternionAlgebra` **over an LG ring** (where constant-rank projectives are free). In
-  general a rank-4 composition algebra is an Azumaya algebra of rank 4, only locally a
-  `QuaternionAlgebra`, with a `PGL₂`-torsor obstruction to a global presentation.
+  is a `QuaternionAlgebra` **over an LG ring**, where `GPR 19.16` writes it as a Cayley–Dickson
+  double of a quadratic étale algebra and constant-rank projectives are free. In general a rank-4
+  composition algebra is an Azumaya algebra of rank 4 — a twisted form of `M₂(R)` — and only
+  locally a `QuaternionAlgebra`.
 
   ⚠ None of this obstructs the **specific** identification `Cay₄ ℝ (-1) (-1) ≃ₐ[ℝ] ℍ[ℝ]`, which
   is proved in `Composition/ComplexQuaternion.lean`: over `ℝ` the module is free and the structure
