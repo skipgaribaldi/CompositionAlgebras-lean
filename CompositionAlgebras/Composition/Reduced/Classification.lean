@@ -21,9 +21,11 @@ constant-rank projectives are free (`GPR 11.24`, `GN 2.6(b)`).
 
 ⚠ **On "division".** In this file "division algebra" is expressed by
 `ConicAlgebra.HasTwoSidedInverses` — every nonzero element has a two-sided inverse — which in
-general is weaker than being a division algebra in the sense of `GPR 8.6`. For the composition
-algebras considered here, which are alternative, the two agree once `1 ≠ 0` (`GPR 13.8`), but that
-equivalence is not formalized; see the docstring of `ConicAlgebra.HasTwoSidedInverses`.
+general is weaker than being a division algebra in the sense of `GPR 8.6`. For composition algebras
+over a field, which are alternative, the two agree once `1 ≠ 0` (`GPR 13.8`,
+`ConicAlgebra.IsComposition.isDivision_iff_hasTwoSidedInverses`), and
+`ConicAlgebra.IsComposition.isSplitOfRank_iff_not_isDivision` restates the field case of `GPR 22.18`
+with `IsDivision`; both are in `Composition/Fields/Basic.lean`.
 
 ## Main results
 

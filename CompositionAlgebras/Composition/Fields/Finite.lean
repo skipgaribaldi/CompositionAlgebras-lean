@@ -21,27 +21,32 @@ quadratic field extension of `𝔽_q` is a composition division algebra. Thus th
 composition algebra in each of the dimensions `1`, `4`, `8`, and two — the split one and a
 division algebra — in dimension `2`.
 
-⚠ **On "division".** In this file "division algebra" is expressed by
-`ConicAlgebra.HasTwoSidedInverses` — every nonzero element has a two-sided inverse — which in
-general is weaker than being a division algebra in the sense of `GPR 8.6`. For the composition
-algebras considered here, which are alternative, the two agree once `1 ≠ 0` (`GPR 13.8`), but that
-equivalence is not formalized; see the docstring of `ConicAlgebra.HasTwoSidedInverses`.
+⚠ **On "division".** Each division statement below comes in two forms: one with
+`ConicAlgebra.HasTwoSidedInverses` — every nonzero element has a two-sided inverse — and one with
+`IsDivision`, division in the sense of `GPR 8.6`. In general the first is weaker, but composition
+algebras are alternative, so the two agree once `1 ≠ 0` (`GPR 13.8`,
+`ConicAlgebra.IsComposition.isDivision_iff_hasTwoSidedInverses`); the `IsDivision` forms are
+derived from the others by that equivalence.
 
 ## Main results
 
 * `ConicAlgebra.IsComposition.isSplitOfRank_of_finite` : **`GPR 23.14`**, every composition
   algebra of dimension four or eight over a finite field is split.
-* `ConicAlgebra.IsComposition.not_hasTwoSidedInverses_of_finite` : there are no quaternion or
+* `ConicAlgebra.IsComposition.not_isDivision_of_finite`,
+  `ConicAlgebra.IsComposition.not_hasTwoSidedInverses_of_finite` : there are no quaternion or
   octonion division algebras over a finite field.
 * `ConicAlgebra.IsComposition.isomorphic_splitQuaternion_of_finite`,
   `ConicAlgebra.IsComposition.isomorphic_zor_of_finite` : the two split models are the only ones.
 * `ConicAlgebra.IsComposition.isomorphic_of_finite_of_ne_two` : uniqueness — over a finite field,
   any two composition algebras of the same dimension other than two are isomorphic.
-* `ConicAlgebra.IsComposition.isomorphic_of_finite_of_hasTwoSidedInverses_two` : the remaining
+* `ConicAlgebra.IsComposition.isomorphic_of_finite_of_isDivision_two`,
+  `ConicAlgebra.IsComposition.isomorphic_of_finite_of_hasTwoSidedInverses_two` : the remaining
   uniqueness statement — any two dimension-two composition division algebras are isomorphic.
-* `ConicAlgebra.exists_isComposition_hasTwoSidedInverses_not_isSplitOfRank_two` : the matching
+* `ConicAlgebra.exists_isComposition_isDivision_not_isSplitOfRank_two`,
+  `ConicAlgebra.exists_isComposition_hasTwoSidedInverses_not_isSplitOfRank_two` : the matching
   existence statement — a quadratic field extension is one.
-* `ConicAlgebra.IsComposition.isSplitOfRank_or_hasTwoSidedInverses_two` : in dimension two the
+* `ConicAlgebra.IsComposition.isSplitOfRank_or_isDivision_two`,
+  `ConicAlgebra.IsComposition.isSplitOfRank_or_hasTwoSidedInverses_two` : in dimension two the
   dichotomy is genuine, and this is the only dimension in which it is.
 
 ## Implementation notes
@@ -59,7 +64,8 @@ give the dimension-two half of `GPR 23.14` in full.
 
 ## References
 
-* [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 22.18, 23.14.
+* [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 8.6, 13.8, 22.18,
+  23.14.
 -/
 
 universe u v w
@@ -85,6 +91,12 @@ theorem IsComposition.isSplitOfRank_of_finite (h : C.IsComposition.{u, v, u})
 theorem IsComposition.not_hasTwoSidedInverses_of_finite (h : C.IsComposition.{u, v, u})
     (hA : Module.finrank K A = r) (hr : r = 4 ∨ r = 8) : ¬ C.HasTwoSidedInverses :=
   h.not_hasTwoSidedInverses_of_isSplitOfRank hA (by tauto) (h.isSplitOfRank_of_finite hA hr)
+
+/-- **`GPR 23.14`: no quaternion or octonion division algebras over a finite field**, with division
+in the sense of `GPR 8.6`. -/
+theorem IsComposition.not_isDivision_of_finite (h : C.IsComposition.{u, v, u})
+    (hA : Module.finrank K A = r) (hr : r = 4 ∨ r = 8) : ¬ IsDivision A := fun hdiv ↦
+  h.not_hasTwoSidedInverses_of_finite hA hr (C.hasTwoSidedInverses_of_isDivision hdiv)
 
 /-- **Every quaternion algebra over a finite field is `Mat₂(K)`.** -/
 theorem IsComposition.isomorphic_splitQuaternion_of_finite (h : C.IsComposition.{u, v, u})
@@ -186,5 +198,33 @@ the second being the quadratic field extension of the base. -/
 theorem IsComposition.isSplitOfRank_or_hasTwoSidedInverses_two (h : C.IsComposition.{u, v, u})
     (hA : Module.finrank K A = 2) : C.IsSplitOfRank 2 ∨ C.HasTwoSidedInverses :=
   h.isSplitOfRank_or_hasTwoSidedInverses hA (Or.inl rfl)
+
+/-! ### The same, with division in the sense of `GPR 8.6` -/
+
+/-- **The dimension-two division composition algebra over a finite field is unique**, with
+division in the sense of `GPR 8.6`. -/
+theorem IsComposition.isomorphic_of_finite_of_isDivision_two
+    (hC : C.IsComposition.{u, v, u}) (hD : D.IsComposition.{u, w, u})
+    (hA : Module.finrank K A = 2) (hB : Module.finrank K B = 2)
+    (hCdiv : IsDivision A) (hDdiv : IsDivision B) : C.Isomorphic D :=
+  hC.isomorphic_of_finite_of_hasTwoSidedInverses_two hD hA hB
+    (C.hasTwoSidedInverses_of_isDivision hCdiv) (D.hasTwoSidedInverses_of_isDivision hDdiv)
+
+/-- **A dimension-two division composition algebra exists over a finite field**, with division in
+the sense of `GPR 8.6`: the quadratic field extension. -/
+theorem exists_isComposition_isDivision_not_isSplitOfRank_two {L : Type w} [Field L]
+    [Algebra K L] (hL : Module.finrank K L = 2) :
+    ∃ (_ : Module.Finite K L) (_ : Module.Projective K L) (E : ConicAlgebra K L),
+      E.IsComposition.{u, w, u} ∧ IsDivision L ∧ ¬ E.IsSplitOfRank 2 := by
+  obtain ⟨_, _, E, hE, hinv, hns⟩ :=
+    exists_isComposition_hasTwoSidedInverses_not_isSplitOfRank_two (K := K) hL
+  exact ⟨‹_›, ‹_›, E, hE, hE.isDivision_iff_hasTwoSidedInverses.mpr hinv, hns⟩
+
+omit [Finite K] in
+/-- **`GPR 23.14` in dimension two, with `GPR 8.6`'s division**: a two-dimensional composition
+algebra over a finite field is split or a division algebra. -/
+theorem IsComposition.isSplitOfRank_or_isDivision_two (h : C.IsComposition.{u, v, u})
+    (hA : Module.finrank K A = 2) : C.IsSplitOfRank 2 ∨ IsDivision A :=
+  h.isSplitOfRank_or_isDivision hA (Or.inl rfl)
 
 end ConicAlgebra

@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
 import CompositionAlgebras.Composition.Examples
+import CompositionAlgebras.Conic.Division
 import CompositionAlgebras.Composition.RankOneTwoFourEight
 
 /-!
@@ -34,13 +35,19 @@ The third goes through the rank: `16 ∉ {1, 2, 4, 8}`. It is strictly stronger 
 conic norm on the underlying module at once, rather than the one that doubling produces — and it
 needs no witness and no computation with associators.
 
+## Inverses without division
+
+Separately, the sedenions are the example of `GPR Exc. 19.29(e)`: their norm is positive definite,
+so every nonzero sedenion has a two-sided inverse, yet they have explicit zero divisors and so are
+not a division algebra in the sense of `GPR 8.6`. This separates `ConicAlgebra.HasTwoSidedInverses`
+from `IsDivision`, and shows that the alternativity hypothesis of `GPR 13.8` cannot be dropped.
+
 That the norm is non-singular is what makes the second statement sharp. A conic algebra can fail to
 be a composition algebra because its norm is degenerate (`GPR 19.4` in characteristic two is that
 example, with an identically zero polar form); the sedenions fail for the opposite reason. Their
 norm is the sixteen-fold orthogonal sum of `⟨1⟩` over `ℝ`, as non-singular as a form can be, and
 what fails is `n(xy) = n(x)n(y)`. This is the converse half of `GPR Exc. 18.18` in this one
-instance,
-obtained without proving that converse in general.
+instance, obtained without proving that converse in general.
 
 ## Main results
 
@@ -51,12 +58,16 @@ obtained without proving that converse in general.
   is a composition algebra.
 * `ConicAlgebra.IsComposition.not_cay_of_mul_mul_ne` : the general statement over a field, of which
   the sedenions are the instance.
+* `ConicAlgebra.posDef_realSedenion`, `ConicAlgebra.hasTwoSidedInverses_realSedenion` : the norm is
+  positive definite, so every nonzero sedenion has a two-sided inverse.
+* `ConicAlgebra.exists_mul_eq_zero_realSedenion`, `ConicAlgebra.not_isDivision_realSedenion` :
+  **`GPR Exc. 19.29(e)`** — the sedenions have zero divisors, so they are not a division algebra in
+  the sense of `GPR 8.6`, despite their two-sided inverses.
 
 ## References
 
-* [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 18.14(c),
-  Exc. 18.18,
-  19.3, 19.18, 19.23.
+* [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 8.6, 13.8,
+  18.14(c), Exc. 18.18, 19.3, 19.18, 19.23, Exc. 19.29.
 -/
 
 universe u v
@@ -139,5 +150,57 @@ theorem not_isComposition_conicAlgebra_realSedenion (C : ConicAlgebra ℝ RealSe
   not_isComposition_of_finrank_notMem C
     (by rw [finrank_realSedenion]; norm_num) (by rw [finrank_realSedenion]; norm_num)
     (by rw [finrank_realSedenion]; norm_num) (by rw [finrank_realSedenion]; norm_num)
+
+/-! ### `GPR Exc. 19.29(e)`: inverses without division
+
+The sedenion norm is positive definite, so every nonzero sedenion `x` has the two-sided inverse
+`n(x)⁻¹ x̄`; yet the sedenions have zero divisors, so they are not a division algebra in the sense
+of `GPR 8.6`. This is the example separating `ConicAlgebra.HasTwoSidedInverses` from `IsDivision`,
+and it is why `GPR 13.8` needs alternativity.
+
+The zero divisors are explicit. Write `e₀, …, e₁₅` for the coordinate basis of
+`Cay(Cay(Cay(Cay(ℝ, -1), -1), -1), -1)`, numbering the two components `u, v` of `u + v j` at each
+level as the lower and upper half; then `(e₄ + e₉)(e₇ + e₁₀) = 0`. -/
+
+/-- **The norm of the real sedenions is positive definite** — the sum of sixteen squares. Doubling
+at a negative scalar preserves positive definiteness (`ConicAlgebra.PosDef.cay`). -/
+theorem posDef_realSedenion : realSedenion.norm.PosDef :=
+  PosDef.cay realOctonion (by norm_num) posDef_realOctonion
+
+/-- **Every nonzero sedenion has a two-sided inverse**, `n(x)⁻¹ x̄`, since the norm is
+anisotropic. -/
+theorem hasTwoSidedInverses_realSedenion : realSedenion.HasTwoSidedInverses :=
+  realSedenion.hasTwoSidedInverses_of_anisotropic posDef_realSedenion.anisotropic
+
+/-- **The real sedenions have zero divisors**: `(e₄ + e₉)(e₇ + e₁₀) = 0`, in the coordinates
+described above. The product is checked coordinate by coordinate. -/
+theorem exists_mul_eq_zero_realSedenion :
+    ∃ x y : RealSedenion, x ≠ 0 ∧ y ≠ 0 ∧ x * y = 0 := by
+  refine ⟨Cay.mk (Cay.mk 0 (Cay.mk (Cay.mk 1 0) (Cay.mk 0 0)))
+      (Cay.mk (Cay.mk (Cay.mk 0 1) (Cay.mk 0 0)) 0),
+    Cay.mk (Cay.mk 0 (Cay.mk (Cay.mk 0 0) (Cay.mk 0 1)))
+      (Cay.mk (Cay.mk (Cay.mk 0 0) (Cay.mk 1 0)) 0), fun h ↦ ?_, fun h ↦ ?_, ?_⟩
+  · have := congrArg (fun z : RealSedenion ↦ z.1.2.1.1) h
+    simp only [Cay.fst_mk, Cay.snd_mk, Cay.fst_zero, Cay.snd_zero] at this
+    exact one_ne_zero this
+  · have := congrArg (fun z : RealSedenion ↦ z.1.2.2.2) h
+    simp only [Cay.fst_mk, Cay.snd_mk, Cay.fst_zero, Cay.snd_zero] at this
+    exact one_ne_zero this
+  · refine Cay.ext ?_ ?_ <;> refine Cay.ext ?_ ?_ <;> refine Cay.ext ?_ ?_ <;>
+      refine Cay.ext ?_ ?_ <;>
+      simp only [Cay.fst_mul, Cay.snd_mul, Cay.fst_mk, Cay.snd_mk, cay_conj_mk,
+        baseRing_conj_apply, Cay.fst_add, Cay.snd_add, Cay.fst_smul, Cay.snd_smul, Cay.fst_neg,
+        Cay.snd_neg, Cay.fst_zero, Cay.snd_zero, mul_zero, zero_mul, add_zero, zero_add,
+        neg_zero, smul_zero, map_zero] <;>
+      norm_num
+
+/-- **`GPR Exc. 19.29(e)`: the real sedenions are not a division algebra** in the sense of
+`GPR 8.6`, although their norm is anisotropic and every nonzero sedenion has a two-sided inverse
+(`ConicAlgebra.hasTwoSidedInverses_realSedenion`). So `HasTwoSidedInverses` is strictly weaker than
+`IsDivision`, and the alternativity hypothesis of `GPR 13.8`
+(`ConicAlgebra.isDivision_iff_hasTwoSidedInverses`) cannot be dropped. -/
+theorem not_isDivision_realSedenion : ¬ IsDivision RealSedenion :=
+  let ⟨_, _, hx, hy, hxy⟩ := exists_mul_eq_zero_realSedenion
+  not_isDivision_of_mul_eq_zero hx hy hxy
 
 end ConicAlgebra

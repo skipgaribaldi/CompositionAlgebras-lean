@@ -123,6 +123,14 @@ variable {C μ}
 
 theorem ext {x y : Cay C μ} (h₁ : x.1 = y.1) (h₂ : x.2 = y.2) : x = y := Prod.ext h₁ h₂
 
+/-- The element `u + v j` of `Cay(B, μ)`, with components `u` and `v`. Writing explicit elements
+with `Cay.mk` rather than as a bare pair keeps their type `Cay C μ` visible, so that the lemmas
+about the doubled multiplication apply to them. -/
+def mk (u v : B) : Cay C μ := (u, v)
+
+@[simp] theorem fst_mk (u v : B) : (mk u v : Cay C μ).1 = u := rfl
+@[simp] theorem snd_mk (u v : B) : (mk u v : Cay C μ).2 = v := rfl
+
 variable (C μ)
 
 /-- The **Cayley–Dickson multiplication** `GPR 18.3`:
@@ -226,6 +234,15 @@ variable {C μ}
   refine Cay.ext ?_ ?_
   · rw [conj_apply, Cay.fst_sub, Cay.fst_smul, cay_trace_apply, Cay.fst_one, conj_apply]
   · rw [conj_apply, Cay.snd_sub, Cay.snd_smul, Cay.snd_one, smul_zero, zero_sub]
+
+/-- `GPR 18.4(6)` on an explicit element: the conjugate of `u + v j` is `ū - v j`.
+
+Not a simp lemma, since `cay_conj_apply` already rewrites its left-hand side; it is for `simp only`
+calls that keep elements in `Cay.mk` form. -/
+theorem cay_conj_mk (u v : B) :
+    (C.cay μ).conj (Cay.mk u v) = Cay.mk (C.conj u) (-v) := by
+  rw [cay_conj_apply]
+  rfl
 
 /-! ### Functoriality -/
 

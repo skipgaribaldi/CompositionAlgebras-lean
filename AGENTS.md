@@ -138,6 +138,7 @@ CompositionAlgebras/
   Nonassociative/        -- layer 0: alternative algebras know nothing about norms
     Associator.lean      -- associator API, nucleus (the center is mathlib's)
     Subalgebra.lean      -- unital subalgebras of non-associative algebras
+    Division.lean        -- IsDivision: division algebras in the sense of GPR 8.6
     Alternative/
       Defs.lean          -- IsAlternative, associator alternation
       Moufang.lean       -- the Moufang identities
@@ -198,6 +199,8 @@ CompositionAlgebras/
                          -- an associative conic algebra over ℤ/4 whose conjugation is not an
                          -- anti-homomorphism (README trap 6)
     Multiplicative.lean  -- IsMultiplicative (GPR 19.1); norm-associativity (GPR 16.5)
+    Division.lean        -- division, two-sided inverses, anisotropy; GPR 13.8 for alternative
+                         -- conic algebras over a field
     Subalgebra.lean      -- the conic structure restricted to a unital subalgebra
     Doubling.lean        -- GPR 18.1: B + Bv inside an ambient algebra, for v orthogonal to B
     Kirmse.lean          -- Kirmse's identities; alternativity under weak regularity
@@ -231,7 +234,8 @@ CompositionAlgebras/
                          -- the first two rungs are mathlib's ℂ and ℍ
     Octonion.lean        -- the Cayley-Dickson tower Cay₂/Cay₄/Cay₈ over any base; octonions
     Examples.lean        -- ℝ, ℂ, ℍ, 𝕆: positive definiteness, division, where the tower breaks
-    Sedenion.lean        -- conic, not composition (GPR 19.23)
+    Sedenion.lean        -- conic, not composition (GPR 19.23); inverses without division
+                         -- (GPR Exc. 19.29(e))
     Inseparable.lean     -- anisotropic conic algebras with vanishing polar form (GPR 19.4)
     InseparableAnisotropic.lean
                          -- an anisotropic witness for GPR 19.4

@@ -88,9 +88,13 @@ for every `u ≠ 0`, the left and right multiplications `L_u` and `R_u` are bije
 associativity a two-sided inverse does not give that: the real sedenions have an anisotropic norm,
 so every nonzero `x` has the two-sided inverse `n(x)⁻¹ x̄`, yet they are not a division algebra
 (`GPR Exc. 19.29(e)`). For a unital *alternative* algebra the two notions agree, given `1 ≠ 0`
-(`GPR 13.8`); in particular they agree for composition algebras, which are alternative. That
-equivalence is not formalized here, so theorems stated with `HasTwoSidedInverses` should be read
-as statements about this weaker property.
+(`GPR 13.8`); in particular they agree for composition algebras, which are alternative. Both
+facts are formalized in `Conic/Division.lean` and `Composition/Sedenion.lean`:
+`ConicAlgebra.isDivision_iff_hasTwoSidedInverses` is `GPR 13.8` for alternative conic algebras over
+a field, and `ConicAlgebra.hasTwoSidedInverses_realSedenion` with
+`ConicAlgebra.not_isDivision_realSedenion` is the sedenion example. Theorems stated with
+`HasTwoSidedInverses` are about this weaker property; the classification theorems over a field are
+also stated with `IsDivision`.
 
 The property depends only on the multiplication, but is placed in the conic-algebra namespace
 because it is used here in the classification of composition algebras. It does not assert
@@ -216,7 +220,8 @@ omit [IsScalarTower k A A] in
 if and only if its norm is anisotropic. Forwards, a null nonzero element cannot have an inverse
 because norms multiply. Backwards, `n(x)⁻¹ x̄` is a two-sided inverse. This is the step of
 `GPR 22.18` that `GPR` phrases with division algebras; `HasTwoSidedInverses` is weaker than that
-notion in general, and agrees with it for composition algebras (see its docstring). -/
+notion in general, and agrees with it for composition algebras
+(`ConicAlgebra.IsComposition.isDivision_iff_hasTwoSidedInverses`). -/
 theorem hasTwoSidedInverses_iff_anisotropic {K : Type*} [Field K] {B : Type*} [NonAssocRing B]
     [Module K B] [SMulCommClass K B B] [IsScalarTower K B B] {D : ConicAlgebra K B}
     (h : D.IsMultiplicative) : D.HasTwoSidedInverses ↔ D.norm.Anisotropic := by

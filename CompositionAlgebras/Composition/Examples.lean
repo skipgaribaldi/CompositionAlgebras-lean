@@ -4,17 +4,16 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
 import CompositionAlgebras.Composition.Octonion
+import CompositionAlgebras.Conic.Division
 import Mathlib.Basic.Real.Basic
 
 /-!
 # The classical tower `ℝ, ℂ, ℍ, 𝕆`
 
-Specializing the Cayley–Dickson tower of `Composition/Octonion.lean` to
-`μ₁ = μ₂ = μ₃ = -1` over
+Specializing the Cayley–Dickson tower of `Composition/Octonion.lean` to `μ₁ = μ₂ = μ₃ = -1` over
 an ordered field gives the classical chain of composition algebras in which every nonzero element
 is invertible, of ranks `1, 2, 4, 8` — division algebras in the sense of `GPR 8.6`, being
-alternative. Over `ℝ` these are the reals, the complex numbers, the quaternions and the
-octonions.
+alternative. Over `ℝ` these are the reals, the complex numbers, the quaternions and the octonions.
 
 The mechanism is that a negative scalar keeps the norm **positive definite**: the norm of
 `Cay(B, μ)` is `n_B(u) - μ n_B(v)`, and for `μ < 0` that is a sum of two non-negative terms which
@@ -24,21 +23,21 @@ two-sided inverse of `x`.
 
 Note that the inverse is obtained here **without** alternativity or associativity: the identity
 `x x̄ = x̄ x = n(x)·1` holds in every conic algebra, so the inverse is immediate once `n(x)` is a
-unit. ⚠ That is **not** yet division in the sense of `GPR 8.6` (bijective left and right
-multiplication by nonzero elements): the real sedenions are anisotropic, so have such inverses, but
-have zero divisors (`GPR Exc. 19.29(e)`). Alternativity is what upgrades the inverse to division —
-`x̄(xy) = n(x) y` — and the four algebras here are alternative.
+unit (`ConicAlgebra.hasTwoSidedInverses_of_anisotropic`). ⚠ That is **not** yet division in the
+sense of `GPR 8.6` (bijective left and right multiplication by nonzero elements): the real
+sedenions are anisotropic, so have such inverses, but have zero divisors (`GPR Exc. 19.29(e)`,
+`ConicAlgebra.not_isDivision_realSedenion`). Alternativity is what upgrades the inverse to
+division — `x̄(xy) = n(x) y` — and the four algebras here are alternative
+(`ConicAlgebra.isDivision_of_anisotropic`, applied in `ConicAlgebra.isDivision_realOctonion`).
 
 ## Main results
 
 * `ConicAlgebra.PosDef.cay` : `μ < 0` preserves positive definiteness under doubling.
-* `ConicAlgebra.exists_mul_eq_one_of_anisotropic` : in an anisotropic conic algebra over a field,
-  every nonzero element has a two-sided inverse.
 * `ConicAlgebra.posDef_cay₈`, `ConicAlgebra.exists_inv_cay₈` : the rank-8 member of the tower at
   negative scalars is positive definite, hence every nonzero element is invertible.
 * `ConicAlgebra.RealOctonion` : the real octonions `𝕆`, with `finrank_realOctonion` (rank 8),
-  `isComposition_realOctonion`, `isAlternative_realOctonion` and
-  `exists_inv_realOctonion`.
+  `isComposition_realOctonion`, `isAlternative_realOctonion`, `exists_inv_realOctonion` and
+  `isDivision_realOctonion` (`𝕆` is a division algebra in the sense of `GPR 8.6`).
 * `ConicAlgebra.exists_mul_ne_mul_realQuaternion`,
   `ConicAlgebra.exists_mul_mul_ne_mul_mul_realOctonion` : `ℍ` is not commutative and `𝕆` is not
   associative — the explicit witnesses that the tower stops.
@@ -104,30 +103,6 @@ theorem posDef_cay₈ {μ₁ μ₂ μ₃ : k} (h₁ : μ₁ < 0) (h₂ : μ₂ <
 
 end Ordered
 
-/-! ### Anisotropic norms give two-sided inverses -/
-
-section Division
-
-variable {K : Type u} [Field K] {A : Type v} [NonAssocRing A] [Module K A]
-  [SMulCommClass K A A] [IsScalarTower K A A]
-
-/-- **In an anisotropic conic algebra over a field every nonzero element is invertible**:
-`n(x)⁻¹ • x̄` is a two-sided inverse of any nonzero `x`. (Division in the sense of `GPR 8.6` needs
-more without alternativity; see the module docstring.)
-
-Only `x x̄ = x̄ x = n(x)·1` is used, so this needs neither alternativity nor associativity nor
-any
-regularity of the norm beyond anisotropy. -/
-theorem exists_mul_eq_one_of_anisotropic (C : ConicAlgebra K A) (hani : C.norm.Anisotropic)
-    {x : A} (hx : x ≠ 0) :
-    ∃ y : A, x * y = 1 ∧ y * x = 1 := by
-  have hn : C.norm x ≠ 0 := fun h ↦ hx (hani x h)
-  refine ⟨(C.norm x)⁻¹ • C.conj x, ?_, ?_⟩
-  · rw [mul_smul_comm, C.mul_conj_self, smul_smul, inv_mul_cancel₀ hn, one_smul]
-  · rw [smul_mul_assoc, C.conj_mul_self, smul_smul, inv_mul_cancel₀ hn, one_smul]
-
-end Division
-
 section OrderedField
 
 variable (K : Type u) [Field K] [LinearOrder K] [IsStrictOrderedRing K]
@@ -137,7 +112,7 @@ element is invertible**. -/
 theorem exists_inv_cay₈ {μ₁ μ₂ μ₃ : K} (h₁ : μ₁ < 0) (h₂ : μ₂ < 0)
     (h₃ : μ₃ < 0)
     {x : Cay₈ K μ₁ μ₂ μ₃} (hx : x ≠ 0) : ∃ y, x * y = 1 ∧ y * x = 1 :=
-  exists_mul_eq_one_of_anisotropic _ (posDef_cay₈ K h₁ h₂ h₃).anisotropic hx
+  (cay₈ K μ₁ μ₂ μ₃).hasTwoSidedInverses_of_anisotropic (posDef_cay₈ K h₁ h₂ h₃).anisotropic hx
 
 end OrderedField
 
@@ -176,10 +151,17 @@ theorem isAlternative_realOctonion : IsAlternative RealOctonion := inferInstance
 theorem posDef_realOctonion : realOctonion.norm.PosDef :=
   posDef_cay₈ ℝ (by norm_num) (by norm_num) (by norm_num)
 
-/-- **Every nonzero octonion is invertible**, so `𝕆`, being alternative, is a division algebra. -/
+/-- **Every nonzero octonion is invertible.** -/
 theorem exists_inv_realOctonion {x : RealOctonion} (hx : x ≠ 0) :
     ∃ y, x * y = 1 ∧ y * x = 1 :=
   exists_inv_cay₈ ℝ (by norm_num) (by norm_num) (by norm_num) hx
+
+/-- **`𝕆` is a division algebra** in the sense of `GPR 8.6`: it is alternative with anisotropic
+norm, so `GPR 13.8` applies (`ConicAlgebra.isDivision_of_anisotropic`). -/
+theorem isDivision_realOctonion : IsDivision RealOctonion :=
+  have : Nontrivial RealOctonion :=
+    Module.nontrivial_of_finrank_pos (R := ℝ) (by rw [finrank_realOctonion]; norm_num)
+  realOctonion.isDivision_of_anisotropic posDef_realOctonion.anisotropic
 
 /-! ### Where the tower breaks
 

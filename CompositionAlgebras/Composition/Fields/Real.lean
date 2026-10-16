@@ -27,19 +27,24 @@ Existence is the Cayley–Dickson tower at `μ₁ = μ₂ = μ₃ = -1` (`Compos
 supplies a positive definite — hence anisotropic, hence division — composition algebra in each of
 the four dimensions.
 
-⚠ **On "division".** In this file "division algebra" is expressed by
-`ConicAlgebra.HasTwoSidedInverses` — every nonzero element has a two-sided inverse — which in
-general is weaker than being a division algebra in the sense of `GPR 8.6`. For the composition
-algebras considered here, which are alternative, the two agree once `1 ≠ 0` (`GPR 13.8`), but that
-equivalence is not formalized; see the docstring of `ConicAlgebra.HasTwoSidedInverses`.
+⚠ **On "division".** Each division statement below comes in two forms: one with
+`ConicAlgebra.HasTwoSidedInverses` — every nonzero element has a two-sided inverse — and one with
+`IsDivision`, division in the sense of `GPR 8.6`. In general the first is weaker, but composition
+algebras are alternative, so the two agree once `1 ≠ 0` (`GPR 13.8`,
+`ConicAlgebra.IsComposition.isDivision_iff_hasTwoSidedInverses`); the `IsDivision` forms are
+derived from the others by that equivalence.
 
 ## Main results
 
-* `ConicAlgebra.IsComposition.posDef_norm_of_hasTwoSidedInverses` : a real composition division
+* `ConicAlgebra.IsComposition.posDef_norm_of_isDivision`,
+  `ConicAlgebra.IsComposition.posDef_norm_of_hasTwoSidedInverses` : a real composition division
   algebra has positive definite norm.
 * `ConicAlgebra.IsComposition.isomorphic_of_anisotropic` : two real composition algebras with
   anisotropic norms and the same dimension are isomorphic.
-* `ConicAlgebra.IsComposition.isomorphic_realTower_of_hasTwoSidedInverses` : **`GPR 23.13`**, every
+* `ConicAlgebra.IsComposition.isomorphic_of_isDivision`,
+  `ConicAlgebra.IsComposition.isomorphic_of_hasTwoSidedInverses` : the same for division algebras.
+* `ConicAlgebra.IsComposition.isomorphic_realTower_of_isDivision`,
+  `ConicAlgebra.IsComposition.isomorphic_realTower_of_hasTwoSidedInverses` : **`GPR 23.13`**, every
   real composition division algebra is `ℝ`, `ℂ`, `ℍ`, or `𝕆`.
 * `ConicAlgebra.IsComposition.isSplitOfRank_or_isomorphic_realTower` : the complete list — a real
   composition algebra of dimension `2`, `4`, or `8` is either split or one of the three division
@@ -57,7 +62,8 @@ files in this layer need a separate argument for each class of field.
 
 ## References
 
-* [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 22.18, 23.13.
+* [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 8.6, 13.8, 22.18,
+  23.13.
 * Sylvester, *A demonstration of the theorem that every homogeneous quadratic polynomial is
   reducible by real orthogonal substitutions to the form of a sum of positive and negative
   squares*, Philosophical Magazine **4** (1852), 138–142.
@@ -182,5 +188,29 @@ theorem IsComposition.isSplitOfRank_or_isomorphic_realTower {r : ℕ}
       anisotropic_norm_realQuaternion (by rw [hA, finrank_realQuaternion]))))
   · exact Or.inr (Or.inr (Or.inr (h.isomorphic_of_anisotropic isComposition_realOctonion hani
       anisotropic_norm_realOctonion (by rw [hA, finrank_realOctonion]))))
+
+/-! ### The same, with division in the sense of `GPR 8.6` -/
+
+/-- **A real composition division algebra has positive definite norm**, with division in the sense
+of `GPR 8.6`. -/
+theorem IsComposition.posDef_norm_of_isDivision (h : C.IsComposition.{0, v, 0})
+    (hdiv : IsDivision A) : C.norm.PosDef :=
+  h.posDef_norm_of_hasTwoSidedInverses (C.hasTwoSidedInverses_of_isDivision hdiv)
+
+/-- **The real division composition algebra of a given dimension is unique**, with division in the
+sense of `GPR 8.6`. -/
+theorem IsComposition.isomorphic_of_isDivision (hC : C.IsComposition.{0, v, 0})
+    (hD : D.IsComposition.{0, w, 0}) (hCdiv : IsDivision A) (hDdiv : IsDivision B)
+    (hdim : Module.finrank ℝ A = Module.finrank ℝ B) : C.Isomorphic D :=
+  hC.isomorphic_of_hasTwoSidedInverses hD (C.hasTwoSidedInverses_of_isDivision hCdiv)
+    (D.hasTwoSidedInverses_of_isDivision hDdiv) hdim
+
+/-- **`GPR 23.13`, with division in the sense of `GPR 8.6`.** Every composition division algebra
+over `ℝ` is isomorphic to one of `ℝ`, `ℂ`, `ℍ`, `𝕆`. -/
+theorem IsComposition.isomorphic_realTower_of_isDivision (h : C.IsComposition.{0, v, 0})
+    (hdiv : IsDivision A) :
+    C.Isomorphic (baseRing ℝ) ∨ C.Isomorphic realComplex ∨ C.Isomorphic realQuaternion ∨
+      C.Isomorphic realOctonion :=
+  h.isomorphic_realTower_of_hasTwoSidedInverses (C.hasTwoSidedInverses_of_isDivision hdiv)
 
 end ConicAlgebra

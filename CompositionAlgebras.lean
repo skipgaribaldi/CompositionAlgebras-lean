@@ -51,6 +51,7 @@ import CompositionAlgebras.Conic.CayleyDicksonAssociative
 import CompositionAlgebras.Conic.CayleyDicksonConverse
 import CompositionAlgebras.Conic.CayleyDicksonMultiplicative
 import CompositionAlgebras.Conic.Defs
+import CompositionAlgebras.Conic.Division
 import CompositionAlgebras.Conic.Doubling
 import CompositionAlgebras.Conic.Kirmse
 import CompositionAlgebras.Conic.Multiplicative
@@ -82,6 +83,7 @@ import CompositionAlgebras.Nonassociative.Alternative.Moufang
 import CompositionAlgebras.Nonassociative.Alternative.Peirce
 import CompositionAlgebras.Nonassociative.Alternative.PowerAssociative
 import CompositionAlgebras.Nonassociative.Associator
+import CompositionAlgebras.Nonassociative.Division
 import CompositionAlgebras.Nonassociative.Subalgebra
 import CompositionAlgebras.QuadraticForm.BaseChangeProjective
 import CompositionAlgebras.QuadraticForm.Cancellation

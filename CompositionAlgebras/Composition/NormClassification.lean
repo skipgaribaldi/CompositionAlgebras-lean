@@ -8,6 +8,7 @@ import CompositionAlgebras.Composition.QuadraticSubalgebra
 import CompositionAlgebras.Composition.RankOneTwoFourEight
 import CompositionAlgebras.Composition.Tower
 import CompositionAlgebras.Conic.CayleyDickson
+import CompositionAlgebras.Conic.Division
 import CompositionAlgebras.Conic.Projective
 import CompositionAlgebras.QuadraticForm.OrthogonalComplement
 import CompositionAlgebras.QuadraticForm.WittCancellation
@@ -190,28 +191,6 @@ section Normalize
 variable {B : Type w} [NonAssocRing B] [Module k B] [SMulCommClass k B B]
   [IsScalarTower k B B] {D : ConicAlgebra k B}
 
-omit [SMulCommClass k A A] [IsScalarTower k A A] [Module.Finite k A] [Module.Projective k A]
-  in
-/-- In an alternative conic algebra, `x (x̄z) = n(x)z`.
-
-This inverse law needs alternativity but no regularity or multiplicativity: expand conjugation and
-use the left alternative law together with the degree-two identity. -/
-theorem mul_conj_mul [IsAlternative B] (x z : B) : x * (D.conj x * z) = D.norm x • z := by
-  rw [conj_apply, sub_mul, smul_mul_assoc, one_mul, mul_sub, mul_smul_comm,
-    IsAlternative.mul_mul_self_left, D.mul_self_eq, sub_mul, smul_mul_assoc, smul_mul_assoc]
-  simp only [one_mul]
-  module
-
-omit [SMulCommClass k A A] [IsScalarTower k A A] [Module.Finite k A] [Module.Projective k A]
-  [SMulCommClass k B B] in
-/-- In an alternative conic algebra, `x̄(xz) = n(x)z`. -/
-theorem conj_mul_mul_of_isAlternative [IsAlternative B] (x z : B) :
-    D.conj x * (x * z) = D.norm x • z := by
-  rw [conj_apply, sub_mul, smul_mul_assoc, one_mul, IsAlternative.mul_mul_self_left,
-    D.mul_self_eq, sub_mul, smul_mul_assoc, smul_mul_assoc]
-  simp only [one_mul]
-  module
-
 /-- Left multiplication by `x̄` is a linear equivalence when `n(x) = 1`; its inverse is left
 multiplication by `x`. -/
 def leftMulConjLinearEquiv [IsAlternative B] (x : B) (hx : D.norm x = 1) : B ≃ₗ[k] B where
@@ -221,7 +200,7 @@ def leftMulConjLinearEquiv [IsAlternative B] (x : B) (hx : D.norm x = 1) : B ≃
   map_smul' c z := mul_smul_comm _ _ _
   left_inv z := by
     change x * (D.conj x * z) = z
-    rw [mul_conj_mul, hx, one_smul]
+    rw [mul_conj_mul_of_isAlternative, hx, one_smul]
   right_inv z := by
     change D.conj x * (x * z) = z
     rw [conj_mul_mul_of_isAlternative, hx, one_smul]
@@ -236,7 +215,7 @@ def leftMulConjUnitLinearEquiv [IsAlternative B] (x : B) (μ : kˣ)
   map_smul' c z := by simp only [mul_smul_comm, RingHom.id_apply, smul_smul, mul_comm]
   left_inv z := by
     change x * ((↑μ⁻¹ : k) • (D.conj x * z)) = z
-    rw [mul_smul_comm, mul_conj_mul, hx, smul_smul, Units.inv_mul, one_smul]
+    rw [mul_smul_comm, mul_conj_mul_of_isAlternative, hx, smul_smul, Units.inv_mul, one_smul]
   right_inv z := by
     change (↑μ⁻¹ : k) • (D.conj x * (x * z)) = z
     rw [conj_mul_mul_of_isAlternative, hx, smul_smul, Units.inv_mul, one_smul]

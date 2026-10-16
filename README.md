@@ -327,6 +327,14 @@ obstruction, and `GPR 16.10(a)` says conjugation is an involution exactly when i
 It vanishes for alternative algebras over a **field**, and — `GPR 16.14(b)`, `GPR 17.6` — over any
 base for which the algebra is finitely generated projective, but not over an arbitrary ring.
 
+**Division** (`GPR 8.6`, `GPR 13.8`). `IsDivision A` (`Nonassociative/Division.lean`) is `GPR`'s
+notion: `A ≠ 0`, and multiplication on either side by a nonzero element is bijective. Over a field,
+`x x̄ = n(x)·1` gives every nonzero element of an anisotropic conic algebra the two-sided inverse
+`n(x)⁻¹ x̄`. ⚠ That property, `ConicAlgebra.HasTwoSidedInverses`, is weaker than division: the real
+sedenions have such inverses and also zero divisors (`GPR Exc. 19.29(e)`). For an *alternative*
+conic algebra over a field, division, two-sided inverses and anisotropy of the norm all coincide
+once `A ≠ 0` (`Conic/Division.lean`), by the identities `x̄(xy) = n(x)y = (yx)x̄`.
+
 ### Layer 6 — Cayley–Dickson doubling (`GPR 18.3–18.6`)
 
 `Cay(B, μ)` on `B × B` with `(u₁,v₁)(u₂,v₂) = (u₁u₂ + μ·v̄₂v₁, v₂u₁ + v₁ū₂)`, unit `(1,0)`, norm
@@ -401,9 +409,11 @@ non-singular agrees with EKM-nondegenerate (`GN C.9`); that identification, `EKM
 - **`ℝ, ℂ, ℍ, 𝕆`.** The tower `ℂ = Cay(ℝ,−1)`, `ℍ = Cay(ℂ,−1)`, `𝕆 = Cay(ℍ,−1)`, with `ℂ` and `ℍ`
   identified with mathlib's `Complex` and `Quaternion ℝ` by `AlgEquiv`. Octonions are defined here
   (mathlib has none), kept general in `k` and then specialized. Each has anisotropic positive
-  definite norm, hence is a division algebra.
+  definite norm, hence — being alternative — is a division algebra in the sense of `GPR 8.6`.
 - **Sedenions (`GPR 19.23`).** `Cay(𝕆, μ)`, rank 16: a **conic algebra that is not a composition
-  algebra** — **proved** (`Composition/Sedenion.lean`), by both available routes.
+  algebra** — **proved** (`Composition/Sedenion.lean`), by both available routes. Its norm is
+  still positive definite, so every nonzero sedenion has a two-sided inverse, yet it has explicit
+  zero divisors and so is not a division algebra (`GPR Exc. 19.29(e)`).
 - **Characteristic 2, purely inseparable (`GPR 19.4`).** For `F` of characteristic 2 and `C/F` a
   **proper** purely inseparable extension of exponent ≤ 1, `C` is a conic algebra whose norm is the
   squaring map: **anisotropic with identically zero polar form**. Not a composition algebra (the
@@ -531,7 +541,8 @@ and §23 is the comparison between those and algebra isomorphisms.
   reduced-to-hyperbolic presentation is `peirceHyperbolicIsometryEquiv`. The field division
   condition is **proved** as `IsComposition.isSplitOfRank_iff_not_hasTwoSidedInverses`:
   multiplicativity makes a two-sided inverse impossible for a nonzero null vector, while anisotropy
-  gives the explicit inverse `n(x)⁻¹ x̄`.
+  gives the explicit inverse `n(x)⁻¹ x̄`. With division in the sense of `GPR 8.6` it is
+  `IsComposition.isSplitOfRank_iff_not_isDivision`, by `GPR 13.8`.
 - **`GPR 22.19`.** Over a PID, the two isotropy notions (unimodular null vector vs. represents zero)
   coincide, and both are equivalent to splitness and to having zero divisors. This is **proved** for
   constant ranks 2, 4, and 8 in `Composition/Reduced/Classification.lean`. The coordinate-ideal
@@ -603,7 +614,9 @@ that the split algebra of a given dimension is unique.
   taking positive values are classified by their dimension. The norm takes the value `1` at the
   identity element, hence is positive definite (`posDef_norm_of_hasTwoSidedInverses`), and Layer 9
   turns the isometry into an algebra isomorphism. `isomorphic_realTower_of_hasTwoSidedInverses` is
-  the resulting list, and `isSplitOfRank_or_isomorphic_realTower` adds the split algebras.
+  the resulting list, and `isSplitOfRank_or_isomorphic_realTower` adds the split algebras. Each
+  division statement in this and the next bullet is also stated with `IsDivision`
+  (`isomorphic_realTower_of_isDivision`, `not_isDivision_of_finite`, …).
 - **Finite fields.** By Chevalley–Warning every form in ≥ 3 variables is isotropic, so all
   quaternion and octonion algebras split; the only non-split composition algebra is `𝔽_{q²}` in
   dimension 2. **Proved** (`Composition/Fields/Finite.lean`, `QuadraticForm/FiniteField.lean`).
