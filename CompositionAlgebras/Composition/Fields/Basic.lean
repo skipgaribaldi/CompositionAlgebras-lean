@@ -18,7 +18,7 @@ division algebra (`GPR 22.18`). Over a field the two isotropy notions of the lit
 (`QuadraticMap.isGPRIsotropic_iff_not_anisotropic`), so no unimodularity bookkeeping survives.
 
 **The norm is a complete invariant.** Two composition algebras over a field with isometric norm
-forms are isomorphic; this is Layer 9 read through the instance `Field ⇒ IsLGRing`.
+forms are isomorphic; this is Layer 9 applied with `isLGRing_of_field`.
 
 Together these reduce classification over a particular field to two questions about quadratic
 forms over that field: which forms of dimension `2`, `4`, `8` are isotropic, and which anisotropic
@@ -175,8 +175,8 @@ theorem IsSplitOfRank.isomorphic (hC : C.IsSplitOfRank r) (hD : D.IsSplitOfRank 
     (isSplitOfRank_eight_iff.mp hC).trans (isSplitOfRank_eight_iff.mp hD).symm]
 
 /-- **Layer 9 over a field.** Composition algebras over a field whose norm forms are isometric are
-isomorphic. This is the converse direction of the norm classification, specialized through the
-instance `Field ⇒ IsLGRing`; no dimension hypothesis is needed because the isometry transports the
+isomorphic. This is the converse direction of the norm classification, specialized by passing
+`isLGRing_of_field`; no dimension hypothesis is needed because the isometry transports the
 dimension. -/
 theorem IsComposition.isomorphic_of_isometryEquiv (hC : C.IsComposition.{u, v, u})
     (hD : D.IsComposition.{u, w, u}) (e : C.norm.IsometryEquiv D.norm) : C.Isomorphic D :=

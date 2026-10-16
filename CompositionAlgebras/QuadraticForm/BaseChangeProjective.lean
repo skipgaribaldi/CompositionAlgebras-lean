@@ -61,7 +61,9 @@ and the `QuadraticForm`-valued construction is given a distinct name.
 ## TODO
 
 * Drop the projectivity hypothesis entirely by constructing base change through the divided
-  square `Γ₂(M)` (Roby), for which mathlib currently has no API.
+  square `Γ₂(M)` (Roby). mathlib now has the divided power algebra `DividedPowerAlgebra R M` and
+  polynomial laws `PolynomialLaw`, but not yet `Γ₂(M)` as the universal quadratic map, nor any link
+  from either to `QuadraticMap`.
 
 ## References
 

@@ -30,7 +30,8 @@ example. Alternativity is the structural hypothesis under which composition alge
   `AGENTS.md` §2 forbids — algebra structure, norm regularity and module regularity are independent
   axes;
 * a bundled class carrying its own `NonAssocRing` parent diamonds against `ConicAlgebra`'s
-  `[NonAssocRing A] [Algebra k A]`, making `IsComposition → IsAlternative` awkward to state.
+  `[NonAssocRing A] [Module k A] [SMulCommClass k A A] [IsScalarTower k A A]` (mathlib's `Algebra`
+  requires an associative `Semiring`), making `IsComposition → IsAlternative` awkward to state.
 
 One instance (`Semigroup.isAlternative`) covers every associative case, mirroring
 `CommSemigroup.isCommJordan`.

@@ -22,8 +22,10 @@ Defines `QuadraticMap.IsGPRIsotropic`: `Q` is isotropic iff it has a **unimodula
 over a general ring, since unimodularity (mathlib's `Module.IsUnimodular`: some functional takes the
 value `1` at `u`, equivalently `R·u` is a free rank-1 direct summand, `GPR 9.13`, `GPR 9.17`) asks
 for more than `u ≠ 0`. The two notions coincide over a field, and `GPR 22.19` shows they also
-coincide over a PID; in general they do not, and the reduced-composition-algebra layer (`GPR 22.9`
-ff.) needs the GPR notion specifically. See `AGENTS.md` §6(c).
+coincide for finitely generated projective modules over a PID (the module hypothesis is needed: the
+zero form on the `ℤ`-module `ℤ/2` has a nonzero null vector but no unimodular element); in general
+they do not, and the reduced-composition-algebra layer (`GPR 22.9` ff.) needs the GPR notion
+specifically. See `AGENTS.md` §6(c).
 
 The name carries its source, as for the regularity ladder (`QuadraticForm.IsGPRNondegenerate`,
 `IsGPRNonsingular`, `IsGPRRegular` in `QuadraticForm/Regularity.lean`): there is no bare
@@ -61,10 +63,11 @@ cancelled are only assumed non-singular (`GN 6.5`, not `GPR 11.27`).
   every nonzero vector is unimodular (`Module.isUnimodular_of_ne_zero`), so the extra strength GPR's
   definition carries over a general ring disappears entirely over a field.
 
-`GPR 22.19`'s further statement — that the two notions already coincide over a **PID**, more
-generally than a field — is proved below by generating the ideal of the coordinates of a nonzero
-vector. A generator divides every coordinate; dividing by it gives a primitive, hence unimodular,
-vector. Homogeneity and the domain hypothesis preserve the null-vector equation.
+`GPR 22.19`'s further statement — that the two notions already coincide for a finitely generated
+projective module over a **PID**, more generally than a field — is proved below by generating the
+ideal of the coordinates of a nonzero vector. A generator divides every coordinate; dividing by it
+gives a primitive, hence unimodular, vector. Homogeneity and the domain hypothesis preserve the
+null-vector equation.
 
 ## References
 

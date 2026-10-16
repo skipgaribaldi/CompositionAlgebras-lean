@@ -91,7 +91,7 @@ Three independent axes recur throughout; keep them separate:
 
 | Axis | Typical hypotheses |
 |---|---|
-| Algebra structure | `[NonAssocRing A] [Algebra k A]`, `[IsAlternative A]` |
+| Algebra structure | `[NonAssocRing A] [Module k A] [SMulCommClass k A A] [IsScalarTower k A A]`, `[IsAlternative A]` |
 | Norm regularity | `(Q.polarBilin).Nondegenerate`, `Q.IsGPRNonsingular`, `Q.IsGPRRegular` |
 | Module regularity | `[Module.Finite k A]`, `[Module.Projective k A]`, constant rank |
 
@@ -102,14 +102,16 @@ Consequences:
 - Do **not** create a `PreCompositionAlgebra` structure to package "projective + GPR-nondegenerate +
   multiplicative". State `GPR 19.3` with those three as separate hypotheses. (Reason: `GPR 19.7(a)`
   — the bundle is not base-change stable.)
-- Do **not** write `[Field K]` when the proof only needs `[IsLGRing k]`, and do not write
-  `[IsLGRing k]` when the proof works over any `CommRing`.
-- Do **not** write `[IsLocalRing k]` as a stand-in for `[IsLGRing k]`. We have `IsLGRing`; use it.
+- Do **not** write `[Field K]` when the proof only needs an LG hypothesis `(hLG : IsLGRing k)`, and
+  do not assume `IsLGRing k` when the proof works over any `CommRing`.
+- Do **not** write `[IsLocalRing k]` as a stand-in for `IsLGRing k`. We have `IsLGRing`; use it.
 
 **The default base is `variable (k : Type*) [CommRing k]`.** Objects are always defined over a
 general commutative ring. Stronger hypotheses attach to *theorems*, never to *definitions*. This
 is what makes the field case a genuine instance of the LG case rather than a duplicate
-development, and it is why `Field ⇒ IsLGRing` must exist as an `instance`.
+development. `IsLGRing` is a plain predicate (`def IsLGRing (R) : Prop`), not a class: LG theorems
+take an explicit hypothesis `(hLG : IsLGRing k)`, and the field case is obtained by passing
+`isLGRing_of_field K`.
 
 ---
 
@@ -173,6 +175,7 @@ CompositionAlgebras/
     FiniteField.lean     -- Chevalley-Warning: forms in >= 3 variables over a finite field are
                          -- isotropic
     Real.lean            -- anisotropic real forms are definite, hence classified by dimension
+                         -- and sign
     Hyperbolic.lean      -- regularity of mathlib's hyperbolic form QuadraticForm.dualProd;
                          -- q ⊥ -q ≅ dualProd for q regular
     HyperbolicPair.lean  -- hyperbolic pairs, Siegel-Eichler transvections, dilations
@@ -390,8 +393,9 @@ source's sense is meant.
 
 **(c) GPR isotropy is *unimodular*, mathlib's is *nonzero*.** Do not implement GPR's isotropy as
 `¬ QuadraticMap.Anisotropic`. Use mathlib's `Module.IsUnimodular` predicate. They agree over fields
-and over PIDs (`GPR 22.19`) and differ in general. As with the regularity words in (b), the
-predicate carries its source's name: `QuadraticMap.IsGPRIsotropic`, never a bare `IsIsotropic`.
+and, for finitely generated projective modules, over PIDs (`GPR 22.19`), and differ in general. As
+with the regularity words in (b), the predicate carries its source's name:
+`QuadraticMap.IsGPRIsotropic`, never a bare `IsIsotropic`.
 
 **(d) The Cayley–Dickson scalar is arbitrary.** `Cay(B, μ)` takes `μ : k`, **not** `μ : kˣ`. Unit
 hypotheses go on theorems. Encoding `μ : kˣ` in the construction breaks the sedenion example.
@@ -421,7 +425,8 @@ contradicts the source, suspect the paraphrase before the source.
 - The associator/Moufang identities are the natural rewrite engine for alternative algebras;
   expose them as clean equational lemmas so downstream proofs can `rw` with them.
 - When a proof is the same over fields and over LG rings — which is the common case here — write
-  it **once**, over `[IsLGRing k]`, and get the field case from the `Field ⇒ IsLGRing` instance.
+  it **once**, with a hypothesis `(hLG : IsLGRing k)`, and get the field case by passing
+  `isLGRing_of_field K`.
   Do not copy a field proof and generalize it later; that produces two proofs to maintain.
 
 ---
@@ -475,7 +480,7 @@ contradicts the source, suspect the paraphrase before the source.
 
 - [ ] Searched mathlib for every notion introduced; nothing reinvented.
 - [ ] Hypotheses are exactly those the proof consumes; nothing bundled.
-- [ ] Objects defined over `CommRing`; `[IsLGRing k]` / `[Field K]` only on theorems.
+- [ ] Objects defined over `CommRing`; `IsLGRing k` / `[Field K]` hypotheses only on theorems.
 - [ ] Import discipline respected (no downward imports; general-purpose files mathlib-only).
 - [ ] Module docstring with main definitions, main results, references.
 - [ ] Every literature result cites its number.

@@ -40,11 +40,13 @@ The final paragraph of `GPR 16.1` has no such restriction, because a quadratic f
 over an arbitrary
 module: `q_S` is the unique form on `S ⊗[k] M` with `q_S(s ⊗ m) = s² q(m)` and the expected
 polar form.
-Proving that needs quadratic maps as degree-two polynomial laws (Roby), which neither mathlib nor
-this repository has; `baseChangeOfProjective` sidesteps it by choosing a bilinear `b` with
-`b(x, x) = q(x)`, which exists exactly when the module is projective. Nothing downstream needs the
-general case: composition algebras are finitely generated projective by definition, and
-Cayley–Dickson doubling preserves that. See the TODO below.
+Proving that needs quadratic maps as degree-two polynomial laws (Roby); mathlib now has polynomial
+laws (`PolynomialLaw`) but does not yet relate them to `QuadraticMap`, and this repository does not
+either. `baseChangeOfProjective` sidesteps it by choosing a bilinear `b` with `b(x, x) = q(x)`,
+which exists whenever the module is projective (`QuadraticMap.hasBilinRepr_of_projective`) — though
+not only then: the zero form has one on every module, and when `2` is invertible half the polar form
+represents every form. Nothing downstream needs the general case: composition algebras are finitely
+generated projective by definition, and Cayley–Dickson doubling preserves that. See the TODO below.
 
 **The multiplication is mathlib's.** `S ⊗[k] A` carries `NonAssocRing` from
 `Mathlib/RingTheory/TensorProduct/Basic.lean`, which builds the multiplication on a tensor product

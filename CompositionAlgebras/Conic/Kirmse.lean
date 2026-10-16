@@ -40,9 +40,12 @@ troubled by characteristic 2, where the polar form of a non-singular form of odd
 ⚠ **Non-degeneracy is not implied by non-singularity over a ring**, so this is not yet `GPR 19.3`
 for composition algebras over an arbitrary base: `QuadraticForm.rankOne 1` over `𝔽₂[t]/(t²)` is
 non-singular (`QuadraticForm.isGPRNonsingular_rankOne`) but has `t` in its radical. Over a *field*
-the two coincide (`QuadraticForm.radical_eq_bot_of_radical_baseChangeOfProjective_eq_bot`), which is
-what `Composition/Basic.lean` uses; over a ring the route is base change to the residue fields. See
-the TODO below.
+non-singularity does imply a vanishing radical
+(`QuadraticForm.radical_eq_bot_of_radical_baseChangeOfProjective_eq_bot`), which is what
+`Composition/Basic.lean` uses. Over a ring, alternativity of composition algebras is proved by a
+different route in `Composition/Alternative.lean`
+(`ConicAlgebra.IsComposition.isAlternative_general`: regularity, the rank-one case, and the rank
+decomposition); see below for why residue-field descent is not that route.
 
 ## Main results
 
@@ -55,27 +58,26 @@ the TODO below.
   `GPR 19.3`'s alternativity statement, with `GPR`'s own hypothesis and no assumption on `2`, on
   the rank, or on the module.
 
-## TODO
+## Why not residue-field descent
 
-* Deduce alternativity of a composition algebra over an arbitrary commutative ring, whose norm is
-  only *non-singular*. **The route previously recorded here does not work**, and is written out
-  below so that it is not attempted again.
+Alternativity of a composition algebra over an arbitrary commutative ring, whose norm is only
+*non-singular*, is proved in `Composition/Alternative.lean`. A route once recorded here does not
+work, and is written out so that it is not attempted again.
 
-  That route was: the alternative laws are multilinear, and a map of finitely generated modules
-  vanishes as soon as it vanishes after base change to every residue field; over each residue field
-  the base-changed algebra is again a multiplicative conic algebra with vanishing radical
-  (`ConicAlgebra.IsComposition.baseChangeOfProjective`, `Composition/BaseChange.lean`, now
-  supplies this half), so the theorem below applies there.
+That route was: the alternative laws are multilinear, and a map of finitely generated modules
+vanishes as soon as it vanishes after base change to every residue field; over each residue field
+the base-changed algebra is again a multiplicative conic algebra with vanishing radical
+(`ConicAlgebra.IsComposition.baseChangeOfProjective`, `Composition/BaseChange.lean`), so the theorem
+below applies there.
 
-  ⚠ The second ingredient — residue-field detection — is **false**. Over `R = 𝔽₂[t]/(t²)`, the
-  map `R → R`, `x ↦ t x`, is nonzero, yet `R` has the single maximal ideal `(t)` and the map
-  vanishes after base change to `R ⧸ (t) = 𝔽₂`. Base changing to every *field* over `R`, rather
-  than every residue field, does not help: `t` is nilpotent, so it dies in every field over `R`.
-  Nothing about finite generation or projectivity repairs this — residue fields simply cannot see
-  a nilpotent, and this is the same phenomenon as the ⚠ above, where `t` sits in the radical of a
-  non-singular form over exactly that ring. A correct proof must therefore obtain something
-  stronger over the base than "vanishing after base change to every field", and `GPR`'s own
-  argument for `19.3` should be consulted before any further attempt.
+⚠ The second ingredient — residue-field detection — is **false**. Over `R = 𝔽₂[t]/(t²)`, the map
+`R → R`, `x ↦ t x`, is nonzero, yet `R` has the single maximal ideal `(t)` and the map vanishes
+after base change to `R ⧸ (t) = 𝔽₂`. Base changing to every *field* over `R`, rather than every
+residue field, does not help: `t` is nilpotent, so it dies in every field over `R`. Nothing about
+finite generation or projectivity repairs this — residue fields simply cannot see a nilpotent, and
+this is the same phenomenon as the ⚠ above, where `t` sits in the radical of a non-singular form
+over exactly that ring. The proof in `Composition/Alternative.lean` therefore works over the base:
+regularity where the rank exceeds one, and commutativity and associativity outright in rank one.
 
 ## References
 

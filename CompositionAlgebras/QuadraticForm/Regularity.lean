@@ -32,26 +32,36 @@ etc.) for regularity conditions on quadratic forms, and worse, the *same* word m
 things in different sources. To keep this straight, every regularity predicate in this file is
 named after the source whose convention it follows.
 
-`GPR`'s regularity ladder (`GPR 11.11`) distinguishes four notions, weakest to strongest:
-**weakly regular** (mathlib's `polarBilin.Nondegenerate`/`SeparatingLeft`, `AGENTS.md` §6(b)),
-**non-degenerate** (`radical Q = ⊥`, `GN C.8(d)`), **non-singular** (the radical vanishes after
-every field base change, `GN C.8(e)`), and **regular** (the polar form is an isomorphism onto the
-dual, not just injective). `EKM` independently has its own two-rung ladder built from the same
-radical, calling
-its rungs "regular" and "non-degenerate" — words that collide with, but do not mean the same thing
-as, GPR's "regular" and "non-degenerate".
+`GPR 11.11` distinguishes four notions: **weakly regular** (the polar form is injective — mathlib's
+`polarBilin.Nondegenerate`/`SeparatingLeft`, `AGENTS.md` §6(b)), **non-degenerate**
+(`radical Q = ⊥`, `GN C.8(d)`), **non-singular** (the radical vanishes after every field base
+change, `GN C.8(e)`), and **regular** (the polar form is an isomorphism onto the dual, not just
+injective).
+
+⚠ **Over a general ring these do not form a linear ladder.** Since `radical Q` lies in the kernel
+of the polar form, regular ⇒ weakly regular ⇒ non-degenerate; and regular ⇒ non-singular for `M`
+finitely generated projective (`GN (C.8.1)`). Nothing else holds in general. `x²` over `𝔽₂` is
+non-degenerate (indeed non-singular) but not weakly regular, its polar form being zero; `x²` over
+`𝔽₂[ε]/(ε²)` is non-singular but has `ε` in its radical; and `2x²` over `ℤ` is weakly regular but
+not non-singular, since it vanishes modulo `2`. Over any field non-singular ⇒ non-degenerate (the
+converse fails for `x² + t y²` over `𝔽₂(t)`, which acquires a radical vector over `𝔽₂(√t)`), and
+for finite-dimensional forms over a field of characteristic not `2` all four notions agree.
+
+`EKM` independently has its own two-rung ladder built from the same radical, calling its rungs
+"regular" and "non-degenerate" — words that collide with, but do not mean the same thing as, GPR's
+"regular" and "non-degenerate".
 
 ## Main definitions
 
 * `QuadraticForm.IsGPRNondegenerate` : `QuadraticMap.radical Q = ⊥`, GPR's own "non-degenerate"
   rung. The radical is **mathlib's** `QuadraticMap.radical`, the submodule of vectors on which
-  both `Q` and its polar form vanish (`GN C.8(d)`, `EKM` II §7): it constrains *both* `Q` and its
-  polar form, which is what makes it finer than mathlib's
-  `LinearMap.BilinForm.Nondegenerate`/`SeparatingLeft`, which only ever see the polar form.
-  `IsGPRNondegenerate` is *not* the same as mathlib's `QuadraticMap.Nondegenerate`, which also
-  bounds the rank of the polar radical and is therefore the stronger `IsGPRNonsingular` rung
-  (`QuadraticForm/NonsingularOverFields.lean`), nor the same as `EKM`'s "non-degenerate" (see
-  `QuadraticForm.IsEKMNondegenerate` below).
+  both `Q` and its polar form vanish (`GN C.8(d)`, `EKM` II §7). It lies in the kernel of the polar
+  form, so `radical Q = ⊥` is *weaker* than mathlib's
+  `LinearMap.BilinForm.Nondegenerate`/`SeparatingLeft` (injectivity of the polar form); `x²` over
+  `𝔽₂` separates them. `IsGPRNondegenerate` is *not* the same as mathlib's
+  `QuadraticMap.Nondegenerate`, which also bounds the rank of the polar radical and over a field
+  is the `IsGPRNonsingular` condition (`QuadraticForm/NonsingularOverFields.lean`), nor the same as
+  `EKM`'s "non-degenerate" (see `QuadraticForm.IsEKMNondegenerate` below).
 * `QuadraticForm.IsGPRRegular` : `polarBilin Q` is a *bijection* onto `Module.Dual R M`, not merely
   injective (`SeparatingLeft`/weakly regular only asks injectivity). Equivalently, `polarBilin Q`
   is a mathlib perfect pairing (`QuadraticForm.isGPRRegular_iff_isPerfPair`).
@@ -234,25 +244,27 @@ variable {R : Type u} [CommRing R] {M : Type v} [AddCommGroup M] [Module R M]
   {N : Type w} [AddCommGroup N] [Module R N]
 
 /-- `Q` is **non-degenerate** in GPR's sense (`GPR 11.11`, boundary/trap in `AGENTS.md` §6(b)):
-`QuadraticMap.radical Q = ⊥`. This is a genuinely different, *stronger* notion than mathlib's
-`polarBilin.Nondegenerate` (GPR's "weakly regular"), which only asks the polar form itself to be
-injective and does not constrain `Q`.
+`QuadraticMap.radical Q = ⊥`. This is a genuinely different, *weaker* notion than mathlib's
+`polarBilin.Nondegenerate` (GPR's "weakly regular"), which asks the polar form itself to be
+injective: the radical lies in the kernel of the polar form, so an injective polar form forces
+`radical Q = ⊥`, but not conversely — `x²` over `𝔽₂` has zero polar form and zero radical.
 
 The radical itself is mathlib's `QuadraticMap.radical` — the submodule of vectors on which both
 `Q` and its polar form vanish (`GN C.8(d)`, `EKM` Chapter II §7). Constraining `Q` itself, not
-just the polar form, is what makes it finer than mathlib's bilinear-form nondegeneracy
-predicates — see `AGENTS.md` §6(b).
+just the polar form, is what makes it smaller than the kernel of the polar form, which is all that
+mathlib's bilinear-form nondegeneracy predicates see — see `AGENTS.md` §6(b).
 
 **Terminology.** Named for its source, `GPR`, since `EKM` uses "non-degenerate" for a different,
 stronger condition — see `QuadraticForm.IsEKMNondegenerate` below. Note in particular that this
 is *not* mathlib's `QuadraticMap.Nondegenerate`, which additionally bounds the rank of the polar
-radical and so is the stronger `IsGPRNonsingular` rung; see
+radical and over a field is the `IsGPRNonsingular` condition; see
 `QuadraticForm/NonsingularOverFields.lean`. -/
 def QuadraticForm.IsGPRNondegenerate (Q : QuadraticForm R M) : Prop :=
   Q.radical = ⊥
 
 /-- `Q` is **regular**: its polar form is a *bijection* `M ≃ Module.Dual R M`, not merely
-injective. The strongest rung of `GPR 11.11`'s ladder.
+injective. The strongest of `GPR 11.11`'s notions: it implies the other three (non-singularity
+for `M` finitely generated projective).
 
 **Terminology.** Named for its source, `GPR`, since `EKM` uses "regular" for the weaker condition
 `radical Q = ⊥` — see `QuadraticForm.IsEKMNondegenerate` below. -/
@@ -287,7 +299,7 @@ over a field, a reader may have met GPR's "non-singular" quadratic forms under a
 Here
 **non-degenerate** in that literature-synonym sense must not be confused with either
 `QuadraticForm.IsGPRNondegenerate` above (the `radical Q = ⊥` rung over the base ring) or mathlib's
-`LinearMap.BilinForm.Nondegenerate` (GPR's still weaker "weakly regular" rung). When `R` is
+`LinearMap.BilinForm.Nondegenerate` (GPR's "weakly regular": an injective polar form). When `R` is
 already a field, this condition coincides with `EKM`'s own "non-degenerate" —
 `QuadraticForm.IsEKMNondegenerate` below. -/
 def QuadraticForm.IsGPRNonsingular [Module.Finite R M] [Module.Projective R M]
@@ -814,10 +826,10 @@ dropped: for `u` a unit, `⟨u⟩` is non-singular over any commutative ring but
 `2` is a unit. `R = ℤ`, `u = 1` is the concrete separating example.
 
 The two directions use genuinely different features of the definitions. Non-singularity needs only
-the `Q m = 0` clause of `QuadraticMap.radical` — the clause that makes it finer than mathlib's
-`Nondegenerate`, which sees the polar form alone — together with the absence of zero divisors in a
-field. Regularity, by contrast, is entirely about the polar form `x ↦ 2 * u * x`, which is where
-the `2` enters.
+the `Q m = 0` clause of `QuadraticMap.radical` — the clause that makes the radical smaller than the
+kernel of the polar form, which is all that mathlib's `LinearMap.BilinForm.Nondegenerate` sees —
+together with the absence of zero divisors in a field. Regularity, by contrast, is entirely about
+the polar form `x ↦ 2 * u * x`, which is where the `2` enters.
 -/
 
 /-- The **rank-one form** `⟨u⟩ : r ↦ u * r ^ 2` on `R` itself.
@@ -1194,11 +1206,11 @@ def QuadraticForm.IsEKMNondegenerate.{w2} {F : Type u} [Field F] {V : Type v}
 /-- Over a field `R`, `EKM`'s non-degenerate (`QuadraticForm.IsEKMNondegenerate`) is *literally*
 the same universal statement as `GPR`'s non-singular (`QuadraticForm.IsGPRNonsingular`): both
 quantify `(Q.baseChangeOfProjective K).radical = ⊥` over the same class of fields `K` with
-`[Algebra R K]`. This does **not** prove `EKM Lemma 7.16` (that this condition agrees with `EKM`'s
-other two, equivalent formulations) — see the module docstring for what remains open there; it
-only records that the definition chosen here for `IsEKMNondegenerate` (condition (1) of the lemma)
-coincides on the nose with the ring-theoretic `IsGPRNonsingular` once the ring is a field, which is
-`GN C.9`'s claim. -/
+`[Algebra R K]`. `EKM Lemma 7.16` itself — that this condition agrees with `EKM`'s other two
+formulations — is `QuadraticForm.isEKMNondegenerate_iff_nondegenerate`, in
+`QuadraticForm/NonsingularOverFields.lean`; this theorem only records that the definition chosen
+here for `IsEKMNondegenerate` (condition (1) of the lemma) coincides on the nose with the
+ring-theoretic `IsGPRNonsingular` once the ring is a field, which is `GN C.9`'s claim. -/
 theorem QuadraticForm.isEKMNondegenerate_iff_isGPRNonsingular.{w2} {F : Type u} [Field F]
     {V : Type v} [AddCommGroup V] [Module F V] [Module.Finite F V] [Module.Projective F V]
     (Q : QuadraticForm F V) :

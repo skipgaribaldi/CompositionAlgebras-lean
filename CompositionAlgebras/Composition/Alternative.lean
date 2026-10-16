@@ -19,11 +19,11 @@ on `2`, none on the rank, and none on the base ring beyond commutativity.
 `GPR 19.3` itself is *not* a statement about composition algebras. Its hypothesis is that the norm
 be **non-degenerate** in the sense of `GPR 11.11` — the radical vanishes — and in that form it is
 already proved in full generality here (`ConicAlgebra.IsMultiplicative.isAlternative`, in
-`Conic/Kirmse.lean`). What a composition algebra supplies is the weaker **non-singularity**, and
-`GPR 19.6` shows the two genuinely differ: the base ring `k = 𝔽₂[t]/(t²)` is a composition algebra
-over itself whose norm has `t` in its radical. So no argument can derive a vanishing radical from
-the definition, and the residue-field descent once proposed for this cannot work — `t` is nilpotent
-and dies in every field over that ring.
+`Conic/Kirmse.lean`). What a composition algebra supplies is **non-singularity**, which over a ring
+does not imply it, and `GPR 19.6` shows the two genuinely differ: the base ring `k = 𝔽₂[t]/(t²)` is
+a composition algebra over itself whose norm has `t` in its radical. So no argument can derive a
+vanishing radical from the definition, and the residue-field descent once proposed for this cannot
+work — `t` is nilpotent and dies in every field over that ring.
 
 `GPR 19.7(c)` says what is true instead: it is the **regular** composition algebras that are
 alternative, via `GPR 19.3`. Regularity gives a vanishing radical for free and with no hypothesis

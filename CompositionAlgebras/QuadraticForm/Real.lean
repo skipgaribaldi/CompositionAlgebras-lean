@@ -6,7 +6,7 @@ Authors: Skip Garibaldi
 import Mathlib.LinearAlgebra.QuadraticForm.Real
 
 /-!
-# Anisotropic real quadratic forms are definite, and determined by their dimension
+# Anisotropic real quadratic forms are definite, and determined by their dimension and sign
 
 The existence half of Sylvester's law of inertia — mathlib's
 `QuadraticForm.equivalent_one_zero_neg_one_weighted_sum_squared` — writes a real quadratic form as
@@ -120,8 +120,10 @@ theorem posDef_of_anisotropic (Q : QuadraticForm ℝ M) (hani : Q.Anisotropic) {
   refine hx (hani x ?_)
   rw [← e.map_app x, weightedSumSquares_apply, ← hzero]
 
-/-- **Anisotropic real quadratic forms are classified by their dimension.** Two anisotropic real
-forms of the same dimension, each taking a positive value, are isometric. -/
+/-- **Anisotropic real quadratic forms are classified by their dimension and sign.** Two
+anisotropic real forms of the same dimension, each taking a positive value, are isometric. The sign
+hypothesis cannot be dropped: `x²` and `-x²` are anisotropic of the same dimension but not
+isometric. -/
 theorem equivalent_of_anisotropic_of_finrank_eq {Q : QuadraticForm ℝ M} {P : QuadraticForm ℝ N}
     (hQ : Q.Anisotropic) (hP : P.Anisotropic) {v : M} (hv : 0 < Q v) {u : N} (hu : 0 < P u)
     (hdim : Module.finrank ℝ M = Module.finrank ℝ N) : Q.Equivalent P := by

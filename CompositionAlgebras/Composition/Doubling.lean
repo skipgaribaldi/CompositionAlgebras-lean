@@ -152,7 +152,7 @@ variable {K : Type u} {A : Type v} [Field K] [NonAssocRing A] [Module K A]
   {C : ConicAlgebra K A} {B : NonAssocSubalgebra K A}
 
 /-- **`GPR 19.16(a)` over a field**, where alternativity of `C` is automatic (`GPR 19.3`) and the
-LG hypothesis is discharged by the `Field ⇒ IsLGRing` instance. -/
+LG hypothesis is discharged by `isLGRing_of_field`. -/
 theorem IsComposition.exists_cayToAlgebra_of_field (h : C.IsComposition.{u, v, u})
     (hreg : QuadraticForm.IsGPRRegular (C.restrict B).norm)
     (hsupp : Module.HasFullSupport K

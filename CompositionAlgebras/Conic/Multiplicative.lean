@@ -77,11 +77,18 @@ no projectivity: those are separate axes (`AGENTS.md` §2), and a composition al
 (`GPR 19.5`) is a conic algebra having all three. -/
 def IsMultiplicative : Prop := ∀ x y : A, C.norm (x * y) = C.norm x * C.norm y
 
-/-- A conic algebra is a **division algebra** when every nonzero element has a two-sided inverse.
+/-- Every nonzero element of the conic algebra has a two-sided inverse.
 
 This property depends only on the multiplication, but is placed in the conic-algebra namespace
 because it is used here in the classification of composition algebras. It does not assert
-associativity. -/
+associativity.
+
+⚠ **This is weaker than "division algebra" in `GPR 8.6`**, which asks left and right
+multiplication by every nonzero element to be bijective. Without associativity a two-sided inverse
+does not give that: the real sedenions have an anisotropic norm, hence two-sided inverses
+`n(x)⁻¹ x̄`, and also zero divisors (`GPR Exc. 19.29(e)`). For an *alternative* conic algebra over a
+field the two agree, since the alternative laws give `x̄(xy) = n(x) y = (yx) x̄`; in particular they
+agree for composition algebras, which are alternative. -/
 def IsDivision (_C : ConicAlgebra k A) : Prop :=
   ∀ {x : A}, x ≠ 0 → ∃ y : A, x * y = 1 ∧ y * x = 1
 

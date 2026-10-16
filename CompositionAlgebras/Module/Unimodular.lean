@@ -39,13 +39,13 @@ This is not a norm-theoretic notion — no quadratic form is in sight here — b
 
 ## Implementation notes
 
-GPR states unimodularity geometrically: `m` is unimodular iff `m ⊗ 1_{κ(𝔭)} ≠ 0` for every
-`𝔭 ∈ Spec R` (i.e. `m` survives in every residue field). `GPR 9.17` shows this is equivalent to
-the two algebraic formulations above, which type-check without first setting up residue fields.
-The geometric form is not (yet) proved equivalent in this file. Doing so needs the same "nonzero in
-a f.g. projective module survives in some residue field" fact that underlies
-`QuadraticForm/BaseChangeProjective.lean` and the missing half of `QuadraticForm/Regularity.lean`
-(`GN (C.8.1)`) — see that file's implementation notes.
+GPR also states unimodularity geometrically: `m` is unimodular iff `m ⊗ 1_{κ(𝔭)} ≠ 0` for every
+`𝔭 ∈ Spec R` (i.e. `m` survives in every residue field). ⚠ That criterion needs `M` finitely
+generated projective (`GPR 9.17`): in the `ℤ`-module `ℤ ⊕ ℤ/2` the element `(2, 1̄)` survives in
+every residue field, but no linear functional takes it to `1`. Only the two algebraic formulations
+above are formalized here; the geometric one is not. Note that residue fields cannot detect
+whether an element is *nonzero* — `ε` in the free rank-one module over `𝔽₂[ε]/(ε²)` dies in every
+residue field — so the geometric criterion genuinely uses unimodularity, not mere non-vanishing.
 
 We use mathlib's general lattice notion `IsComplemented` (`Mathlib.Order.Disjoint`) for "direct
 summand" in the `GPR 9.13` characterization rather than inventing a submodule-specific one, per

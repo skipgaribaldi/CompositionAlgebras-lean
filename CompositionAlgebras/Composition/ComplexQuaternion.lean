@@ -31,7 +31,10 @@ multiplication of `u + vj`. Writing `u = a + bi` and `v = c + di` gives `a + bi 
 ⚠ These are equivalences at `μ₁ = μ₂ = -1` over `ℝ` specifically. `Cay₄ k μ₁ μ₂` and
 `QuaternionAlgebra k a b c` are **not** comparable in general — see the README's trap 3:
 `QuaternionAlgebra` takes arbitrary structure constants and always produces a free module, while
-`Cay₄` produces a composition algebra exactly when the `μᵢ` are units.
+`Cay₄ k μ₁ μ₂` is a composition algebra when `2` and the `μᵢ` are units
+(`ConicAlgebra.isComposition_cay₄`, which needs `Invertible (2 : k)`: in characteristic `2` the
+polar form of the norm of `Cay₄ k μ₁ μ₂` is identically zero, so it is never a composition
+algebra).
 
 ## Main results
 

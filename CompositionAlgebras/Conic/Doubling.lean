@@ -43,10 +43,11 @@ together with `n(v)` being a unit, which lets right multiplication by `v` be can
 ## Why no regularity hypothesis
 
 `GPR 19.3` produces alternativity of a composition algebra from the vanishing of the *radical* of
-its norm, which over a general commutative ring is strictly stronger than non-singularity (see
-`Composition/Basic.lean`). Alternativity is therefore assumed here rather than derived, as an
-honest hypothesis: over a field, and over any ring in which `2` is invertible, it is automatic
-(`ConicAlgebra.IsComposition.isAlternative`).
+its norm, which over a general commutative ring is not implied by non-singularity (see
+`Composition/Basic.lean`). Alternativity is therefore assumed here rather than derived, as an honest
+hypothesis on a conic algebra. For a composition algebra it is automatic over every commutative ring
+(`ConicAlgebra.IsComposition.isAlternative_general`, `Composition/Alternative.lean`, which this
+layer may not import).
 
 What is *not* assumed is any regularity of the norm — not on `A`, not on `B`. The three identities
 below are cancellation statements proved by multiplying by `v` and using `n(v) ∈ kˣ`, so no

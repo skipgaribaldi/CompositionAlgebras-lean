@@ -23,10 +23,13 @@ happens here is the passage from the composition-algebra hypothesis,
 
 ⚠ **That passage is not free over a ring.** Non-singularity does not imply that the radical
 vanishes: `QuadraticForm.rankOne 1` over `𝔽₂[t]/(t²)` is non-singular but has `t` in its radical.
-Over a field the two agree, because non-singularity includes the trivial base change
-(`QuadraticForm.radical_eq_bot_of_radical_baseChangeOfProjective_eq_bot`); over a ring with `2`
-invertible, non-singular implies regular (`GN (C.8.2)`) and hence injective polar form. The general
-ring case has to descend from the residue fields instead; see `Conic/Kirmse.lean`'s TODO.
+Over a field, non-singularity implies a vanishing radical, because it includes the trivial base
+change (`QuadraticForm.radical_eq_bot_of_radical_baseChangeOfProjective_eq_bot`) — only that
+direction: `x² + t y²` over `𝔽₂(t)` has zero radical but acquires a radical vector over `𝔽₂(√t)`.
+Over a ring with `2` invertible, non-singular implies regular (`GN (C.8.2)`) and hence injective
+polar form. The general ring case is not a descent from the residue fields (`Conic/Kirmse.lean`
+explains why that fails); alternativity over an arbitrary ring is proved instead in
+`Composition/Alternative.lean`.
 
 ## Main results
 

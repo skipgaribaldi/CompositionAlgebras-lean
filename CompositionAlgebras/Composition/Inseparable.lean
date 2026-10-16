@@ -51,8 +51,9 @@ non-regular composition norm only in dimension one.
 ⚠ The dual numbers are **not** anisotropic — `n(ε) = 0` — so they witness the vanishing polar form
 and the failure of composition, but not the sharpness claim about anisotropy. An anisotropic
 witness must be a genuine purely inseparable field extension, so it needs an imperfect base such as
-`𝔽₂(t)` with `A = 𝔽₂(t)(√t)`; that is not constructed here, and the general theorems below apply to
-it as soon as it is.
+`𝔽₂(t)` with `A = 𝔽₂(t)(√t)`. That witness is constructed in
+`Composition/InseparableAnisotropic.lean` (`ConicAlgebra.anisotropic_insepSqrtConic`,
+`ConicAlgebra.not_isComposition_insepSqrtConic`), by applying the general theorems below.
 
 ## Main results
 
