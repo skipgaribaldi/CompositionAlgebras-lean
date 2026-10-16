@@ -28,17 +28,17 @@ projectivity, and no assumption that `2` is invertible.
 ## Main results
 
 * `ConicAlgebra.conj_conj` : conjugation is an involution.
-* `ConicAlgebra.add_conj` : `x + x̄ = t(x) • 1`.
-* `ConicAlgebra.mul_conj_self`, `ConicAlgebra.conj_mul_self` : `x x̄ = x̄ x = n(x) • 1`.
+* `ConicAlgebra.add_conj` : `x + conj x = t(x) • 1`.
+* `ConicAlgebra.mul_conj_self`, `ConicAlgebra.conj_mul_self` : `x (conj x) = (conj x) x = n(x) • 1`.
 * `ConicAlgebra.trace_conj`, `ConicAlgebra.norm_conj` : trace and norm are conjugation-invariant.
 * `ConicAlgebra.mul_add_mul` : the linearized degree-two identity
   `xy + yx = t(x) • y + t(y) • x - n(x, y) • 1`.
-* `ConicAlgebra.conj_mul_conj` : `ȳ x̄ = conj (xy) + traceDefect x y • 1`, the sharp unconditional
-  statement of how far conjugation is from being an anti-homomorphism.
+* `ConicAlgebra.conj_mul_conj` : `(conj y) (conj x) = conj (xy) + traceDefect x y • 1`, the sharp
+  unconditional statement of how far conjugation is from being an anti-homomorphism.
 * `ConicAlgebra.traceDefect_smul_eq_smul_one` : in an **alternative** conic algebra,
   `traceDefect x y • x` is a scalar multiple of `1`.
 * `ConicAlgebra.traceDefect_eq_zero`, `ConicAlgebra.conj_mul` : over a **field**, conjugation of an
-  alternative conic algebra is an anti-homomorphism, `conj (xy) = ȳ x̄`.
+  alternative conic algebra is an anti-homomorphism, `conj (xy) = (conj y) (conj x)`.
 
 ## Implementation notes
 
@@ -143,7 +143,8 @@ theorem mul_comm_eq (x y : A) :
 
 /-! ### Conjugation -/
 
-/-- The **conjugation** of a conic algebra: `x̄ = t(x) • 1 - x` (`GPR 16.2`), as a `k`-linear map.
+/-- The **conjugation** of a conic algebra: `conj x = t(x) • 1 - x` (`GPR 16.2`), as a `k`-linear
+map.
 
 It is not mathlib's `star`: the conjugation depends on the norm, which is data, so it cannot be a
 typeclass on `A`. -/
@@ -176,12 +177,12 @@ omit [SMulCommClass k A A] [IsScalarTower k A A] in
   ring
 
 omit [IsScalarTower k A A] in
-/-- `x x̄ = n(x) • 1` (`GPR 16.2`). -/
+/-- `x (conj x) = n(x) • 1` (`GPR 16.2`). -/
 @[simp] theorem mul_conj_self (x : A) : x * C.conj x = C.norm x • (1 : A) := by
   rw [conj_apply, mul_sub, mul_smul_comm, mul_one, C.mul_self_eq]; abel
 
 omit [SMulCommClass k A A] in
-/-- `x̄ x = n(x) • 1` (`GPR 16.2`). -/
+/-- `(conj x) x = n(x) • 1` (`GPR 16.2`). -/
 @[simp] theorem conj_mul_self (x : A) : C.conj x * x = C.norm x • (1 : A) := by
   rw [conj_apply, sub_mul, smul_mul_assoc, one_mul, C.mul_self_eq]; abel
 
@@ -200,7 +201,7 @@ variable (k) in
   ring
 
 variable (k) in
-/-- The conjugation of the base ring is the identity: `x̄ = t(x)·1 - x = 2x - x = x`. -/
+/-- The conjugation of the base ring is the identity: `conj x = t(x)·1 - x = 2x - x = x`. -/
 @[simp] theorem baseRing_conj_apply (x : k) : (baseRing k).conj x = x := by
   rw [conj_apply, baseRing_trace_apply, smul_eq_mul, mul_one]
   ring
@@ -212,18 +213,18 @@ end BaseRing
 /-- The **trace defect** `t(x)t(y) - n(x, y) - t(xy)`: the obstruction to conjugation being an
 anti-homomorphism, by `ConicAlgebra.conj_mul_conj`.
 
-This name is ours, not `GPR`'s, but the quantity is: `traceDefect x y = n(x, ȳ) - t(xy)`, the
-negative of the obstruction `t(x, y) - n(x, ȳ)` appearing in `GPR 16.5(11)` and `GPR 16.10` (where
-`t(x, y)` denotes the *bilinear* trace `t(xy)`, and `n(x, ȳ) = t(x)t(y) - n(x, y)` by
-`GPR 16.5(10)`).
-Equivalently it is the difference of the two sides of the identity `t(xy) = t(x)t(y) - n(x, y)`,
-which holds in every composition algebra but not in every conic algebra. See the ⚠ in the module
-docstring for an associative conic algebra over `ℤ/4` with nonzero trace defect. -/
+This name is ours, not `GPR`'s, but the quantity is: `traceDefect x y = n(x, conj y) - t(xy)`, the
+negative of the obstruction `t(x, y) - n(x, conj y)` appearing in `GPR 16.5(11)` and `GPR 16.10`
+(where `t(x, y)` denotes the *bilinear* trace `t(xy)`, and `n(x, conj y) = t(x)t(y) - n(x, y)` by
+`GPR 16.5(10)`). Equivalently it is the difference of the two sides of the identity
+`t(xy) = t(x)t(y) - n(x, y)`, which holds in every composition algebra but not in every conic
+algebra. See the ⚠ in the module docstring for an associative conic algebra over `ℤ/4` with nonzero
+trace defect. -/
 def traceDefect (x y : A) : k :=
   C.trace x * C.trace y - QuadraticMap.polar C.norm x y - C.trace (x * y)
 
 /-- **How far conjugation is from being an anti-homomorphism**, exactly, in any conic algebra
-(`GPR 16.5(11)`): `ȳ x̄ = conj (xy) + traceDefect x y • 1`. -/
+(`GPR 16.5(11)`): `(conj y) (conj x) = conj (xy) + traceDefect x y • 1`. -/
 theorem conj_mul_conj (x y : A) :
     C.conj y * C.conj x = C.conj (x * y) + C.traceDefect x y • (1 : A) := by
   have hyx := C.mul_comm_eq x y

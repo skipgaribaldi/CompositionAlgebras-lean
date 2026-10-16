@@ -19,8 +19,8 @@ non-singularity: **over a field**, unconditionally, and **over a ring in which `
 invertible**.
 
 The mathematical content is entirely in `Conic/Kirmse.lean`, where the Kirmse defect
-`x̄(xy) - n(x)·y` is shown to lie in the radical of the norm with no hypothesis at all. All that
-happens here is the passage from the composition-algebra hypothesis,
+`(conj x)(xy) - n(x)·y` is shown to lie in the radical of the norm with no hypothesis at all. All
+that happens here is the passage from the composition-algebra hypothesis,
 `QuadraticForm.IsGPRNonsingular`, to `QuadraticForm.IsGPRNondegenerate`.
 
 ⚠ **That passage is not free over a ring.** Non-singularity does not imply that the radical

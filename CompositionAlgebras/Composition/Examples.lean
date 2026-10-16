@@ -19,17 +19,17 @@ alternative. Over `ℝ` these are the reals, the complex numbers, the quaternion
 
 The mechanism is that a negative scalar keeps the norm **positive definite**: the norm of
 `Cay(B, μ)` is `n_B(u) - μ n_B(v)`, and for `μ < 0` that is a sum of two non-negative terms which
-vanishes only when both do. A positive definite form is anisotropic, and an anisotropic norm
-makes every nonzero element invertible, because `x x̄ = n(x)·1` exhibits `n(x)⁻¹ · x̄` as a
+vanishes only when both do. A positive definite form is anisotropic, and an anisotropic norm makes
+every nonzero element invertible, because `x (conj x) = n(x)·1` exhibits `n(x)⁻¹ · (conj x)` as a
 two-sided inverse of `x`.
 
 Note that the inverse is obtained here **without** alternativity or associativity: the identity
-`x x̄ = x̄ x = n(x)·1` holds in every conic algebra, so the inverse is immediate once `n(x)` is a
-unit (`ConicAlgebra.hasTwoSidedInverses_of_anisotropic`). ⚠ That is **not** yet division in the
-sense of `GPR 8.6` (bijective left and right multiplication by nonzero elements): the real
+`x (conj x) = (conj x) x = n(x)·1` holds in every conic algebra, so the inverse is immediate once
+`n(x)` is a unit (`ConicAlgebra.hasTwoSidedInverses_of_anisotropic`). ⚠ That is **not** yet division
+in the sense of `GPR 8.6` (bijective left and right multiplication by nonzero elements): the real
 sedenions are anisotropic, so have such inverses, but have zero divisors (`GPR Exc. 19.29(e)`,
-`ConicAlgebra.not_isDivision_realSedenion`). Alternativity is what upgrades the inverse to
-division — `x̄(xy) = n(x) y` — and the four algebras here are alternative
+`ConicAlgebra.not_isDivision_realSedenion`). Alternativity is what upgrades the inverse to division
+— `(conj x)(xy) = n(x) y` — and the four algebras here are alternative
 (`ConicAlgebra.isDivision_of_anisotropic`, applied in `ConicAlgebra.isDivision_realOctonion`).
 
 ## Main results

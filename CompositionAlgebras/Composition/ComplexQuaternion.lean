@@ -25,9 +25,9 @@ mathlib's objects rather than merely resembling them, and so that a reader who k
 `Cay₂ ℝ (-1)` is `ℝ × ℝ` with `(a, b)(c, d) = (ac - db, da + bc)` — the conjugation of the base
 ring being the identity — which is multiplication of `a + bi`. So `(a, b) ↦ ⟨a, b⟩`.
 
-`Cay₄ ℝ (-1) (-1)` is `ℂ × ℂ` with `(u₁, v₁)(u₂, v₂) = (u₁u₂ - v̄₂v₁, v₂u₁ + v₁ū₂)`, which is
-multiplication of `u + vj`. Writing `u = a + bi` and `v = c + di` gives `a + bi + cj + dk` with
-`k = ij`, so `((a, b), (c, d)) ↦ ⟨a, b, c, d⟩`. mathlib's `Quaternion ℝ` is
+`Cay₄ ℝ (-1) (-1)` is `ℂ × ℂ` with `(u₁, v₁)(u₂, v₂) = (u₁u₂ - (conj v₂)v₁, v₂u₁ + v₁(conj u₂))`,
+which is multiplication of `u + vj`. Writing `u = a + bi` and `v = c + di` gives `a + bi + cj + dk`
+with `k = ij`, so `((a, b), (c, d)) ↦ ⟨a, b, c, d⟩`. mathlib's `Quaternion ℝ` is
 `QuaternionAlgebra ℝ (-1) 0 (-1)`, whose structure constants are exactly `i² = j² = -1`.
 
 ⚠ These are equivalences at `μ₁ = μ₂ = -1` over `ℝ` specifically. `Cay₄ k μ₁ μ₂` and

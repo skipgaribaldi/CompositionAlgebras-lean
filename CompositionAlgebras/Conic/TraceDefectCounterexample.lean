@@ -46,7 +46,7 @@ nonzero scalar. Here `traceDefect m₁ m₂ = -2 = 2` and `2 • m₁ = 0`.
 ## Relation to the literature
 
 None of this contradicts `GPR`, which is careful about it throughout: `GPR 16.10(a)` states that
-the conjugation of a conic algebra is an involution **iff** `t(x, y) - n(x, ȳ) ∈ Ann(C)` — the
+the conjugation of a conic algebra is an involution **iff** `t(x, y) - n(x, conj y) ∈ Ann(C)` — the
 trace defect up to sign, and `Ann(A) = 0` here — while the theorems that do give an involution,
 `GPR 16.14(b)` and `GPR 17.6`, carry a projectivity hypothesis on the module. `GPR 17.4` flags the
 tempting false claim in as many words and points at `GPR Exc. 17.8` (due to McCrimmon) for a

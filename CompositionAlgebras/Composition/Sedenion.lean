@@ -158,9 +158,9 @@ theorem not_isComposition_conicAlgebra_realSedenion (C : ConicAlgebra ℝ RealSe
 /-! ### `GPR Exc. 19.29(e)`: inverses without division
 
 The sedenion norm is positive definite, so every nonzero sedenion `x` has the two-sided inverse
-`n(x)⁻¹ x̄`; yet the sedenions have zero divisors, so they are not a division algebra in the sense
-of `GPR 8.6`. This is the example separating `ConicAlgebra.HasTwoSidedInverses` from `IsDivision`,
-and it is why `GPR 13.8` needs alternativity.
+`n(x)⁻¹ (conj x)`; yet the sedenions have zero divisors, so they are not a division algebra in the
+sense of `GPR 8.6`. This is the example separating `ConicAlgebra.HasTwoSidedInverses` from
+`IsDivision`, and it is why `GPR 13.8` needs alternativity.
 
 The zero divisors are explicit. Write `e₀, …, e₁₅` for the coordinate basis of
 `Cay(Cay(Cay(Cay(ℝ, -1), -1), -1), -1)`, numbering the two components `u, v` of `u + v j` at each
@@ -171,7 +171,7 @@ at a negative scalar preserves positive definiteness (`ConicAlgebra.PosDef.cay`)
 theorem posDef_realSedenion : realSedenion.norm.PosDef :=
   PosDef.cay realOctonion (by norm_num) posDef_realOctonion
 
-/-- **Every nonzero sedenion has a two-sided inverse**, `n(x)⁻¹ x̄`, since the norm is
+/-- **Every nonzero sedenion has a two-sided inverse**, `n(x)⁻¹ (conj x)`, since the norm is
 anisotropic. -/
 theorem hasTwoSidedInverses_realSedenion : realSedenion.HasTwoSidedInverses :=
   realSedenion.hasTwoSidedInverses_of_anisotropic posDef_realSedenion.anisotropic

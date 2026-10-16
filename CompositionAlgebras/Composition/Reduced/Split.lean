@@ -44,7 +44,7 @@ characteristic.
 * `ConicAlgebra.finrank_splitEtale`, `ConicAlgebra.finrank_splitQuaternion` : of ranks `2` and `4`.
 * `ConicAlgebra.conj_splitEtale_apply` : the conjugation of `k × k` is the exchange involution.
 * `ConicAlgebra.conj_splitQuaternion_apply` : the conjugation of `Mat₂(k)` is the adjugate, so the
-  conic identity `x x̄ = n(x) 1` is the classical `A · adj A = det A · 1`.
+  conic identity `x (conj x) = n(x) 1` is the classical `A · adj A = det A · 1`.
 
 ## Implementation notes
 
@@ -190,7 +190,7 @@ variable {k}
   rw [ConicAlgebra.trace_apply, splitQuaternion_norm, polar_splitQuaternionNorm_one]
 
 /-- **The conjugation of `Mat₂(k)` is the adjugate.** Consequently the conic identity
-`x x̄ = n(x) 1` specializes to `A · adj A = det A · 1`. -/
+`x (conj x) = n(x) 1` specializes to `A · adj A = det A · 1`. -/
 @[simp] theorem conj_splitQuaternion_apply (A : Matrix (Fin 2) (Fin 2) k) :
     (splitQuaternion k).conj A = A.adjugate := by
   rw [ConicAlgebra.conj_apply, trace_splitQuaternion_apply]

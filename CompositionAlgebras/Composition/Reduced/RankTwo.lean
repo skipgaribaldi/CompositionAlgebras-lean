@@ -19,12 +19,12 @@ idempotent `(1, 0)`. This file proves the other, and proves it for conic algebra
 regularity or multiplicativity hypothesis at all:
 
 > if a conic algebra of constant rank `2` has an elementary idempotent `c`, then
-> `(a, b) ↦ a c + b c̄` is an **isomorphism** `k × k → A` of conic algebras.
+> `(a, b) ↦ a c + b (conj c)` is an **isomorphism** `k × k → A` of conic algebras.
 
 The map is injective in any conic algebra (`GPR 22.9`'s proof); what rank `2` adds is surjectivity,
 and it adds it through the orthogonal splitting rather than through any counting of generators: the
-plane `k c ⊕ k c̄` has regular restricted norm, so it is a direct summand whose complement has rank
-`0`, hence is trivial.
+plane `k c ⊕ k (conj c)` has regular restricted norm, so it is a direct summand whose complement has
+rank `0`, hence is trivial.
 
 ## Main results
 
@@ -69,7 +69,7 @@ variable (hc : C.IsElementaryIdempotent c)
 include hc
 
 omit [SMulCommClass k A A] [IsScalarTower k A A] [Module.Finite k A] [Module.Projective k A] in
-/-- The plane `k c ⊕ k c̄` has constant rank `2`: it is `k × k` as a module. -/
+/-- The plane `k c ⊕ k (conj c)` has constant rank `2`: it is `k × k` as a module. -/
 theorem rankAtStalk_planeSubmodule :
     Module.rankAtStalk (R := k)
       (QuadraticMap.IsHyperbolicPair.planeSubmodule (R := k) c (C.conj c)) = fun _ ↦ 2 := by
@@ -82,7 +82,7 @@ theorem rankAtStalk_planeSubmodule :
 
 omit [SMulCommClass k A A] [IsScalarTower k A A] in
 /-- **`GPR 22.10`.** In a conic algebra of constant rank `2`, an elementary idempotent generates
-everything: `(a, b) ↦ a c + b c̄` is bijective.
+everything: `(a, b) ↦ a c + b (conj c)` is bijective.
 
 Injectivity is `GPR 22.9`'s and holds always; surjectivity is the orthogonal splitting, since the
 plane is regular and of full rank. No hypothesis on the norm of `C` and none on `2`. -/
@@ -138,11 +138,11 @@ theorem exists_linearEquiv_of_hasSplitEtaleSubalgebra_of_rankAtStalk_eq_two
   exact ⟨hc.splitEtaleEquiv hA, hc.splitEtaleEquiv_one hA, hc.splitEtaleEquiv_mul hA,
     hc.norm_splitEtaleEquiv hA⟩
 
-/-! ### Rank two composition algebras: split ⟺ isotropic norm
+/-! ### Rank two composition algebras: split ↔ isotropic norm
 
 For a composition algebra the regularity that `GPR 22.9` consumes is not a hypothesis: `GPR 19.11`
 gives it as soon as the constant rank is not `1`. So in rank `2` the chain
-"split ⟺ reduced ⟺ isotropic norm" closes with no side conditions beyond the rank. -/
+"split ↔ reduced ↔ isotropic norm" closes with no side conditions beyond the rank. -/
 
 variable (C)
 

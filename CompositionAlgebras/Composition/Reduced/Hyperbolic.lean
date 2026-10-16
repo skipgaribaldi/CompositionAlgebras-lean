@@ -13,7 +13,7 @@ public import CompositionAlgebras.Composition.Reduced.TwistedMatrix
 
 At an elementary idempotent `c`, the Peirce decomposition writes an element as
 
-  `a₁ c + x₁₂ + x₂₁ + a₂ c̄`
+  `a₁ c + x₁₂ + x₂₁ + a₂ (conj c)`
 
 and `GPR Exc. 19.35(3)` gives its norm as `a₁a₂ + n(x₁₂, x₂₁)`. When the norm is regular, the
 polar pairing identifies `C₁₂` with `C₂₁*`. Consequently the whole norm is the hyperbolic form

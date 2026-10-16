@@ -306,7 +306,7 @@ theorem QuadraticForm.isGPRNonsingular_of_isAlgClosed {K : Type*} [Field K] [IsA
     (Q.radical_eq_bot_of_radical_baseChangeOfProjective_eq_bot hK)
     (Q.finrank_ker_polarBilin_le_one_of_isAlgClosed hK)
 
-/-- **`EKM Lemma 7.16`, (1) ⟺ (3); `GPR Exercise 11.37`, (i) ⟺ (ii).** `Q` is non-singular
+/-- **`EKM Lemma 7.16`, (1) ↔ (3); `GPR Exercise 11.37`, (i) ↔ (ii).** `Q` is non-singular
 exactly when its radical vanishes and the radical of its polar form is at most a line.
 
 The right-hand side is mathlib's `QuadraticMap.Nondegenerate`, which is `EKM`'s condition (3)

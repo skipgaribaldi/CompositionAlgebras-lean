@@ -32,13 +32,13 @@ Write `x = (a, b)`, `y = (c, d)`, `z = (e, f)`. Both components of `(xy)z` and o
 into four terms each, and they match term by term using only
 
 * anti-multiplicativity of the conjugation of `B`, to push `conj` through the products it meets
-  (`conj (fc) = c̄ f̄`, `conj (d ē) = e d̄`), and
+  (`conj (fc) = (conj c) (conj f)`, `conj (d (conj e)) = e (conj d)`), and
 * commutativity and associativity of `B`, to reorder the resulting monomials.
 
-The conjugates `ā, c̄, ē, …` are never expanded via `z̄ = t(z)·1 - z`; they behave as atoms
-throughout. This is unlike `Conic/CayleyDicksonAlternative.lean`, where eliminating the conjugation
-first is what makes the cancellations linear — here commutativity does that job instead, and `ring`
-closes both components.
+The conjugates `conj a, conj c, conj e, …` are never expanded via `conj z = t(z)·1 - z`; they behave
+as atoms throughout. This is unlike `Conic/CayleyDicksonAlternative.lean`, where eliminating the
+conjugation first is what makes the cancellations linear — here commutativity does that job instead,
+and `ring` closes both components.
 
 ## Main results
 
@@ -117,7 +117,7 @@ variable {k' : Type u} {B' : Type v} [CommRing k'] [NonAssocRing B'] [Module k' 
 
 omit [SMulCommClass k' B' B'] [IsScalarTower k' B' B'] in
 /-- **`Cay(B, μ)` is not commutative** as soon as the conjugation of `B` moves some element:
-`(u, 0)(0, 1) = (0, u)` while `(0, 1)(u, 0) = (0, ū)`. -/
+`(u, 0)(0, 1) = (0, u)` while `(0, 1)(u, 0) = (0, conj u)`. -/
 theorem exists_mul_ne_mul_cay {u : B'} (h : C'.conj u ≠ u) :
     ∃ x y : Cay C' μ', x * y ≠ y * x := by
   set x : Cay C' μ' := ((u, 0) : B' × B') with hx
@@ -134,7 +134,8 @@ theorem exists_mul_ne_mul_cay {u : B'} (h : C'.conj u ≠ u) :
 
 omit [SMulCommClass k' B' B'] [IsScalarTower k' B' B'] in
 /-- **`Cay(B, μ)` is not associative** as soon as `B` is not commutative. With `x = (0, 1)`,
-`y = (ā, 0)` and `z = (c̄, 0)`, the second components of `(xy)z` and `x(yz)` are `ac` and `ca`. -/
+`y = (conj a, 0)` and `z = (conj c, 0)`, the second components of `(xy)z` and `x(yz)` are `ac` and
+`ca`. -/
 theorem exists_mul_mul_ne_mul_mul_cay (hconj : C'.ConjIsInvolution) {a c : B'}
     (h : a * c ≠ c * a) : ∃ x y z : Cay C' μ', x * y * z ≠ x * (y * z) := by
   set x : Cay C' μ' := ((0, 1) : B' × B') with hx

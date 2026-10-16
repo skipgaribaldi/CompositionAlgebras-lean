@@ -21,12 +21,12 @@ Layer 8).
 
 Write `x = u₁ + v₁ j`, `y = u₂ + v₂ j`. Expanding
 
-  `n(xy) = n_B(u₁u₂ + μ v̄₂v₁) - μ n_B(v₂u₁ + v₁ū₂)`
+  `n(xy) = n_B(u₁u₂ + μ (conj v₂)v₁) - μ n_B(v₂u₁ + v₁(conj u₂))`
 
-with `n_B` multiplicative and `n_B(z̄) = n_B(z)` leaves exactly the terms of
+with `n_B` multiplicative and `n_B(conj z) = n_B(z)` leaves exactly the terms of
 `n(x)n(y) = (n_B(u₁) - μ n_B(v₁))(n_B(u₂) - μ n_B(v₂))`, plus
 
-  `μ · [ n_B(u₁u₂, v̄₂v₁) - n_B(v₂u₁, v₁ū₂) ]`.
+  `μ · [ n_B(u₁u₂, (conj v₂)v₁) - n_B(v₂u₁, v₁(conj u₂)) ]`.
 
 So everything reduces to the vanishing of that bracket, `polar_shuffle` below. That is where
 associativity of `B` is spent, and it is spent exactly once: the two polar terms are moved onto a
@@ -59,7 +59,7 @@ variable {k : Type u} {B : Type v} [CommRing k] [Ring B] [Algebra k B] {C : Coni
 /-- The one place associativity of `B` enters `GPR Exc. 18.18`: for a multiplicative norm on an
 associative `B`,
 
-  `n(u₁u₂, v̄₂v₁) = n(v₂u₁, v₁ū₂)`.
+  `n(u₁u₂, (conj v₂)v₁) = n(v₂u₁, v₁(conj u₂))`.
 
 Both sides equal `n(v₁, (v₂u₁)u₂)`: the left by norm-associativity on the left
 (`ConicAlgebra.IsMultiplicative.polar_mul_left`) followed by `v₂(u₁u₂) = (v₂u₁)u₂`, the right by

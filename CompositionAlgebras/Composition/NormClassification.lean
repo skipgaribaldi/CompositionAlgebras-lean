@@ -195,7 +195,7 @@ section Normalize
 variable {B : Type w} [NonAssocRing B] [Module k B] [SMulCommClass k B B]
   [IsScalarTower k B B] {D : ConicAlgebra k B}
 
-/-- Left multiplication by `x̄` is a linear equivalence when `n(x) = 1`; its inverse is left
+/-- Left multiplication by `conj x` is a linear equivalence when `n(x) = 1`; its inverse is left
 multiplication by `x`. -/
 def leftMulConjLinearEquiv [IsAlternative B] (x : B) (hx : D.norm x = 1) : B ≃ₗ[k] B where
   toFun z := D.conj x * z
@@ -209,7 +209,7 @@ def leftMulConjLinearEquiv [IsAlternative B] (x : B) (hx : D.norm x = 1) : B ≃
     change D.conj x * (x * z) = z
     rw [conj_mul_mul_of_isAlternative, hx, one_smul]
 
-/-- Left multiplication by `x̄`, followed by division by `n(x)`, is a linear equivalence when
+/-- Left multiplication by `conj x`, followed by division by `n(x)`, is a linear equivalence when
 `n(x)` is a unit. Its inverse is left multiplication by `x`. -/
 def leftMulConjUnitLinearEquiv [IsAlternative B] (x : B) (μ : kˣ)
     (hx : D.norm x = (μ : k)) : B ≃ₗ[k] B where
@@ -226,7 +226,7 @@ def leftMulConjUnitLinearEquiv [IsAlternative B] (x : B) (μ : kˣ)
 
 omit [SMulCommClass k A A] [IsScalarTower k A A] [Module.Finite k A] [Module.Projective k A] in
 /-- For a norm-one element `x` in an alternative multiplicative conic algebra, left multiplication
-by `x̄` is a self-isometry of the norm and carries `x` to `1`. -/
+by `conj x` is a self-isometry of the norm and carries `x` to `1`. -/
 noncomputable def IsMultiplicative.leftMulConjIsometryEquiv [IsAlternative B]
     (h : D.IsMultiplicative) (x : B) (hx : D.norm x = 1) : D.norm.IsometryEquiv D.norm where
   toLinearEquiv := D.leftMulConjLinearEquiv x hx

@@ -17,12 +17,12 @@ Let `A` be a conic **alternative** algebra, `B ⊆ A` a unital subalgebra, and `
 **orthogonal to `B`** — `n(b, v) = 0` for every `b ∈ B` — whose norm is a unit. Then the three
 identities
 
-  `x(yv) = (yx)v`,   `(xv)y = (x ȳ)v`,   `(xv)(yv) = -n(v) (ȳ x)`   (`x, y ∈ B`)
+  `x(yv) = (yx)v`,   `(xv)y = (x (conj y))v`,   `(xv)(yv) = -n(v) ((conj y) x)`   (`x, y ∈ B`)
 
 hold. They are exactly the three clauses of the Cayley–Dickson multiplication
-`(u₁ + v₁j)(u₂ + v₂j) = (u₁u₂ + μ v̄₂v₁) + (v₂u₁ + v₁ū₂) j` with `μ = -n(v)`, so `B + Bv` is a copy
-of `Cay(B, μ)` sitting inside `A`. `Conic/CayleyDickson.lean` builds `Cay(B, μ)` externally;
-this file is the internal counterpart, and the comparison between the two is
+`(u₁ + v₁j)(u₂ + v₂j) = (u₁u₂ + μ (conj v₂)v₁) + (v₂u₁ + v₁(conj u₂)) j` with `μ = -n(v)`, so
+`B + Bv` is a copy of `Cay(B, μ)` sitting inside `A`. `Conic/CayleyDickson.lean` builds `Cay(B, μ)`
+externally; this file is the internal counterpart, and the comparison between the two is
 `ConicAlgebra.cayToAlgebra`.
 
 ## The mechanism
@@ -31,11 +31,11 @@ Everything rests on one unconditional observation. The linearized degree-two ide
 `xy + yx = t(x)y + t(y)x - n(x,y)·1` (`ConicAlgebra.mul_add_mul`, valid in *every* conic algebra)
 collapses, for `x ∈ B` and `v ⊥ B`, to
 
-  `xv = v x̄`,   `vx = x̄ v`
+  `xv = v (conj x)`,   `vx = (conj x) v`
 
 (`ConicAlgebra.mul_eq_mul_conj`, `ConicAlgebra.mul_eq_conj_mul`): orthogonality to `B` turns
 multiplication by `v` into a twisted commutation rule. Note `1 ∈ B`, so `t(v) = n(1, v) = 0` and
-hence `v̄ = -v` and `v² = -n(v)·1`.
+hence `conj v = -v` and `v² = -n(v)·1`.
 
 Given that rule, the three identities follow from the alternative laws alone — the alternating
 property of the associator, the middle Moufang identity `(ab)(ca) = a(bc)a`, and flexibility —
@@ -63,10 +63,10 @@ multiplicativity of the norm; those enter only when the norm of the doubled alge
 ## Main results
 
 * `ConicAlgebra.mul_eq_mul_conj`, `ConicAlgebra.mul_eq_conj_mul` : the commutation rule
-  `xv = v x̄`, `vx = x̄ v` for `x ∈ B`, in any conic algebra whatsoever.
+  `xv = v (conj x)`, `vx = (conj x) v` for `x ∈ B`, in any conic algebra whatsoever.
 * `ConicAlgebra.mul_mul_orthogonal` : `x(yv) = (yx)v`, `GPR 18.1(1)`.
-* `ConicAlgebra.mul_orthogonal_mul` : `(xv)y = (x ȳ)v`, `GPR 18.1(2)`.
-* `ConicAlgebra.mul_orthogonal_mul_mul_orthogonal` : `(xv)(yv) = -n(v)(ȳx)`, `GPR 18.1(3)`.
+* `ConicAlgebra.mul_orthogonal_mul` : `(xv)y = (x (conj y))v`, `GPR 18.1(2)`.
+* `ConicAlgebra.mul_orthogonal_mul_mul_orthogonal` : `(xv)(yv) = -n(v)((conj y)x)`, `GPR 18.1(3)`.
 * `ConicAlgebra.cayToAlgebra_mul` : **`GPR 18.1`** — the doubling map is multiplicative, so
   `B + Bv` is a copy of `Cay(B, -n(v))` inside `A`.
 * `ConicAlgebra.norm_cayToAlgebra` : it is an isometry for the Cayley–Dickson norm. This is where
@@ -131,7 +131,7 @@ end TraceZero
 /-! ### An element orthogonal to a subalgebra -/
 
 omit [SMulCommClass k A A] [IsScalarTower k A A] in
-/-- A unital subalgebra is closed under conjugation, since `b̄ = t(b)·1 - b`. -/
+/-- A unital subalgebra is closed under conjugation, since `conj b = t(b)·1 - b`. -/
 theorem conj_mem {B : NonAssocSubalgebra k A} {b : A} (hb : b ∈ B) : C.conj b ∈ B := by
   rw [conj_apply]
   exact sub_mem (SMulMemClass.smul_mem _ (show (1 : A) ∈ B from B.one_mem)) hb
@@ -148,7 +148,7 @@ theorem trace_eq_zero_of_orthogonal : C.trace v = 0 :=
   (C.trace_apply v).trans (hBv 1 B.one_mem)
 
 omit [IsScalarTower k A A] in
-/-- **The commutation rule**, first form: `xv = v x̄` for `x ∈ B` and `v ⊥ B`.
+/-- **The commutation rule**, first form: `xv = v (conj x)` for `x ∈ B` and `v ⊥ B`.
 
 This holds in every conic algebra — no alternativity, no regularity, no hypothesis on `2`. It is
 the linearized degree-two identity `xy + yx = t(x)y + t(y)x - n(x,y)·1` with `y = v`, where both
@@ -160,7 +160,7 @@ theorem mul_eq_mul_conj {x : A} (hx : x ∈ B) : x * v = v * C.conj x := by
   linear_combination (norm := module) hlin
 
 omit [SMulCommClass k A A] in
-/-- **The commutation rule**, second form: `vx = x̄ v` for `x ∈ B` and `v ⊥ B`. -/
+/-- **The commutation rule**, second form: `vx = (conj x) v` for `x ∈ B` and `v ⊥ B`. -/
 theorem mul_eq_conj_mul {x : A} (hx : x ∈ B) : v * x = C.conj x * v := by
   have hlin := C.mul_add_mul x v
   rw [trace_eq_zero_of_orthogonal hBv, hBv x hx, zero_smul, zero_smul, sub_zero, add_zero] at hlin
@@ -169,7 +169,7 @@ theorem mul_eq_conj_mul {x : A} (hx : x ∈ B) : v * x = C.conj x * v := by
 
 variable [IsAlternative A]
 
-/-- Conjugating by `v`: `(vc)v = -n(v) c̄` for `c ∈ B`. -/
+/-- Conjugating by `v`: `(vc)v = -n(v) (conj c)` for `c ∈ B`. -/
 theorem mul_mul_eq_neg_smul_conj {c : A} (hc : c ∈ B) :
     v * c * v = -(C.norm v • C.conj c) := by
   rw [mul_eq_conj_mul hBv hc,
@@ -195,9 +195,9 @@ theorem mul_orthogonal_mul_orthogonal_mul {x y : A} (hx : x ∈ B) (hy : y ∈ B
     mul_mul_eq_neg_smul_conj hBv (mul_mem (conj_mem hx) (conj_mem hy)), hconj, conj_conj,
     conj_conj]
 
-/-- **`GPR 18.1(3)`**: `(xv)(yv) = -n(v)(ȳx)` for `x, y ∈ B`.
+/-- **`GPR 18.1(3)`**: `(xv)(yv) = -n(v)((conj y)x)` for `x, y ∈ B`.
 
-This is the first component of the Cayley–Dickson product `(0 + v₁j)(0 + v₂j) = μ v̄₂v₁`, with
+This is the first component of the Cayley–Dickson product `(0 + v₁j)(0 + v₂j) = μ (conj v₂)v₁`, with
 `μ = -n(v)`. -/
 theorem mul_orthogonal_mul_mul_orthogonal {x y : A} (hx : x ∈ B) (hy : y ∈ B) :
     x * v * (y * v) = -(C.norm v • (C.conj y * x)) := by
@@ -225,9 +225,9 @@ theorem mul_mul_orthogonal {x y : A} (hx : x ∈ B) (hy : y ∈ B) :
     linear_combination (norm := module) hcyc
   rw [sub_mul, key, mul_mul_self_of_trace_eq_zero htv (y * x), sub_self]
 
-/-- **`GPR 18.1(2)`**: `(xv)y = (x ȳ)v` for `x, y ∈ B`.
+/-- **`GPR 18.1(2)`**: `(xv)y = (x (conj y))v` for `x, y ∈ B`.
 
-Conjugating `GPR 18.1(1)` at the pair `(ȳ, x)` turns it into this, because conjugation is an
+Conjugating `GPR 18.1(1)` at the pair `(conj y, x)` turns it into this, because conjugation is an
 anti-homomorphism and negates every element of `Bv`. -/
 theorem mul_orthogonal_mul {x y : A} (hx : x ∈ B) (hy : y ∈ B) :
     x * v * y = x * C.conj y * v := by
@@ -278,8 +278,8 @@ variable (hBv : ∀ b ∈ B, polar C.norm b v = 0)
 include hBv
 
 omit [SMulCommClass k A A] in
-/-- **`B ⊥ Bv`.** Norm-associativity moves the `v` across the polar form, where orthogonality to
-`B` kills it: `n(b, wv) = n(w̄b, v) = 0`. This is what makes the internal doubling map an isometry
+/-- **`B ⊥ Bv`.** Norm-associativity moves the `v` across the polar form, where orthogonality to `B`
+kills it: `n(b, wv) = n((conj w)b, v) = 0`. This is what makes the internal doubling map an isometry
 onto its image, and needs the norm to be multiplicative. -/
 theorem polar_mul_orthogonal (hmul : C.IsMultiplicative) {b w : A} (hb : b ∈ B) (hw : w ∈ B) :
     polar C.norm b (w * v) = 0 := by

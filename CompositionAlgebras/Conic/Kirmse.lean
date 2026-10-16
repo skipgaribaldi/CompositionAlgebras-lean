@@ -13,16 +13,16 @@ public import CompositionAlgebras.QuadraticForm.Regularity
 
 **Kirmse's identities** for a multiplicative conic algebra are
 
-  `x̄(xy) = n(x) y`,   `(yx)x̄ = n(x) y`.
+  `(conj x)(xy) = n(x) y`,   `(yx)(conj x) = n(x) y`.
 
-They are the mechanism behind `GPR 19.3`: substituting `x̄ = t(x)·1 - x` and using the degree-two
-identity `x² = t(x)·x - n(x)·1` turns them into precisely the two alternative laws, so a
+They are the mechanism behind `GPR 19.3`: substituting `conj x = t(x)·1 - x` and using the
+degree-two identity `x² = t(x)·x - n(x)·1` turns them into precisely the two alternative laws, so a
 multiplicative conic algebra satisfying them is alternative.
 
 ## The Kirmse element lies in the radical
 
-Write `w = x̄(xy) - n(x)·y` for the defect of the first identity. **In every multiplicative conic
-algebra, with no hypothesis whatsoever, `w` lies in the radical of the norm** — that is, both
+Write `w = (conj x)(xy) - n(x)·y` for the defect of the first identity. **In every multiplicative
+conic algebra, with no hypothesis whatsoever, `w` lies in the radical of the norm** — that is, both
 
   `n(w, z) = 0` for every `z`   and   `n(w) = 0`.
 
@@ -99,18 +99,18 @@ variable {k : Type u} {A : Type v} [CommRing k] [NonAssocRing A] [Module k A]
   [SMulCommClass k A A] [IsScalarTower k A A] {C : ConicAlgebra k A}
 
 omit [SMulCommClass k A A] in
-/-- **Kirmse's left identity, in polar form**: `n(x̄(xy), z) = n(x) n(y, z)`, in every
+/-- **Kirmse's left identity, in polar form**: `n((conj x)(xy), z) = n(x) n(y, z)`, in every
 multiplicative conic algebra and with no regularity hypothesis.
 
-Norm-associativity moves `x̄` across the polar form as `x` (`conj (conj x) = x`), turning the left
-side into `n(xy, xz)`, which is the linearization of multiplicativity in the right variable. -/
+Norm-associativity moves `conj x` across the polar form as `x` (`conj (conj x) = x`), turning the
+left side into `n(xy, xz)`, which is the linearization of multiplicativity in the right variable. -/
 theorem polar_conj_mul_mul (h : C.IsMultiplicative) (x y z : A) :
     QuadraticMap.polar C.norm (C.conj x * (x * y)) z
       = C.norm x * QuadraticMap.polar C.norm y z := by
   rw [h.polar_mul_left, conj_conj, h.polar_mul_mul_left]
 
 omit [IsScalarTower k A A] in
-/-- **Kirmse's right identity, in polar form**: `n((yx)x̄, z) = n(x) n(y, z)`, in every
+/-- **Kirmse's right identity, in polar form**: `n((yx)(conj x), z) = n(x) n(y, z)`, in every
 multiplicative conic algebra and with no regularity hypothesis. -/
 theorem polar_mul_mul_conj (h : C.IsMultiplicative) (x y z : A) :
     QuadraticMap.polar C.norm ((y * x) * C.conj x) z
@@ -118,7 +118,7 @@ theorem polar_mul_mul_conj (h : C.IsMultiplicative) (x y z : A) :
   rw [h.polar_mul_right, conj_conj, h.polar_mul_mul_right, mul_comm]
 
 omit [SMulCommClass k A A] in
-/-- The norm of the left Kirmse defect vanishes: `n(x̄(xy) - n(x)·y) = 0`.
+/-- The norm of the left Kirmse defect vanishes: `n((conj x)(xy) - n(x)·y) = 0`.
 
 Multiplicativity evaluates the two square terms as `n(x)²n(y)` each, and the polar term as
 `n(x)² · n(y, y) = 2n(x)²n(y)` by `ConicAlgebra.IsMultiplicative.polar_conj_mul_mul` at `z = y`.
@@ -133,7 +133,7 @@ theorem norm_conj_mul_mul_sub (h : C.IsMultiplicative) (x y : A) :
   ring
 
 omit [IsScalarTower k A A] in
-/-- The norm of the right Kirmse defect vanishes: `n((yx)x̄ - n(x)·y) = 0`. -/
+/-- The norm of the right Kirmse defect vanishes: `n((yx)(conj x) - n(x)·y) = 0`. -/
 theorem norm_mul_mul_conj_sub (h : C.IsMultiplicative) (x y : A) :
     C.norm ((y * x) * C.conj x - C.norm x • y) = 0 := by
   simp only [C.norm_sub, h.norm_mul, norm_conj, QuadraticMap.map_smul,
@@ -145,7 +145,7 @@ theorem norm_mul_mul_conj_sub (h : C.IsMultiplicative) (x y : A) :
 omit [SMulCommClass k A A] in
 /-- **The left Kirmse defect lies in the radical of the norm**, in every multiplicative conic
 algebra and with no hypothesis at all. This is the sharp unconditional statement behind
-`GPR 19.3`; the identity `x̄(xy) = n(x)·y` is exactly its image under `radical = ⊥`. -/
+`GPR 19.3`; the identity `(conj x)(xy) = n(x)·y` is exactly its image under `radical = ⊥`. -/
 theorem mem_radical_conj_mul_mul (h : C.IsMultiplicative) (x y : A) :
     C.conj x * (x * y) - C.norm x • y ∈ QuadraticMap.radical C.norm :=
   ⟨h.norm_conj_mul_mul_sub x y, LinearMap.ext fun z ↦ by
@@ -164,7 +164,7 @@ variable (hrad : C.norm.IsGPRNondegenerate)
 include hrad
 
 omit [SMulCommClass k A A] in
-/-- **Kirmse's left identity**: `x̄(xy) = n(x) y`.
+/-- **Kirmse's left identity**: `(conj x)(xy) = n(x) y`.
 
 The hypothesis is `GPR`'s non-degeneracy, `QuadraticMap.radical C.norm = ⊥` — exactly what
 `GPR 19.3` assumes, and exactly what is needed to cancel the radical element of
@@ -176,7 +176,7 @@ theorem conj_mul_mul (h : C.IsMultiplicative) (x y : A) :
   exact hmem
 
 omit [IsScalarTower k A A] in
-/-- **Kirmse's right identity**: `(yx)x̄ = n(x) y`. -/
+/-- **Kirmse's right identity**: `(yx)(conj x) = n(x) y`. -/
 theorem mul_mul_conj (h : C.IsMultiplicative) (x y : A) :
     (y * x) * C.conj x = C.norm x • y := by
   have hmem := h.mem_radical_mul_mul_conj x y
@@ -186,7 +186,7 @@ theorem mul_mul_conj (h : C.IsMultiplicative) (x y : A) :
 /-- **`GPR 19.3`, the alternativity statement: a multiplicative conic algebra with non-degenerate
 norm is alternative.**
 
-Each alternative law is one of Kirmse's identities rewritten with `x̄ = t(x)·1 - x` and the
+Each alternative law is one of Kirmse's identities rewritten with `conj x = t(x)·1 - x` and the
 degree-two identity `x² = t(x)·x - n(x)·1`.
 
 The hypotheses are exactly `GPR`'s: the norm multiplicative and its radical zero. Nothing is

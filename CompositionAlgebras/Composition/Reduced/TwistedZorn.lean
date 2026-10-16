@@ -16,13 +16,13 @@ public import CompositionAlgebras.Module.VectorProduct
 For `M` a `k`-module equipped with a pair of associated vector products
 (`Module.VectorProductPair`), the **twisted Zorn vector matrices** are the formal matrices
 
-  `⎡ρ₁  u*⎤`
-  `⎣v   ρ₂⎦`,   `ρᵢ ∈ k`, `u* ∈ M*`, `v ∈ M`,
+  `[ρ₁  u*]`
+  `[v   ρ₂]`,   `ρᵢ ∈ k`, `u* ∈ M*`, `v ∈ M`,
 
 multiplied by `GPR (22.14.3)`
 
-  `⎡ρ₁ v*⎤ ⎡σ₁ w*⎤   ⎡ρ₁σ₁ - ⟨v*, w⟩    ρ₁w* + σ₂v* + v × w⎤`
-  `⎣v  ρ₂⎦ ⎣w  σ₂⎦ = ⎣σ₁v + ρ₂w + v* × w*  ρ₂σ₂ - ⟨w*, v⟩ ⎦`,
+  `[ρ₁ v*] [σ₁ w*]   [ρ₁σ₁ - ⟨v*, w⟩    ρ₁w* + σ₂v* + v × w]`
+  `[v  ρ₂] [w  σ₂] = [σ₁v + ρ₂w + v* × w*  ρ₂σ₂ - ⟨w*, v⟩ ]`,
 
 Its norm is `ρ₁ρ₂ + ⟨u*, v⟩` and its trace is `ρ₁ + ρ₂`.
 With the usual conjugation, it is the octonion analogue of
@@ -116,8 +116,8 @@ variable {k : Type u} {M : Type v} [CommRing k] [AddCommGroup M] [Module k M]
 /-- The `k`-module of **twisted Zorn vector matrices** attached to a vector product pair
 (`GPR 22.14`), as a type synonym for `(k × M*) × (k × M)`: the element `x` is the matrix
 
-  `⎡x.1.1  x.1.2⎤`
-  `⎣x.2.2  x.2.1⎦`
+  `[x.1.1  x.1.2]`
+  `[x.2.2  x.2.1]`
 
 whose top row is `x.1 = (ρ₁, u*)` and whose bottom row is
 `(x.2.2, x.2.1) = (v, ρ₂)`. The grouping puts the two diagonal entries first in their pairs, so

@@ -17,9 +17,9 @@ An **elementary idempotent** of a conic algebra (`GPR Exc. 16.23`) is an element
   `n(c) = 0`  and  `t(c) = 1`.
 
 The degree-two identity then makes it an idempotent for free, `c² = t(c)c - n(c)1 = c`, and its
-conjugate `c̄ = 1 - c` is a second elementary idempotent orthogonal to it. Elementary idempotents
-are what "reduced" means in practice: a composition algebra of rank `> 1` is reduced in the sense
-of `GPR 22.6` exactly when it has one (`GPR 22.7`).
+conjugate `conj c = 1 - c` is a second elementary idempotent orthogonal to it. Elementary
+idempotents are what "reduced" means in practice: a composition algebra of rank `> 1` is reduced in
+the sense of `GPR 22.6` exactly when it has one (`GPR 22.7`).
 
 This file proves the part of **`GPR 22.9`** that needs no Peirce decomposition: for a conic algebra
 `C`, being reduced, containing a split quadratic étale subalgebra, and — under the two hypotheses
@@ -37,7 +37,7 @@ the proof actually consumes — having isotropic norm, are all the same conditio
 
 `(i) ↔ (ii)` holds in **every** conic algebra, with no regularity, no projectivity, no
 multiplicativity and no hypothesis on `2`: both directions are a direct computation with `c` and
-`c̄`. `(i) → (iii)` is likewise free — the trace is a functional taking the value `1` at `c`,
+`conj c`. `(i) → (iii)` is likewise free — the trace is a functional taking the value `1` at `c`,
 which is exactly unimodularity (`GPR 9.13`). Only `(iii) → (i)` costs anything, and what it
 costs is `GPR`'s own argument: regularity of the norm and multiplicativity.
 
@@ -46,16 +46,16 @@ costs is `GPR`'s own argument: regularity of the norm and multiplicativity.
 * `ConicAlgebra.IsElementaryIdempotent` : `n(c) = 0` and `t(c) = 1` (`GPR Exc. 16.23`).
 * `ConicAlgebra.HasElementaryIdempotent`, `ConicAlgebra.HasSplitEtaleSubalgebra` : conditions (i)
   and (ii) of `GPR 22.9`.
-* `ConicAlgebra.elementaryIdempotentEmbedding` : the map `(a, b) ↦ a c + b c̄`.
+* `ConicAlgebra.elementaryIdempotentEmbedding` : the map `(a, b) ↦ a c + b (conj c)`.
 
 ## Main results
 
 * `ConicAlgebra.hasSplitEtaleSubalgebra_iff_hasElementaryIdempotent` : **`GPR 22.9` (i) ↔ (ii)**.
 * `ConicAlgebra.hasElementaryIdempotent_iff_isGPRIsotropic` : **`GPR 22.9` (i) ↔ (iii)**, for a
   regular multiplicative norm.
-* `ConicAlgebra.IsElementaryIdempotent.isHyperbolicPair` : `(c, c̄)` is a hyperbolic pair of the
+* `ConicAlgebra.IsElementaryIdempotent.isHyperbolicPair` : `(c, conj c)` is a hyperbolic pair of the
   norm, and `ConicAlgebra.IsElementaryIdempotent.isometryEquivPlaneProd` splits the plane
-  `k c ⊕ k c̄` off orthogonally. The full hyperbolic presentation is in
+  `k c ⊕ k (conj c)` off orthogonally. The full hyperbolic presentation is in
   `Composition/Reduced/Hyperbolic.lean`.
 
 ## Implementation notes
@@ -72,7 +72,7 @@ overloading `GPR`'s word.
 
 Clause (iv) of `GPR 22.9` — that the norm is hyperbolic — is completed in
 `Composition/Reduced/Hyperbolic.lean`. What is proved here is the hypothesis-free first step: the
-plane `k c ⊕ k c̄` splits off orthogonally
+plane `k c ⊕ k (conj c)` splits off orthogonally
 (`IsElementaryIdempotent.isometryEquivPlaneProd`).
 
 **Why (ii) is not stated with a `NonAssocSubalgebra`.** The content of "contains a split quadratic
@@ -123,31 +123,31 @@ theorem conj_eq (hc : C.IsElementaryIdempotent c) : C.conj c = 1 - c := by
   rw [ConicAlgebra.conj_apply, hc.trace_eq_one, one_smul]
 
 omit [SMulCommClass k A A] [IsScalarTower k A A] in
-/-- The conjugate of an elementary idempotent is again one: `c̄ = 1 - c` is the complementary
+/-- The conjugate of an elementary idempotent is again one: `conj c = 1 - c` is the complementary
 idempotent. -/
 theorem conj (hc : C.IsElementaryIdempotent c) : C.IsElementaryIdempotent (C.conj c) where
   norm_eq_zero := by rw [ConicAlgebra.norm_conj, hc.norm_eq_zero]
   trace_eq_one := by rw [ConicAlgebra.trace_conj, hc.trace_eq_one]
 
 omit [IsScalarTower k A A] in
-/-- The two complementary idempotents are orthogonal: `c c̄ = 0`. (Not a `simp` lemma:
+/-- The two complementary idempotents are orthogonal: `c (conj c) = 0`. (Not a `simp` lemma:
 `ConicAlgebra.mul_conj_self` already rewrites the left-hand side to `n(c) • 1`.) -/
 theorem mul_conj (hc : C.IsElementaryIdempotent c) : c * C.conj c = 0 := by
   rw [ConicAlgebra.mul_conj_self, hc.norm_eq_zero, zero_smul]
 
 omit [SMulCommClass k A A] in
-/-- The two complementary idempotents are orthogonal: `c̄ c = 0`. -/
+/-- The two complementary idempotents are orthogonal: `(conj c) c = 0`. -/
 theorem conj_mul (hc : C.IsElementaryIdempotent c) : C.conj c * c = 0 := by
   rw [ConicAlgebra.conj_mul_self, hc.norm_eq_zero, zero_smul]
 
 omit [SMulCommClass k A A] [IsScalarTower k A A] in
-/-- `c + c̄ = 1`. -/
+/-- `c + conj c = 1`. -/
 theorem add_conj_eq_one (hc : C.IsElementaryIdempotent c) : c + C.conj c = 1 := by
   rw [ConicAlgebra.add_conj, hc.trace_eq_one, one_smul]
 
 omit [SMulCommClass k A A] [IsScalarTower k A A] in
-/-- **`(c, c̄)` is a hyperbolic pair**: both are null and `n(c, c̄) = 1`. This is what makes the
-norm of a reduced algebra hyperbolic (`GPR 22.9(iv)`). -/
+/-- **`(c, conj c)` is a hyperbolic pair**: both are null and `n(c, conj c) = 1`. This is what makes
+the norm of a reduced algebra hyperbolic (`GPR 22.9(iv)`). -/
 theorem polar_conj (hc : C.IsElementaryIdempotent c) :
     QuadraticMap.polar C.norm c (C.conj c) = 1 := by
   have h := C.norm_add c (C.conj c)
@@ -155,9 +155,9 @@ theorem polar_conj (hc : C.IsElementaryIdempotent c) :
   simpa using h.symm
 
 omit [SMulCommClass k A A] [IsScalarTower k A A] in
-/-- **`(c, c̄)` is a hyperbolic pair of the norm**, in the sense of
+/-- **`(c, conj c)` is a hyperbolic pair of the norm**, in the sense of
 `QuadraticMap.IsHyperbolicPair`. This is what connects a reduced algebra to the hyperbolic-form
-machinery: by `QuadraticMap.IsHyperbolicPair.isometryEquivPlaneProd` the plane `k c ⊕ k c̄`
+machinery: by `QuadraticMap.IsHyperbolicPair.isometryEquivPlaneProd` the plane `k c ⊕ k (conj c)`
 splits off the norm orthogonally. -/
 theorem isHyperbolicPair (hc : C.IsElementaryIdempotent c) :
     QuadraticMap.IsHyperbolicPair C.norm c (C.conj c) where
@@ -184,12 +184,12 @@ end IsElementaryIdempotent
 one carries its own name — see the module docstring. -/
 def HasElementaryIdempotent (C : ConicAlgebra k A) : Prop := ∃ c : A, C.IsElementaryIdempotent c
 
-/-! ### The split quadratic étale subalgebra `k c ⊕ k c̄` -/
+/-! ### The split quadratic étale subalgebra `k c ⊕ k (conj c)` -/
 
 variable (C : ConicAlgebra k A)
 
-/-- The map `k × k → A`, `(a, b) ↦ a c + b c̄`, whose image is the subalgebra
-`k c ⊕ k c̄` of `GPR 22.9`'s proof of (i) ⇒ (ii). It is unital, multiplicative and an
+/-- The map `k × k → A`, `(a, b) ↦ a c + b (conj c)`, whose image is the subalgebra
+`k c ⊕ k (conj c)` of `GPR 22.9`'s proof of (i) ⇒ (ii). It is unital, multiplicative and an
 isometry from the split quadratic étale norm exactly when `c` is an elementary idempotent. -/
 def elementaryIdempotentEmbedding (c : A) : (k × k) →ₗ[k] A :=
   (LinearMap.toSpanSingleton k A c).comp (LinearMap.fst k k k) +
@@ -207,7 +207,7 @@ variable {c : A} (hc : C.IsElementaryIdempotent c)
 include hc
 
 omit [SMulCommClass k A A] [IsScalarTower k A A] in
-/-- The embedding is unital: `c + c̄ = 1`. (Not a `simp` lemma:
+/-- The embedding is unital: `c + conj c = 1`. (Not a `simp` lemma:
 `elementaryIdempotentEmbedding_apply` already rewrites the left-hand side.) -/
 theorem elementaryIdempotentEmbedding_one :
     C.elementaryIdempotentEmbedding c 1 = 1 := by
@@ -231,8 +231,8 @@ theorem norm_elementaryIdempotentEmbedding (x : k × k) :
   simp
 
 omit [SMulCommClass k A A] [IsScalarTower k A A] in
-/-- The coefficient `a` is recovered from `a c + b c̄` by pairing with `c̄`, which is what makes
-the embedding injective — with no regularity hypothesis on `C`. -/
+/-- The coefficient `a` is recovered from `a c + b (conj c)` by pairing with `conj c`, which is what
+makes the embedding injective — with no regularity hypothesis on `C`. -/
 theorem polar_elementaryIdempotentEmbedding_conj (x : k × k) :
     QuadraticMap.polar C.norm (C.elementaryIdempotentEmbedding c x) (C.conj c) = x.1 := by
   rw [elementaryIdempotentEmbedding_apply, QuadraticMap.polar_add_left,
@@ -241,7 +241,7 @@ theorem polar_elementaryIdempotentEmbedding_conj (x : k × k) :
   ring
 
 omit [SMulCommClass k A A] [IsScalarTower k A A] in
-/-- The coefficient `b` is recovered from `a c + b c̄` by pairing with `c`. -/
+/-- The coefficient `b` is recovered from `a c + b (conj c)` by pairing with `c`. -/
 theorem polar_elementaryIdempotentEmbedding_self (x : k × k) :
     QuadraticMap.polar C.norm (C.elementaryIdempotentEmbedding c x) c = x.2 := by
   have hcc : QuadraticMap.polar C.norm (C.conj c) c = 1 := by
@@ -277,7 +277,7 @@ def HasSplitEtaleSubalgebra (C : ConicAlgebra k A) : Prop :=
 /-- **`GPR 22.9`, (i) ⇔ (ii)**, in an arbitrary conic algebra: `C` has an elementary idempotent
 if and only if it contains a split quadratic étale subalgebra.
 
-Forwards, the subalgebra is `k c ⊕ k c̄`. Backwards, the image of `(1, 0)` is an elementary
+Forwards, the subalgebra is `k c ⊕ k (conj c)`. Backwards, the image of `(1, 0)` is an elementary
 idempotent: it has norm `1 * 0 = 0`, and its trace is `n(1, ·)` computed in `k × k`, namely
 `1 * 0 + 1 * 1 = 1`. Neither direction uses regularity, projectivity, multiplicativity of the norm
 of `C`, or any hypothesis on `2`. -/
@@ -307,7 +307,7 @@ omit [SMulCommClass k A A] in
 produces an elementary idempotent.
 
 Given a unimodular null `u`, unimodularity gives a functional `l` with `l(u) = 1`; precomposing
-with the conjugation and inverting the polar map produces `v` with `n(v, ū) = 1`.
+with the conjugation and inverting the polar map produces `v` with `n(v, conj u) = 1`.
 Norm-associativity (`GPR 16.5`) turns that into `t(uv) = 1`, while multiplicativity gives
 `n(uv) = n(u) n(v) = 0`. So `c = uv` is elementary. -/
 theorem exists_isElementaryIdempotent_of_isGPRIsotropic {C : ConicAlgebra k A}
@@ -346,15 +346,15 @@ theorem hasSplitEtaleSubalgebra_iff_isGPRIsotropic {C : ConicAlgebra k A}
 /-! ### The norm splits off a hyperbolic plane
 
 `GPR 22.9`(iv) says the norm of a reduced composition algebra is hyperbolic. What follows from the
-pair `(c, c̄)` alone, with no Peirce decomposition and no hypothesis whatever on `C`, is that it
+pair `(c, conj c)` alone, with no Peirce decomposition and no hypothesis whatever on `C`, is that it
 splits off *one* hyperbolic plane. `Composition/Reduced/Hyperbolic.lean` uses the Peirce
 decomposition and regularity to identify the entire norm with a hyperbolic form. -/
 
 /-- **Towards `GPR 22.9`(iv)**: an elementary idempotent splits a hyperbolic plane off the norm,
 
-  `n ≅ ⟨plane⟩ ⊥ n|_{(k c ⊕ k c̄)ᗮ}`.
+  `n ≅ ⟨plane⟩ ⊥ n|_{(k c ⊕ k (conj c))ᗮ}`.
 
-The plane is `k c ⊕ k c̄`, and the restriction of `n` to it is regular by
+The plane is `k c ⊕ k (conj c)`, and the restriction of `n` to it is regular by
 `QuadraticMap.IsHyperbolicPair.isGPRRegular_comp_planeSubmodule_subtype` — so no regularity of `n`
 itself, no projectivity, and no hypothesis on `2` is needed. The ingredients for full hyperbolicity
 from `GPR Exc. 19.35` are developed in `Composition/Reduced/Peirce.lean`. -/

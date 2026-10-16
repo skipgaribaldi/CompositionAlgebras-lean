@@ -43,7 +43,7 @@ This is not a norm-theoretic notion — no quadratic form is in sight here — b
 
 GPR also states unimodularity geometrically: `m` is unimodular iff `m ⊗ 1_{κ(𝔭)} ≠ 0` for every
 `𝔭 ∈ Spec R` (i.e. `m` survives in every residue field). ⚠ That criterion needs `M` finitely
-generated projective (`GPR 9.17`): in the `ℤ`-module `ℤ ⊕ ℤ/2` the element `(2, 1̄)` survives in
+generated projective (`GPR 9.17`): in the `ℤ`-module `ℤ ⊕ ℤ/2` the element `(2, 1)` survives in
 every residue field, but no linear functional takes it to `1`. Only the two algebraic formulations
 above are formalized here; the geometric one is not. Note that residue fields cannot detect
 whether an element is *nonzero* — `ε` in the free rank-one module over `𝔽₂[ε]/(ε²)` dies in every

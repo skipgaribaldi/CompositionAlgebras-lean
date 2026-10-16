@@ -145,7 +145,8 @@ def inseparable : ConicAlgebra F A where
   rw [trace_apply]
   exact polar_inseparableNorm hchar n hn 1 x
 
-/-- The conjugation is the **identity**, not merely an involution: `x̄ = t(x) · 1 − x = −x = x`. -/
+/-- The conjugation is the **identity**, not merely an involution: `conj x = t(x) · 1 − x = −x = x`.
+-/
 @[simp] theorem conj_inseparable (x : A) : (inseparable hchar n hn).conj x = x := by
   rw [conj_apply, trace_inseparable, zero_smul, zero_sub, neg_eq_iff_add_eq_zero, ← two_smul F x,
     hchar, zero_smul]

@@ -39,7 +39,7 @@ in `R₁` resp. `R₂` — `Ideal.ideal_prod_prime` classifies the primes, and m
 ways along `Ideal.comap_isMaximal_of_surjective` and `Ideal.map_fst_prod` — with the
 corresponding residue fields those of the factors.
 
-For `⟸`, given `p` over `R₁ × R₂` representing a unit at every residue field, its images
+For `⇐`, given `p` over `R₁ × R₂` representing a unit at every residue field, its images
 `MvPolynomial.map (RingHom.fst _ _) p` and `map (RingHom.snd _ _) p` represent units at every
 residue field of `R₁` resp. `R₂`; the LG hypotheses give witnesses `s₁, s₂`, and
 `fun i ↦ (s₁ i, s₂ i)` is a witness over `R₁ × R₂`, because `IsUnit` in a product is

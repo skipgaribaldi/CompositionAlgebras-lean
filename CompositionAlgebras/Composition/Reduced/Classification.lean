@@ -343,7 +343,7 @@ end IsReduced
 namespace IsComposition
 
 omit [IsAlternative A] in
-/-- **`GPR 22.18`, split ⟺ isotropic over an LG ring.** For a constant-rank composition
+/-- **`GPR 22.18`, split ↔ isotropic over an LG ring.** For a constant-rank composition
 algebra of rank two, four, or eight, splitness is equivalent to the existence of a unimodular null
 vector. The forward implication transports the elementary idempotent of the standard model; the
 reverse implication uses `GPR 22.9` and the reduced classification of `GPR 22.16`. -/
@@ -381,7 +381,7 @@ theorem isSplitOfRank_of_isometryEquiv_dualProd_of_isUnimodular [Nontrivial k]
     ((QuadraticForm.isGPRIsotropic_dualProd hm).map_isometryEquiv e)
 
 omit [IsAlternative A] in
-/-- **`GPR 22.18`, split ⟺ not division over a field.** For a constant-rank composition algebra
+/-- **`GPR 22.18`, split ↔ not division over a field.** For a constant-rank composition algebra
 of rank two, four, or eight, splitness is equivalent to the failure of the property that every
 nonzero element has a two-sided inverse. -/
 theorem isSplitOfRank_iff_not_hasTwoSidedInverses {K : Type u} [Field K] {B : Type v}
@@ -395,7 +395,7 @@ theorem isSplitOfRank_iff_not_hasTwoSidedInverses {K : Type u} [Field K] {B : Ty
       (not_congr hcomp.isMultiplicative.hasTwoSidedInverses_iff_anisotropic.symm)
 
 omit [IsAlternative A] in
-/-- **`GPR 22.19`, split ⟺ GPR-isotropic over a PID.** For a constant-rank composition algebra
+/-- **`GPR 22.19`, split ↔ GPR-isotropic over a PID.** For a constant-rank composition algebra
 of rank two, four, or eight, a unimodular null vector is equivalent to splitness. Projective
 twisting modules are free over the PID, replacing the LG-ring freeness step in `GPR 22.18`. -/
 theorem isSplitOfRank_iff_isGPRIsotropic_of_pid [IsDomain k] [IsPrincipalIdealRing k]
@@ -418,7 +418,7 @@ theorem isSplitOfRank_iff_isGPRIsotropic_of_pid [IsDomain k] [IsPrincipalIdealRi
     · exact hc.isSplitOfRank_eight_of_pid hcomp hA
 
 omit [IsAlternative A] in
-/-- **`GPR 22.19`, split ⟺ a nonzero null vector over a PID.** This is where GPR's
+/-- **`GPR 22.19`, split ↔ a nonzero null vector over a PID.** This is where GPR's
 unimodular-vector isotropy and mathlib's failure of anisotropy become equivalent, by
 `GPR Exc. 12.38(c)` (`QuadraticMap.isGPRIsotropic_iff_not_anisotropic_of_pid`). -/
 theorem isSplitOfRank_iff_not_anisotropic_of_pid [IsDomain k] [IsPrincipalIdealRing k]
@@ -429,7 +429,7 @@ theorem isSplitOfRank_iff_not_anisotropic_of_pid [IsDomain k] [IsPrincipalIdealR
     QuadraticMap.isGPRIsotropic_iff_not_anisotropic_of_pid
 
 omit [IsAlternative A] in
-/-- **`GPR 22.19`, split ⟺ zero divisors over a PID.** Here "has zero divisors" is expressed
+/-- **`GPR 22.19`, split ↔ zero divisors over a PID.** Here "has zero divisors" is expressed
 canonically as the negation of mathlib's `NoZeroDivisors` predicate. -/
 theorem isSplitOfRank_iff_not_noZeroDivisors_of_pid [IsDomain k] [IsPrincipalIdealRing k]
     (hcomp : C.IsComposition.{u, v, u})

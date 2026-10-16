@@ -15,13 +15,13 @@ public import Mathlib.LinearAlgebra.CrossProduct
 
 The **algebra of Zorn vector matrices** `Zor(k)` is the `k`-module of formal matrices
 
-  `⎡ρ₁  u₂⎤`
-  `⎣u₁  ρ₂⎦`,   `ρᵢ ∈ k`, `uᵢ ∈ k³`,
+  `[ρ₁  u₂]`
+  `[u₁  ρ₂]`,   `ρᵢ ∈ k`, `uᵢ ∈ k³`,
 
 with the multiplication built from the dot and cross products of `k³` (`GPR (21.18.4)`)
 
-  `⎡ρ₁ u₂⎤ ⎡σ₁ v₂⎤   ⎡ ρ₁σ₁ - u₂ᵀv₁       ρ₁v₂ + σ₂u₂ + u₁ ⨯ v₁ ⎤`
-  `⎣u₁ ρ₂⎦ ⎣v₁ σ₂⎦ = ⎣ σ₁u₁ + ρ₂v₁ + u₂ ⨯ v₂    ρ₂σ₂ - u₁ᵀv₂     ⎦`,
+  `[ρ₁ u₂] [σ₁ v₂]   [ ρ₁σ₁ - u₂ᵀv₁       ρ₁v₂ + σ₂u₂ + u₁ ⨯ v₁ ]`
+  `[u₁ ρ₂] [v₁ σ₂] = [ σ₁u₁ + ρ₂v₁ + u₂ ⨯ v₂    ρ₂σ₂ - u₁ᵀv₂     ]`,
 
 the norm `n = ρ₁ρ₂ + u₁ᵀu₂`, the trace `t = ρ₁ + ρ₂` and the conjugation exchanging the diagonal
 and negating the off-diagonal entries.
@@ -95,8 +95,8 @@ variable (k : Type u) [CommRing k]
 /-- The `k`-module underlying the algebra of **Zorn vector matrices** `Zor(k)` (`GPR (21.18.5)`),
 as a type synonym for `(k × k³) × (k × k³)`: the element `x` is the matrix
 
-  `⎡x.1.1  x.2.2⎤`
-  `⎣x.1.2  x.2.1⎦`
+  `[x.1.1  x.2.2]`
+  `[x.1.2  x.2.1]`
 
 whose first column is `x.1 = (ρ₁, u₁)` and whose second column is `x.2 = (ρ₂, u₂)`. The synonym is
 needed because the multiplication below is not the componentwise one. -/

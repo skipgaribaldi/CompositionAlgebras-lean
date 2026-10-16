@@ -15,14 +15,14 @@ public import CompositionAlgebras.Module.Invertible
 
 For `L` a `k`-module, the **`L`-twisted 2-by-2 matrices** are the formal matrices
 
-  `⎡ρ₁  u*⎤`
-  `⎣v   ρ₂⎦`,   `ρᵢ ∈ k`, `u* ∈ L*`, `v ∈ L`,
+  `[ρ₁  u*]`
+  `[v   ρ₂]`,   `ρᵢ ∈ k`, `u* ∈ L*`, `v ∈ L`,
 
 multiplied as matrices, using the canonical pairing `L* × L → k` wherever a product of an entry
 of `L*` with an entry of `L` occurs (`GPR 22.12`):
 
-  `⎡ρ₁ u*⎤ ⎡σ₁ w*⎤   ⎡ ρ₁σ₁ + ⟨u*, z⟩     ρ₁w* + σ₂u*   ⎤`
-  `⎣v  ρ₂⎦ ⎣z  σ₂⎦ = ⎣ σ₁v + ρ₂z         ρ₂σ₂ + ⟨w*, v⟩ ⎦`,
+  `[ρ₁ u*] [σ₁ w*]   [ ρ₁σ₁ + ⟨u*, z⟩     ρ₁w* + σ₂u*   ]`
+  `[v  ρ₂] [z  σ₂] = [ σ₁v + ρ₂z         ρ₂σ₂ + ⟨w*, v⟩ ]`,
 
 with norm `ρ₁ρ₂ - ⟨u*, v⟩`, trace `ρ₁ + ρ₂` and conjugation exchanging the diagonal
 and negating the off-diagonal entries — `GPR (22.12.1)`, `(22.12.2)`, `(22.12.3)`. When `L` is a
@@ -85,8 +85,8 @@ variable (k : Type u) [CommRing k] (L : Type v) [AddCommGroup L] [Module k L]
 /-- The `k`-module of **`L`-twisted 2-by-2 matrices** (`GPR 22.12`), as a type synonym for
 `(k × L*) × (k × L)`: the element `x` is the matrix
 
-  `⎡x.1.1  x.1.2⎤`
-  `⎣x.2.2  x.2.1⎦`
+  `[x.1.1  x.1.2]`
+  `[x.2.2  x.2.1]`
 
 whose top row is `x.1 = (ρ₁, u*)` and whose bottom row is `(x.2.2, x.2.1) = (v, ρ₂)`. The
 synonym

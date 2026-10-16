@@ -38,7 +38,8 @@ chain downwards from a hypothetical algebra of dimension `16`:
   (`ConicAlgebra.exists_mul_mul_ne_mul_mul_cay`, contrapositive), so the four-dimensional rung is
   commutative;
 * a commutative double forces the conjugation of its half to be the **identity**
-  (`ConicAlgebra.exists_mul_ne_mul_cay`, contrapositive), so the two-dimensional rung has `x̄ = x`;
+  (`ConicAlgebra.exists_mul_ne_mul_cay`, contrapositive), so the two-dimensional rung has
+  `conj x = x`;
 * but a composition algebra with trivial conjugation has dimension at most one
   (`ConicAlgebra.IsComposition.finrank_le_one_of_conj_eq_id`) — contradiction.
 
@@ -47,7 +48,7 @@ Only the first bullet is new; the middle two are the explicit witnesses already 
 
 ## The bottom of the descent
 
-`finrank_le_one_of_conj_eq_id` is where the two characteristics part company. `x̄ = x` reads
+`finrank_le_one_of_conj_eq_id` is where the two characteristics part company. `conj x = x` reads
 `2x = t(x) · 1`. When `2 ≠ 0` every element is therefore a scalar multiple of `1`, and the
 dimension is at most one outright. When `2 = 0` it reads `t(x) · 1 = 0`, so `t ≡ 0` because
 `1 ≠ 0`; then `n(1, y) = t(y) = 0` for every `y`, so `1` is a nonzero vector in the kernel of the
@@ -191,8 +192,8 @@ theorem nontrivial_of_conicAlgebra (C : ConicAlgebra F A) : Nontrivial A := by
 /-- **The last step of the descent.** A composition algebra over a field whose conjugation is the
 identity has dimension at most one.
 
-The two characteristics are genuinely different. When `2 ≠ 0`, `x̄ = x` reads `2x = t(x) · 1`, so
-every element is a scalar multiple of `1` outright. When `2 = 0` it reads `t(x) · 1 = 0`, hence
+The two characteristics are genuinely different. When `2 ≠ 0`, `conj x = x` reads `2x = t(x) · 1`,
+so every element is a scalar multiple of `1` outright. When `2 = 0` it reads `t(x) · 1 = 0`, hence
 `t ≡ 0` since `1 ≠ 0`; then `n(1, y) = t(y) = 0` for every `y`, so `1` is a nonzero vector in the
 kernel of the polar form, the norm is not regular, and `GPR 19.11` leaves only dimension one. -/
 theorem IsComposition.finrank_le_one_of_conj_eq_id (h : C.IsComposition.{u, v, u})

@@ -18,7 +18,7 @@ The point of this file is that multiplicativity is much stronger than it looks: 
 twice turns the *quadratic* statement `n(xy) = n(x)n(y)` into a *bilinear* one, and that bilinear
 identity is exactly `GPR`'s **norm-associativity**
 
-  `n(xy, z) = n(y, x̄z)`,   `n(xy, z) = n(x, zȳ)`,
+  `n(xy, z) = n(y, (conj x)z)`,   `n(xy, z) = n(x, z(conj y))`,
 
 which is the workhorse of the whole composition-algebra theory. Everything here holds in an
 arbitrary conic algebra over an arbitrary commutative ring: no alternativity, no regularity, no
@@ -39,9 +39,9 @@ projectivity, and nothing on `2`. Only additivity of the norm's polar form is us
 * `ConicAlgebra.IsMultiplicative.polar_mul_add_polar_mul` : the second linearization,
   `n(xz, yw) + n(xw, yz) = n(x, y) n(z, w)`.
 * `ConicAlgebra.IsMultiplicative.polar_mul_left` : **norm-associativity**,
-  `n(xy, z) = n(y, x̄z)`.
+  `n(xy, z) = n(y, (conj x)z)`.
 * `ConicAlgebra.IsMultiplicative.polar_mul_right` : norm-associativity on the other side,
-  `n(xy, z) = n(x, zȳ)`.
+  `n(xy, z) = n(x, z(conj y))`.
 * `ConicAlgebra.IsMultiplicative.trace_mul` : `t(xy) = t(x)t(y) - n(x, y)`.
 * `ConicAlgebra.IsMultiplicative.anisotropic_iff_noZeroDivisors_of_isDomain` : over a domain,
   the norm is anisotropic exactly when the algebra has no zero divisors.
@@ -87,12 +87,12 @@ def IsMultiplicative : Prop := ∀ x y : A, C.norm (x * y) = C.norm x * C.norm y
 `x * y = 1` and `y * x = 1`.
 
 ⚠ **This property is weaker than being a division algebra as defined in `GPR 8.6`, and is
-deliberately not called `IsDivision`.** `GPR 8.6` calls `A` a division algebra when `A ≠ 0` and,
-for every `u ≠ 0`, the left and right multiplications `L_u` and `R_u` are bijective. Without
+deliberately not called `IsDivision`.** `GPR 8.6` calls `A` a division algebra when `A ≠ 0` and, for
+every `u ≠ 0`, the left and right multiplications `L_u` and `R_u` are bijective. Without
 associativity a two-sided inverse does not give that: the real sedenions have an anisotropic norm,
-so every nonzero `x` has the two-sided inverse `n(x)⁻¹ x̄`, yet they are not a division algebra
-(`GPR Exc. 19.29(e)`). For a unital *alternative* algebra the two notions agree, given `1 ≠ 0`
-(`GPR 13.8`); in particular they agree for composition algebras, which are alternative. Both
+so every nonzero `x` has the two-sided inverse `n(x)⁻¹ (conj x)`, yet they are not a division
+algebra (`GPR Exc. 19.29(e)`). For a unital *alternative* algebra the two notions agree, given
+`1 ≠ 0` (`GPR 13.8`); in particular they agree for composition algebras, which are alternative. Both
 facts are formalized in `Conic/Division.lean` and `Composition/Sedenion.lean`:
 `ConicAlgebra.isDivision_iff_hasTwoSidedInverses` is `GPR 13.8` for alternative conic algebras over
 a field, and `ConicAlgebra.hasTwoSidedInverses_realSedenion` with
@@ -154,10 +154,10 @@ theorem polar_mul_add_polar_mul (h : C.IsMultiplicative) (x y z w : A) :
 
 omit [SMulCommClass k A A] in
 /-- **Norm-associativity** (`GPR 16.5`, and the reason multiplicativity is so rigid):
-`n(xy, z) = n(y, x̄z)`.
+`n(xy, z) = n(y, (conj x)z)`.
 
 The left factor may be moved across the polar form at the cost of conjugating it. Specialize the
-second linearization at `y = 1`, where `n(x, 1) = t(x)`, and use `x̄ = t(x)·1 - x`. -/
+second linearization at `y = 1`, where `n(x, 1) = t(x)`, and use `conj x = t(x)·1 - x`. -/
 theorem polar_mul_left (h : C.IsMultiplicative) (x y z : A) :
     QuadraticMap.polar C.norm (x * y) z = QuadraticMap.polar C.norm y (C.conj x * z) := by
   have key := h.polar_mul_add_polar_mul x 1 y z
@@ -167,7 +167,7 @@ theorem polar_mul_left (h : C.IsMultiplicative) (x y z : A) :
   linear_combination key
 
 omit [IsScalarTower k A A] in
-/-- **Norm-associativity**, the other side (`GPR 16.5`): `n(xy, z) = n(x, zȳ)`.
+/-- **Norm-associativity**, the other side (`GPR 16.5`): `n(xy, z) = n(x, z(conj y))`.
 
 Not a consequence of `ConicAlgebra.IsMultiplicative.polar_mul_left` — `A` is not assumed
 associative or commutative — but proved the same way, specializing the second linearization at
@@ -191,7 +191,7 @@ theorem trace_mul (h : C.IsMultiplicative) (x y : A) :
   ring
 
 omit [SMulCommClass k A A] [IsScalarTower k A A] in
-/-- The norm of a product of conjugates: `n(x̄ȳ) = n(x) n(y)`. -/
+/-- The norm of a product of conjugates: `n((conj x)(conj y)) = n(x) n(y)`. -/
 theorem norm_conj_mul_conj (h : C.IsMultiplicative) (x y : A) :
     C.norm (C.conj x * C.conj y) = C.norm x * C.norm y := by
   rw [h.norm_mul, norm_conj, norm_conj]
@@ -222,7 +222,7 @@ theorem anisotropic_iff_noZeroDivisors_of_isDomain [IsDomain k]
 omit [IsScalarTower k A A] in
 /-- Over a field, every nonzero element of a multiplicative conic algebra has a two-sided inverse
 if and only if its norm is anisotropic. Forwards, a null nonzero element cannot have an inverse
-because norms multiply. Backwards, `n(x)⁻¹ x̄` is a two-sided inverse. This is the step of
+because norms multiply. Backwards, `n(x)⁻¹ (conj x)` is a two-sided inverse. This is the step of
 `GPR 22.18` that `GPR` phrases with division algebras; `HasTwoSidedInverses` is weaker than that
 notion in general, and agrees with it for composition algebras
 (`ConicAlgebra.IsComposition.isDivision_iff_hasTwoSidedInverses`). -/

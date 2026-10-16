@@ -17,12 +17,12 @@ public import Mathlib.LinearAlgebra.FreeModule.StrongRankCondition
 Given a conic algebra `B` over `k` and a scalar `μ ∈ k`, the **Cayley–Dickson double**
 `Cay(B, μ)` is the `k`-module `B ⊕ B`, written `u + v j`, with
 
-  `(u₁ + v₁ j)(u₂ + v₂ j) = (u₁u₂ + μ v̄₂v₁) + (v₂u₁ + v₁ū₂) j`,   `1 = 1_B + 0 j`,
+  `(u₁ + v₁ j)(u₂ + v₂ j) = (u₁u₂ + μ (conj v₂)v₁) + (v₂u₁ + v₁(conj u₂)) j`,   `1 = 1_B + 0 j`,
   `n(u + v j) = n_B(u) - μ n_B(v)`.
 
 It is again a conic algebra (`ConicAlgebra.cay`, `GPR 18.4`), and its trace and conjugation are
 
-  `t(u + v j) = t_B(u)`,   `conj (u + v j) = ū - v j`.
+  `t(u + v j) = t_B(u)`,   `conj (u + v j) = conj u - v j`.
 
 ## Main definitions
 
@@ -46,7 +46,7 @@ It is again a conic algebra (`ConicAlgebra.cay`, `GPR 18.4`), and its trace and 
 construction.
 
 **No hypotheses on `B` beyond conic.** The degree-two identity for `Cay(B, μ)` needs exactly two
-facts about `B`: `v̄v = n(v) · 1` (`ConicAlgebra.conj_mul_self`) and `u + ū = t(u) · 1`
+facts about `B`: `(conj v)v = n(v) · 1` (`ConicAlgebra.conj_mul_self`) and `u + conj u = t(u) · 1`
 (`ConicAlgebra.add_conj`), both of which hold in every conic algebra with no regularity,
 projectivity, alternativity or assumption on `2`. In particular the norm is written down directly,
 so — unlike `ConicAlgebra.baseChangeOfProjective` — nothing here needs `B` to be projective.
@@ -138,7 +138,7 @@ def mk (u v : B) : Cay C μ := (u, v)
 variable (C μ)
 
 /-- The **Cayley–Dickson multiplication** `GPR 18.3`:
-`(u₁ + v₁j)(u₂ + v₂j) = (u₁u₂ + μ v̄₂v₁) + (v₂u₁ + v₁ū₂) j`. -/
+`(u₁ + v₁j)(u₂ + v₂j) = (u₁u₂ + μ (conj v₂)v₁) + (v₂u₁ + v₁(conj u₂)) j`. -/
 instance : Mul (Cay C μ) :=
   ⟨fun x y ↦ ((x.1 * y.1 + μ • (C.conj y.2 * x.2), y.2 * x.1 + x.2 * C.conj y.1) : B × B)⟩
 
@@ -203,8 +203,8 @@ variable (C μ)
 
 /-- **`GPR 18.4`: the Cayley–Dickson double of a conic algebra is a conic algebra.**
 
-The first component of `x * x` is `u² + μ v̄v = t(u)·u - n(u)·1 + μ n(v)·1`, and the second is
-`vu + vū = v(u + ū) = t(u)·v`. No hypothesis on `B` or on `μ`. -/
+The first component of `x * x` is `u² + μ (conj v)v = t(u)·u - n(u)·1 + μ n(v)·1`, and the second is
+`vu + v(conj u) = v(u + conj u) = t(u)·v`. No hypothesis on `B` or on `μ`. -/
 noncomputable def cay : ConicAlgebra k (Cay C μ) where
   norm := C.cayNorm μ
   norm_one := by simp [C.norm_one]
@@ -232,14 +232,14 @@ variable {C μ}
   rw [polar_cayNorm]
   simp [trace_apply]
 
-/-- **`GPR 18.4(6)`.** The conjugation of `Cay(B, μ)` is `u + v j ↦ ū - v j`. -/
+/-- **`GPR 18.4(6)`.** The conjugation of `Cay(B, μ)` is `u + v j ↦ conj u - v j`. -/
 @[simp] theorem cay_conj_apply (x : Cay C μ) :
     (C.cay μ).conj x = ((C.conj x.1, -x.2) : Cay C μ) := by
   refine Cay.ext ?_ ?_
   · rw [conj_apply, Cay.fst_sub, Cay.fst_smul, cay_trace_apply, Cay.fst_one, conj_apply]
   · rw [conj_apply, Cay.snd_sub, Cay.snd_smul, Cay.snd_one, smul_zero, zero_sub]
 
-/-- `GPR 18.4(6)` on an explicit element: the conjugate of `u + v j` is `ū - v j`.
+/-- `GPR 18.4(6)` on an explicit element: the conjugate of `u + v j` is `conj u - v j`.
 
 Not a simp lemma, since `cay_conj_apply` already rewrites its left-hand side; it is for `simp only`
 calls that keep elements in `Cay.mk` form. -/
@@ -323,7 +323,8 @@ end Functoriality
 
 /-- **`GPR 18.11`.** If the conjugation of `B` is an involution then so is the conjugation of
 `Cay(B, μ)`. No associativity and no hypothesis on `μ`: the verification is the two component
-identities `conj(u₁u₂ + μ v̄₂v₁) = ū₂ū₁ + μ v̄₁v₂` and `-(v₂u₁ + v₁ū₂) = -v₂u₁ - v₁ū₂`. -/
+identities `conj(u₁u₂ + μ (conj v₂)v₁) = (conj u₂)(conj u₁) + μ (conj v₁)v₂` and
+`-(v₂u₁ + v₁(conj u₂)) = -v₂u₁ - v₁(conj u₂)`. -/
 theorem ConjIsInvolution.cay (hconj : C.ConjIsInvolution) : (C.cay μ).ConjIsInvolution := by
   intro x y
   rw [cay_conj_apply, cay_conj_apply, cay_conj_apply]

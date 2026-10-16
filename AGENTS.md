@@ -76,7 +76,11 @@ local variation. Highlights, since they are the ones most often violated:
 - Prefer `theorem` over `lemma` for results intended to be used elsewhere; both are fine.
 - Anonymous constructor notation `⟨_, _⟩`, `fun` over `λ`, `·` for placeholders.
 
-Run `lake lint` (not `lake exe lint`) before considering a file done.
+Run `lake lint` (not `lake exe lint`) and `lake exe lint-style CompositionAlgebras` before
+considering a file done. The second is mathlib's text linter; among other things it rejects
+characters outside mathlib's unicode allowlist, so docstrings write the conjugate of `x` as
+`conj x` (`(conj x)` when it is a factor in a product), never `x̄` with a combining macron, and use
+`↔`/`⇐` rather than `⟺`/`⟸`.
 
 ---
 
@@ -502,7 +506,7 @@ contradicts the source, suspect the paraphrase before the source.
 - [ ] The four mandatory warnings (§6) preserved where relevant.
 - [ ] Any `sorry` documented and flagged in the module docstring.
 - [ ] Style: 100 columns, two-space indent, mathlib naming.
-- [ ] `lake build` succeeds; linters pass.
+- [ ] `lake build` succeeds with no warnings; `lake lint` and `lake exe lint-style` pass.
 
 ---
 

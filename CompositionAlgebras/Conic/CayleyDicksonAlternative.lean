@@ -44,7 +44,7 @@ Write `x = a + bj`, `y = c + dj`. Expanding the two alternative laws in componen
 
 * associativity of `B`,
 * anti-multiplicativity of the conjugation,
-* `z̄ = t(z) · 1 - z` (`ConicAlgebra.conj_apply`), which turns every conjugate into a scalar
+* `conj z = t(z) · 1 - z` (`ConicAlgebra.conj_apply`), which turns every conjugate into a scalar
   multiple of `1` minus the element, and
 * `z² = t(z) · z - n(z) · 1` (`ConicAlgebra.mul_self_eq`) for `z = a` and `z = b`,
 
@@ -61,18 +61,18 @@ other, and neither uses `μ`.
 
 * **Involutivity** is the `j`-component of left alternativity at `x = a + j`, `y = c`:
 
-    `c̄ a + conj(ac) = t(a) c̄`,
+    `(conj c) a + conj(ac) = t(a) (conj c)`,
 
-  and `t(a) c̄ - c̄ a = c̄ ā`. The element `b` multiplying the conjugate in the general
-  computation is here specialized to `1`, which is what makes the defect visible without any
-  faithfulness hypothesis: `GPR 16.10(a)` only places the trace defect in `Ann(B)`, but `B` is
-  unital, so it vanishes.
+and `t(a) (conj c) - (conj c) a = (conj c) (conj a)`. The element `b` multiplying the conjugate in
+the general computation is here specialized to `1`, which is what makes the defect visible without
+any faithfulness hypothesis: `GPR 16.10(a)` only places the trace defect in `Ann(B)`, but `B` is
+unital, so it vanishes.
 * **Associativity** is the `j`-component of the linearized right alternative law
   (`IsAlternative.right_alt_linearized`) at `x = a`, `y = b`, `z = cj`:
 
-    `a(bc) + (ab)c̄ = (ac)b + (ac̄)b`,
+    `a(bc) + (ab)(conj c) = (ac)b + (a(conj c))b`,
 
-  in which expanding `c̄ = t(c) · 1 - c` cancels both the trace terms and the two products that
+  in which expanding `conj c = t(c) · 1 - c` cancels both the trace terms and the two products that
   are not associated, leaving `abc = a(bc)`. Note that this is the linearization, not either
   alternative law itself: the plain laws applied to elements of these shapes give back only
   alternativity of `B` and the commutator identity, never associativity.
@@ -154,9 +154,9 @@ theorem isAlternative_cay_of_mul_assoc (C : ConicAlgebra k B) (μ : k)
 is an involution.
 
 The `j`-component of left alternativity at `x = a + j` and `y = c` reads
-`c̄ a + conj(ac) = t(a) c̄`, and `t(a) c̄ - c̄ a` is `c̄ ā` by `ConicAlgebra.conj_apply`. No
-hypothesis on `μ`, and no associativity of `B`: taking the `j`-part of `x` to be `1` removes every
-product in which `μ` or a reassociation could appear. -/
+`(conj c) a + conj(ac) = t(a) (conj c)`, and `t(a) (conj c) - (conj c) a` is `(conj c) (conj a)` by
+`ConicAlgebra.conj_apply`. No hypothesis on `μ`, and no associativity of `B`: taking the `j`-part of
+`x` to be `1` removes every product in which `μ` or a reassociation could appear. -/
 theorem conjIsInvolution_of_isAlternative_cay (C : ConicAlgebra k B) (μ : k)
     (h : IsAlternative (Cay C μ)) : C.ConjIsInvolution := by
   intro a c
@@ -172,9 +172,9 @@ theorem conjIsInvolution_of_isAlternative_cay (C : ConicAlgebra k B) (μ : k)
 /-- **`GPR 18.14(c)`, `⇒`, second half.** If `Cay(B, μ)` is alternative then `B` is associative.
 
 The `j`-component of the linearized right alternative law at `x = a`, `y = b`, `z = cj` reads
-`a(bc) + (ab)c̄ = (ac)b + (ac̄)b`; expanding `c̄ = t(c) · 1 - c` cancels the trace terms against the
-two products that are not associated. No hypothesis on `μ`: every product below has a zero
-component where `μ` would enter. -/
+`a(bc) + (ab)(conj c) = (ac)b + (a(conj c))b`; expanding `conj c = t(c) · 1 - c` cancels the trace
+terms against the two products that are not associated. No hypothesis on `μ`: every product below
+has a zero component where `μ` would enter. -/
 theorem mul_assoc_of_isAlternative_cay (C : ConicAlgebra k B) (μ : k)
     (h : IsAlternative (Cay C μ)) (a b c : B) : a * b * c = a * (b * c) := by
   let := h

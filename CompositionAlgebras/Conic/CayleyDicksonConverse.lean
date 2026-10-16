@@ -32,8 +32,9 @@ well-chosen instance, exactly as in `GPR 18.14(c)`:
   identity holding in `Cay(B, μ)` holds in `B` — this gives commutativity and associativity of `B`
   at once, with no hypothesis on `μ`.
 * The conjugation is handled by the failure witnesses already available: `(u, 0)(0, 1) = (0, u)`
-  while `(0, 1)(u, 0) = (0, ū)`, so commutativity of the double forces `ū = u`; and an associative
-  double is alternative, so `ConicAlgebra.conjIsInvolution_of_isAlternative_cay` applies.
+  while `(0, 1)(u, 0) = (0, conj u)`, so commutativity of the double forces `conj u = u`; and an
+  associative double is alternative, so `ConicAlgebra.conjIsInvolution_of_isAlternative_cay`
+  applies.
 * Commutativity of `B` under an associative double is the contrapositive of
   `ConicAlgebra.exists_mul_mul_ne_mul_mul_cay`, whose conjugation hypothesis the previous point
   has just supplied.
