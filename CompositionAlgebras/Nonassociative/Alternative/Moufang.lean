@@ -23,14 +23,12 @@ restate them, check `Conic/CayleyDickson.lean` still elaborates.
 
 ## Implementation notes
 
-`left_moufang` is obtained from `right_moufang` by transport along `MulOpposite`, using the
-`IsAlternative αᵐᵒᵖ` instance from `Defs.lean`.
-
-⚠ **TODO (proof hygiene).** `right_moufang` is closed by `grind`, and in the original development
-this required `set_option maxHeartbeats 32000000` — 160× the default. That is a symptom of brute
-force, not a proof. Replace it with structured `calc` reasoning from the linearized laws before
-this goes anywhere near mathlib; see `AGENTS.md` §7. The heartbeat bound below is a deliberate,
-much smaller placeholder and may need raising until that proof is rewritten.
+`right_moufang` is a short `calc` from the linearized alternative laws
+(`IsAlternative.left_alt_linearized`, `IsAlternative.right_alt_linearized`); its docstring gives
+the computation. `left_moufang` is obtained from `right_moufang` by transport along `MulOpposite`,
+using the `IsAlternative αᵐᵒᵖ` instance from `Defs.lean`, and `middle_moufang` from
+`left_moufang`, flexibility, the linearized right law and the alternating property of the
+associator.
 
 ## References
 
@@ -45,25 +43,28 @@ namespace IsAlternative
 
 variable {α : Type u} [NonUnitalNonAssocRing α] [IsAlternative α]
 
-set_option maxHeartbeats 1000000 in
--- The final `grind` call currently exceeds the default heartbeat budget.
 /-- **Right Moufang identity**: `((c * a) * b) * a = c * (a * (b * a))`.
 
-The enlarged heartbeat budget is local to this proof while its final `grind` call remains. -/
+Expand `((c a) b) a` by the linearized left alternative law at `(c a, b, a)`, and then `(c a)(b a)`
+by the linearized right alternative law at `(c, a, b a)`; the right alternative law turns `(c a) a`
+and `(b a) a` into `c a²` and `b a²`. What remains beside `c (a (b a))` is
+`c (b a²) + b (c a²) - ((c (b a)) a + (b (c a)) a)`, which vanishes because both sums equal
+`(c b) a² + (b c) a²`: the first by the linearized left law at `(c, b, a²)`, the second by the
+linearized left law at `(c, b, a)` multiplied on the right by `a`, and the right alternative law. -/
 theorem right_moufang (a b c : α) :
     ((c * a) * b) * a = c * (a * (b * a)) := by
-  have hA := left_alt_linearized (c * a) b a
-  have hB := right_alt_linearized c a (b * a)
-  have h3 := mul_self_mul_right a c
-  have h4 := mul_self_mul_right a b
-  have hD := left_alt_linearized c b a
-  have h6a := mul_self_mul_right a (c * b)
-  have h6b := mul_self_mul_right a (b * c)
-  have hF := left_alt_linearized c b (a * a)
-  have hE : (c * (b * a)) * a + (b * (c * a)) * a =
-            ((c * b) * a) * a + ((b * c) * a) * a := by
-    have := congr_arg (· * a) hD; simp only [add_mul] at this; exact this
-  grind
+  have key : c * (b * (a * a)) + b * (c * (a * a)) = (c * (b * a)) * a + (b * (c * a)) * a := by
+    rw [left_alt_linearized c b (a * a), ← mul_self_mul_right a (c * b),
+      ← mul_self_mul_right a (b * c), ← add_mul, ← left_alt_linearized c b a, add_mul]
+  have h₁ := left_alt_linearized (c * a) b a
+  have h₂ := right_alt_linearized c a (b * a)
+  rw [mul_self_mul_right a c] at h₁
+  rw [mul_self_mul_right a b] at h₂
+  calc ((c * a) * b) * a
+      = (c * a) * (b * a) + b * (c * (a * a)) - (b * (c * a)) * a := eq_sub_of_add_eq h₁.symm
+    _ = c * (a * (b * a)) + (c * (b * (a * a)) + b * (c * (a * a)))
+          - ((c * (b * a)) * a + (b * (c * a)) * a) := by rw [eq_sub_of_add_eq h₂]; abel
+    _ = c * (a * (b * a)) := by rw [key, add_sub_cancel_right]
 
 /-- **Left Moufang identity**: `a * (b * (a * c)) = ((a * b) * a) * c`.
 
