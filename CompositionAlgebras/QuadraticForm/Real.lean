@@ -8,7 +8,7 @@ import Mathlib.LinearAlgebra.QuadraticForm.Real
 /-!
 # Anisotropic real quadratic forms are definite, and determined by their dimension
 
-Sylvester's law of inertia — mathlib's
+The existence half of Sylvester's law of inertia — mathlib's
 `QuadraticForm.equivalent_one_zero_neg_one_weighted_sum_squared` — writes a real quadratic form as
 a weighted sum of squares with weights `-1`, `0`, `1`. Anisotropy
 forbids the weight `0`, and forbids `-1` and `1` from occurring together — a weight `0` gives a null

@@ -129,11 +129,13 @@ import mathlib only, and nothing composition-algebra-specific (see
   `QuadraticForm.toMvPolynomial` together with the new bound
   `QuadraticForm.totalDegree_toMvPolynomial_le`. *(Layer 11.)*
 
-- **Anisotropic real quadratic forms are classified by their dimension.** mathlib has Sylvester's
-  law of inertia in the form "a real quadratic form is a weighted sum of squares with weights
-  `-1, 0, 1`", but not the consequence that an anisotropic real form taking a positive value is
-  the sum of `dim` squares, hence positive definite, hence determined up to isometry by its
-  dimension. *(Layer 11.)*
+- **Anisotropic real quadratic forms are classified by their dimension.** mathlib has both halves
+  of Sylvester's law of inertia — a real quadratic form is a weighted sum of squares with weights
+  `-1, 0, 1` (`QuadraticForm.equivalent_one_zero_neg_one_weighted_sum_squared`), and the numbers of
+  positive and negative weights are invariants (`QuadraticForm.sigPos`, `QuadraticForm.sigNeg`) —
+  but not the consequence that an anisotropic real form taking a positive value is the sum of
+  `dim` squares, hence positive definite, hence determined up to isometry by its dimension.
+  *(Layer 11.)*
 
 ⚠ Of these, Artin's theorem is the one where the hard direction is a genuinely substantial
 formalization — a multi-page argument in Schafer and Zhevlakov, not previously formalized in Lean

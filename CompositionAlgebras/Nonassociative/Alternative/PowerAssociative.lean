@@ -24,7 +24,9 @@ direction we actually use, and it needs no new classes.
 
 The recursive power below is `private` implementation detail. It exists only because a
 non-associative multiplication has no canonical `Monoid.npow`; once associativity is available,
-prefer mathlib's `^`.
+prefer mathlib's `^`. mathlib does have power-associativity mixins for a type that already carries
+a power operation, `PNatPowAssoc` and `NatPowAssoc`; `pow_assoc` below is not stated as an
+instance of them because an alternative ring comes with no `Pow` instance to attach them to.
 
 ## Main results
 
