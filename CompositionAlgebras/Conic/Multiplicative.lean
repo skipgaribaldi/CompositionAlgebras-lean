@@ -25,7 +25,9 @@ projectivity, and nothing on `2`. Only additivity of the norm's polar form is us
 ## Main definitions
 
 * `ConicAlgebra.IsMultiplicative` : `n(xy) = n(x) n(y)`.
-* `ConicAlgebra.IsDivision` : every nonzero element has a two-sided multiplicative inverse.
+* `ConicAlgebra.HasTwoSidedInverses` : every nonzero element has a two-sided multiplicative
+  inverse. ⚠ This is **weaker** than being a division algebra in the sense of `GPR 8.6`; see its
+  docstring.
 
 ## Main results
 
@@ -77,19 +79,23 @@ no projectivity: those are separate axes (`AGENTS.md` §2), and a composition al
 (`GPR 19.5`) is a conic algebra having all three. -/
 def IsMultiplicative : Prop := ∀ x y : A, C.norm (x * y) = C.norm x * C.norm y
 
-/-- Every nonzero element of the conic algebra has a two-sided inverse.
+/-- **Every nonzero element has a two-sided inverse**: for each `x ≠ 0` there is `y` with
+`x * y = 1` and `y * x = 1`.
 
-This property depends only on the multiplication, but is placed in the conic-algebra namespace
+⚠ **This property is weaker than being a division algebra as defined in `GPR 8.6`, and is
+deliberately not called `IsDivision`.** `GPR 8.6` calls `A` a division algebra when `A ≠ 0` and,
+for every `u ≠ 0`, the left and right multiplications `L_u` and `R_u` are bijective. Without
+associativity a two-sided inverse does not give that: the real sedenions have an anisotropic norm,
+so every nonzero `x` has the two-sided inverse `n(x)⁻¹ x̄`, yet they are not a division algebra
+(`GPR Exc. 19.29(e)`). For a unital *alternative* algebra the two notions agree, given `1 ≠ 0`
+(`GPR 13.8`); in particular they agree for composition algebras, which are alternative. That
+equivalence is not formalized here, so theorems stated with `HasTwoSidedInverses` should be read
+as statements about this weaker property.
+
+The property depends only on the multiplication, but is placed in the conic-algebra namespace
 because it is used here in the classification of composition algebras. It does not assert
-associativity.
-
-⚠ **This is weaker than "division algebra" in `GPR 8.6`**, which asks left and right
-multiplication by every nonzero element to be bijective. Without associativity a two-sided inverse
-does not give that: the real sedenions have an anisotropic norm, hence two-sided inverses
-`n(x)⁻¹ x̄`, and also zero divisors (`GPR Exc. 19.29(e)`). For an *alternative* conic algebra over a
-field the two agree, since the alternative laws give `x̄(xy) = n(x) y = (yx) x̄`; in particular they
-agree for composition algebras, which are alternative. -/
-def IsDivision (_C : ConicAlgebra k A) : Prop :=
+associativity. -/
+def HasTwoSidedInverses (_C : ConicAlgebra k A) : Prop :=
   ∀ {x : A}, x ≠ 0 → ∃ y : A, x * y = 1 ∧ y * x = 1
 
 namespace IsMultiplicative
@@ -206,13 +212,14 @@ theorem anisotropic_iff_noZeroDivisors_of_isDomain [IsDomain k]
       simpa only [C.conj_conj, map_zero] using this
 
 omit [IsScalarTower k A A] in
-/-- Over a field, a multiplicative conic algebra is a division algebra if and only if its norm is
-anisotropic. Forwards, a null nonzero element cannot have an inverse because norms multiply.
-Backwards, `n(x)⁻¹ x̄` is a two-sided inverse. This is the division-algebra step of
-`GPR 22.18`. -/
-theorem isDivision_iff_anisotropic {K : Type*} [Field K] {B : Type*} [NonAssocRing B]
+/-- Over a field, every nonzero element of a multiplicative conic algebra has a two-sided inverse
+if and only if its norm is anisotropic. Forwards, a null nonzero element cannot have an inverse
+because norms multiply. Backwards, `n(x)⁻¹ x̄` is a two-sided inverse. This is the step of
+`GPR 22.18` that `GPR` phrases with division algebras; `HasTwoSidedInverses` is weaker than that
+notion in general, and agrees with it for composition algebras (see its docstring). -/
+theorem hasTwoSidedInverses_iff_anisotropic {K : Type*} [Field K] {B : Type*} [NonAssocRing B]
     [Module K B] [SMulCommClass K B B] [IsScalarTower K B B] {D : ConicAlgebra K B}
-    (h : D.IsMultiplicative) : D.IsDivision ↔ D.norm.Anisotropic := by
+    (h : D.IsMultiplicative) : D.HasTwoSidedInverses ↔ D.norm.Anisotropic := by
   constructor
   · intro hdiv x hx
     by_contra hx0

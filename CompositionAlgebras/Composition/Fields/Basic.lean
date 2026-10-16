@@ -24,6 +24,12 @@ Together these reduce classification over a particular field to two questions ab
 forms over that field: which forms of dimension `2`, `4`, `8` are isotropic, and which anisotropic
 ones occur as norms.
 
+⚠ **On "division".** In this file "division algebra" is expressed by
+`ConicAlgebra.HasTwoSidedInverses` — every nonzero element has a two-sided inverse — which in
+general is weaker than being a division algebra in the sense of `GPR 8.6`. For the composition
+algebras considered here, which are alternative, the two agree once `1 ≠ 0` (`GPR 13.8`), but that
+equivalence is not formalized; see the docstring of `ConicAlgebra.HasTwoSidedInverses`.
+
 ## Main results
 
 * `ConicAlgebra.IsComposition.isSplitOfRank_iff_not_anisotropic` : **`GPR 22.18`** over a field,
@@ -31,7 +37,7 @@ ones occur as norms.
 * `ConicAlgebra.IsComposition.isSplitOfRank_of_forall_not_anisotropic` : the `u`-invariant
   mechanism — if all forms of the relevant dimension over `K` are isotropic, every composition
   algebra of that dimension is split.
-* `ConicAlgebra.IsComposition.isSplitOfRank_or_isDivision` : the dichotomy — over a field a
+* `ConicAlgebra.IsComposition.isSplitOfRank_or_hasTwoSidedInverses` : the dichotomy — over a field a
   composition algebra of dimension `2`, `4`, or `8` is split or a division algebra, never both.
 * `ConicAlgebra.IsComposition.mul_assoc_of_finrank_eq_two`,
   `ConicAlgebra.IsComposition.mul_comm_of_finrank_eq_two` : a two-dimensional composition
@@ -106,20 +112,20 @@ theorem IsComposition.isSplitOfRank_of_forall_not_anisotropic (h : C.IsCompositi
 
 /-- **The dichotomy of `GPR 22.18`.** Over a field a composition algebra of dimension `2`, `4`, or
 `8` is either split or a division algebra. -/
-theorem IsComposition.isSplitOfRank_or_isDivision (h : C.IsComposition.{u, v, u})
+theorem IsComposition.isSplitOfRank_or_hasTwoSidedInverses (h : C.IsComposition.{u, v, u})
     (hA : Module.finrank K A = r) (hr : r = 2 ∨ r = 4 ∨ r = 8) :
-    C.IsSplitOfRank r ∨ C.IsDivision := by
+    C.IsSplitOfRank r ∨ C.HasTwoSidedInverses := by
   by_cases hs : C.IsSplitOfRank r
   · exact Or.inl hs
-  · exact Or.inr (h.isMultiplicative.isDivision_iff_anisotropic.mpr
+  · exact Or.inr (h.isMultiplicative.hasTwoSidedInverses_iff_anisotropic.mpr
       (not_not.mp ((not_congr (h.isSplitOfRank_iff_not_anisotropic hA hr)).mp hs)))
 
 /-- **The dichotomy of `GPR 22.18` is exclusive.** A split composition algebra of dimension `2`,
 `4`, or `8` is not a division algebra. -/
-theorem IsComposition.not_isDivision_of_isSplitOfRank (h : C.IsComposition.{u, v, u})
+theorem IsComposition.not_hasTwoSidedInverses_of_isSplitOfRank (h : C.IsComposition.{u, v, u})
     (hA : Module.finrank K A = r) (hr : r = 2 ∨ r = 4 ∨ r = 8) (hs : C.IsSplitOfRank r) :
-    ¬ C.IsDivision :=
-  (h.isSplitOfRank_iff_not_isDivision (Module.rankAtStalk_eq_of_finrank_eq hA) hr).mp hs
+    ¬ C.HasTwoSidedInverses :=
+  (h.isSplitOfRank_iff_not_hasTwoSidedInverses (Module.rankAtStalk_eq_of_finrank_eq hA) hr).mp hs
 
 /-! ### Composition algebras of dimension two are quadratic algebras -/
 

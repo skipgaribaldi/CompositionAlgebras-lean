@@ -306,9 +306,9 @@ On a finitely generated projective algebra it becomes unique (`GPR 16.16`,
 
 Trace and conjugation are derived from the **un-halved polar form**: `t(x) = polar n 1 x` (so
 `t(1) = 2`) and `x̄ = t(x)·1 − x`. Core identities: conjugation is a linear involution,
-`x + x̄ = t(x)·1`, `x·x̄ = x̄·x = n(x)·1`, `t(x̄) = t(x)`, `n(x̄) = n(x)`, and the linearized degree-two
-identity `xy + yx = t(x)·y + t(y)·x − n(x,y)·1`, which is the workhorse of the whole conic
-calculus.
+`x + x̄ = t(x)·1`, `x·x̄ = x̄·x = n(x)·1`, `t(x̄) = t(x)`, `n(x̄) = n(x)`, and the linearized
+degree-two identity `xy + yx = t(x)·y + t(y)·x − n(x,y)·1`, which is the workhorse of the whole
+conic calculus.
 
 Conic algebras are stable under base change (the final paragraph of `GPR 16.1`). ⚠ What is
 formalized here is
@@ -354,14 +354,14 @@ condition, and is the one new form-regularity predicate we build.
 
 ⚠ This is very slightly less general than `GPR 19.5`, which assumes only projective of locally
 constant rank — allowing the rank to be infinite a priori — and then *proves* it finite, indeed one
-of `1, 2, 4, 8` (`GPR 19.18`). We assume finite generation outright, so the two definitions pick
-out the same objects only a posteriori: ours builds in a conclusion of the theory rather than
-deriving it, so "every composition algebra" means the finitely generated ones. `GPR 19.18` is now
-proved (`Composition/RankOneTwoFourEight.lean`), but for *our* definition — it says a finitely
-generated composition algebra of constant rank has rank `1, 2, 4, 8`, which is not yet the
-derivation of finiteness that would close the gap. Conversely, no *locally constant rank* clause is needed: that is automatic
-for a finitely generated projective module. It is the **constancy** of the rank that later theorems
-assume, as a hypothesis on those theorems.
+of `1, 2, 4, 8` (`GPR 19.18`). We assume finite generation outright, so the two definitions pick out
+the same objects only a posteriori: ours builds in a conclusion of the theory rather than deriving
+it, so "every composition algebra" means the finitely generated ones. `GPR 19.18` is now proved
+(`Composition/RankOneTwoFourEight.lean`), but for *our* definition — it says a finitely generated
+composition algebra of constant rank has rank `1, 2, 4, 8`, which is not yet the derivation of
+finiteness that would close the gap. Conversely, no *locally constant rank* clause is needed: that
+is automatic for a finitely generated projective module. It is the **constancy** of the rank that
+later theorems assume, as a hypothesis on those theorems.
 
 ⚠ Get the definition right (`GN C.8(d),(e)`): the **radical** of a quadratic form is
 `rad(q) = {m ∈ M : q(m) = 0 = b_q(m, M)}` — note it constrains `q` *and* the polar form `b_q`, not
@@ -484,31 +484,30 @@ and §23 is the comparison between those and algebra isomorphisms.
   is a line bundle, and the Peirce coordinates give a unital multiplicative norm isometry from its
   twisted-matrix algebra onto the original algebra.
 - **`GPR 22.15`** (Petersson). Reduced octonion algebras are the twisted **Zorn vector matrix**
-  algebras `Zor(M, θ)`, `M` projective of rank 3 with an orientation `θ`; split iff `M` is free.
-  The split form `Zor(k)` is `GPR 21.18`: elements `[[ρ₁, u₂], [u₁, ρ₂]]` with `ρᵢ ∈ k`,
-  `uᵢ ∈ k³`, multiplication from dot and cross products, norm `ρ₁ρ₂ + u₁ᵀu₂`, trace `ρ₁ + ρ₂`.
-  `Zor(k)` is **proved** (`Composition/Reduced/Zorn.lean`): conic, alternative, multiplicative,
-  non-singular, of rank 8 — a composition algebra over *any* commutative ring, with no hypothesis
-  on `2`. The twisted form is now built as `ConicAlgebra.TwistedZor`
-  (`Composition/Reduced/TwistedZorn.lean`), on the data `GPR 22.14` actually consumes: a
-  `Module.VectorProductPair` — the two associated vector products `M × M → M*` and `M* × M* → M`,
-  alternating, orthogonal to their own arguments, and linked by Binet–Cauchy. It is conic with no
-  hypothesis on `M`, has hyperbolic (hence regular and non-singular) norm for `M` finitely
-  generated projective, is multiplicative, alternative, and reduced. Alternativity follows from
-  Kirmse's theorem because regularity forces the radical to vanish, with no hypothesis on `2`.
-  The orientation construction is **proved over every commutative ring**
-  (`Composition/Reduced/Orientation.lean`). It localizes a constant-rank-three finite projective
-  module at each maximal ideal, uses projective dual base change (`GPR 9.15`) and exterior-power
-  duality (`GPR 21.7`) to show that the local primal and dual volume coefficients are inverse,
-  applies the based Binet–Cauchy calculation, and descends the resulting scalar identity. The converse
-  structure theorem is **proved on vector-product-pair data**
-  (`Composition/Reduced/RankEight.lean`): multiplication on the two off-diagonal Peirce
-  components supplies a pair, and the Peirce coordinates give a unital multiplicative norm
-  isometry from its twisted Zorn algebra onto every reduced constant-rank-eight composition
-  algebra. The twisting module has constant rank three. `Module.VectorProductPair.ofBasis`
-  supplies the free case, and every vector-product pair on a based rank-three module is the pair
-  of a suitably rescaled basis. Thus a free twisting module gives exactly `Zor(k)` and satisfies
-  `IsSplitOfRank 8`, without a hypothesis on `2`.
+  algebras `Zor(M, θ)`, `M` projective of rank 3 with an orientation `θ`; split iff `M` is free. The
+  split form `Zor(k)` is `GPR 21.18`: elements `[[ρ₁, u₂], [u₁, ρ₂]]` with `ρᵢ ∈ k`, `uᵢ ∈ k³`,
+  multiplication from dot and cross products, norm `ρ₁ρ₂ + u₁ᵀu₂`, trace `ρ₁ + ρ₂`. `Zor(k)` is
+  **proved** (`Composition/Reduced/Zorn.lean`): conic, alternative, multiplicative, non-singular, of
+  rank 8 — a composition algebra over *any* commutative ring, with no hypothesis on `2`. The twisted
+  form is now built as `ConicAlgebra.TwistedZor` (`Composition/Reduced/TwistedZorn.lean`), on the
+  data `GPR 22.14` actually consumes: a `Module.VectorProductPair` — the two associated vector
+  products `M × M → M*` and `M* × M* → M`, alternating, orthogonal to their own arguments, and
+  linked by Binet–Cauchy. It is conic with no hypothesis on `M`, has hyperbolic (hence regular and
+  non-singular) norm for `M` finitely generated projective, is multiplicative, alternative, and
+  reduced. Alternativity follows from Kirmse's theorem because regularity forces the radical to
+  vanish, with no hypothesis on `2`. The orientation construction is **proved over every commutative
+  ring** (`Composition/Reduced/Orientation.lean`). It localizes a constant-rank-three finite
+  projective module at each maximal ideal, uses projective dual base change (`GPR 9.15`) and
+  exterior-power duality (`GPR 21.7`) to show that the local primal and dual volume coefficients are
+  inverse, applies the based Binet–Cauchy calculation, and descends the resulting scalar identity.
+  The converse structure theorem is **proved on vector-product-pair data**
+  (`Composition/Reduced/RankEight.lean`): multiplication on the two off-diagonal Peirce components
+  supplies a pair, and the Peirce coordinates give a unital multiplicative norm isometry from its
+  twisted Zorn algebra onto every reduced constant-rank-eight composition algebra. The twisting
+  module has constant rank three. `Module.VectorProductPair.ofBasis` supplies the free case, and
+  every vector-product pair on a based rank-three module is the pair of a suitably rescaled basis.
+  Thus a free twisting module gives exactly `Zor(k)` and satisfies `IsSplitOfRank 8`, without a
+  hypothesis on `2`.
 - **`GPR 21.19`, the split models.** The four algebras splitness is defined against — `k`, `k × k`,
   `Mat₂(k)`, `Zor(k)`, of ranks 1, 2, 4, 8 — are all **proved** composition algebras over any
   commutative ring: rank 1 is `ConicAlgebra.baseRing`, ranks 2 and 4 are in
@@ -527,12 +526,12 @@ and §23 is the comparison between those and algebra isomorphisms.
 - **`GPR 22.18`.** Over rings where constant-rank projectives are free: split ⟺ norm isotropic ⟺
   norm hyperbolic; over a field, additionally ⟺ not a division algebra. The split/isotropic
   equivalence in constant ranks two, four, and eight is **proved over nontrivial LG rings** as
-  `IsComposition.isSplitOfRank_iff_isGPRIsotropic_of_isLGRing`. The hyperbolic-to-split direction
-  is packaged for a hyperbolic presentation whose first module has a unimodular element; the
+  `IsComposition.isSplitOfRank_iff_isGPRIsotropic_of_isLGRing`. The hyperbolic-to-split direction is
+  packaged for a hyperbolic presentation whose first module has a unimodular element; the
   reduced-to-hyperbolic presentation is `peirceHyperbolicIsometryEquiv`. The field division
-  condition is **proved** as `IsComposition.isSplitOfRank_iff_not_isDivision`: multiplicativity
-  makes a two-sided inverse impossible for a nonzero null vector, while anisotropy gives the
-  explicit inverse `n(x)⁻¹ x̄`.
+  condition is **proved** as `IsComposition.isSplitOfRank_iff_not_hasTwoSidedInverses`:
+  multiplicativity makes a two-sided inverse impossible for a nonzero null vector, while anisotropy
+  gives the explicit inverse `n(x)⁻¹ x̄`.
 - **`GPR 22.19`.** Over a PID, the two isotropy notions (unimodular null vector vs. represents zero)
   coincide, and both are equivalent to splitness and to having zero divisors. This is **proved** for
   constant ranks 2, 4, and 8 in `Composition/Reduced/Classification.lean`. The coordinate-ideal
@@ -602,25 +601,24 @@ that the split algebra of a given dimension is unique.
   `QuadraticForm.equivalent_of_anisotropic_of_finrank_eq` (`QuadraticForm/Real.lean`): an
   anisotropic real form taking a positive value is a sum of squares, so anisotropic real forms
   taking positive values are classified by their dimension. The norm takes the value `1` at the
-  identity element, hence is positive definite (`posDef_norm_of_isDivision`), and Layer 9 turns the
-  isometry into an algebra isomorphism. `isomorphic_realTower_of_isDivision` is the resulting list,
-  and `isSplitOfRank_or_isomorphic_realTower` adds the split algebras.
+  identity element, hence is positive definite (`posDef_norm_of_hasTwoSidedInverses`), and Layer 9
+  turns the isometry into an algebra isomorphism. `isomorphic_realTower_of_hasTwoSidedInverses` is
+  the resulting list, and `isSplitOfRank_or_isomorphic_realTower` adds the split algebras.
 - **Finite fields.** By Chevalley–Warning every form in ≥ 3 variables is isotropic, so all
   quaternion and octonion algebras split; the only non-split composition algebra is `𝔽_{q²}` in
-  dimension 2. **Proved**
-  (`Composition/Fields/Finite.lean`, `QuadraticForm/FiniteField.lean`).
+  dimension 2. **Proved** (`Composition/Fields/Finite.lean`, `QuadraticForm/FiniteField.lean`).
   `QuadraticForm.not_anisotropic_of_two_lt_finrank` feeds the `GPR 11.8` polynomial of the form —
   total degree 2, which is `QuadraticForm.totalDegree_toMvPolynomial_le`, new here — to mathlib's
   Chevalley–Warning; anisotropy would make the zero vector the only solution, contradicting
-  divisibility of the solution count by the characteristic. Hence
-  `isSplitOfRank_of_finite` in dimensions 4 and 8, `not_isDivision_of_finite`, and uniqueness in
-  every dimension other than 2 (`isomorphic_of_finite_of_ne_two`). In dimension 2, `GPR 19.8`
-  makes the algebra associative and commutative; anisotropy makes it a field, and mathlib's
+  divisibility of the solution count by the characteristic. Hence `isSplitOfRank_of_finite` in
+  dimensions 4 and 8, `not_hasTwoSidedInverses_of_finite`, and uniqueness in every dimension other
+  than 2 (`isomorphic_of_finite_of_ne_two`). In dimension 2, `GPR 19.8` makes the algebra
+  associative and commutative; anisotropy makes it a field, and mathlib's
   `FiniteField.algEquivExtension` identifies any two such degree-two extensions, including in
-  characteristic 2. Thus `isomorphic_of_finite_of_isDivision_two` proves uniqueness of the
+  characteristic 2. Thus `isomorphic_of_finite_of_hasTwoSidedInverses_two` proves uniqueness of the
   dimension-two division algebra without redeveloping Artin–Schreier theory, and
-  `exists_isComposition_isDivision_not_isSplitOfRank_two` proves the matching existence: any
-  quadratic field extension of `𝔽_q`, with the conic structure of `GPR 19.8`, is one.
+  `exists_isComposition_hasTwoSidedInverses_not_isSplitOfRank_two` proves the matching existence:
+  any quadratic field extension of `𝔽_q`, with the conic structure of `GPR 19.8`, is one.
 - **Local fields** (complete discretely valued with finite residue field, e.g. `ℚ_p`). Every form
   in ≥ 5 variables is isotropic, so **every octonion algebra splits**; there is a **unique**
   quaternion division algebra; in characteristic ≠ 2 the dimension-2 algebras are parameterized by
@@ -744,14 +742,14 @@ Elman–Karpenko–Merkurjev, p. 49, cited at the end of `GN §6`.
 
 **6. Alternativity does not make conjugation an anti-homomorphism over a ring.** The field proof
 ("if `x ∉ k·1` then `1, x` are independent") is a *field* proof, and the statement it proves is
-false over a general base — even for **associative** algebras. `Conic/TraceDefectCounterexample.lean`
-exhibits an associative conic algebra over `ℤ/4`, namely `ℤ/4 · 1 ⊕ (ℤ/2)²` with a non-symmetric
-multiplication `β` on the second summand, for which `conj(m₁m₂) = 2·1 ≠ 0 = conj(m₂)·conj(m₁)`; the
-whole thing is checked by `decide`. What survives over any base is the identity
-`ȳ x̄ − conj(xy) = (t(x)t(y) − n(x,y) − t(xy))·1` and, for alternative algebras, the fact that the
-obstruction times `x` is a multiple of `1`. Getting the anti-homomorphism property over a ring
-needs the algebra to be projective, which is a hypothesis on the *theorem*, not on `ConicAlgebra`
-(`ConicAlgebra.conj_mul_of_projective`).
+false over a general base — even for **associative** algebras.
+`Conic/TraceDefectCounterexample.lean` exhibits an associative conic algebra over `ℤ/4`, namely
+`ℤ/4 · 1 ⊕ (ℤ/2)²` with a non-symmetric multiplication `β` on the second summand, for which
+`conj(m₁m₂) = 2·1 ≠ 0 = conj(m₂)·conj(m₁)`; the whole thing is checked by `decide`. What survives
+over any base is the identity `ȳ x̄ − conj(xy) = (t(x)t(y) − n(x,y) − t(xy))·1` and, for alternative
+algebras, the fact that the obstruction times `x` is a multiple of `1`. Getting the
+anti-homomorphism property over a ring needs the algebra to be projective, which is a hypothesis on
+the *theorem*, not on `ConicAlgebra` (`ConicAlgebra.conj_mul_of_projective`).
 
 This is a trap for the reader, not an error in the literature: `GPR` states the criterion as an
 iff (`GPR 16.10(a)`), puts projectivity into the hypotheses of the theorems that deliver the

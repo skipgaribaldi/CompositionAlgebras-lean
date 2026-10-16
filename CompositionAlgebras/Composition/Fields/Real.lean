@@ -27,14 +27,20 @@ Existence is the Cayley–Dickson tower at `μ₁ = μ₂ = μ₃ = -1` (`Compos
 supplies a positive definite — hence anisotropic, hence division — composition algebra in each of
 the four dimensions.
 
+⚠ **On "division".** In this file "division algebra" is expressed by
+`ConicAlgebra.HasTwoSidedInverses` — every nonzero element has a two-sided inverse — which in
+general is weaker than being a division algebra in the sense of `GPR 8.6`. For the composition
+algebras considered here, which are alternative, the two agree once `1 ≠ 0` (`GPR 13.8`), but that
+equivalence is not formalized; see the docstring of `ConicAlgebra.HasTwoSidedInverses`.
+
 ## Main results
 
-* `ConicAlgebra.IsComposition.posDef_norm_of_isDivision` : a real composition division algebra has
-  positive definite norm.
+* `ConicAlgebra.IsComposition.posDef_norm_of_hasTwoSidedInverses` : a real composition division
+  algebra has positive definite norm.
 * `ConicAlgebra.IsComposition.isomorphic_of_anisotropic` : two real composition algebras with
   anisotropic norms and the same dimension are isomorphic.
-* `ConicAlgebra.IsComposition.isomorphic_realTower_of_isDivision` : **`GPR 23.13`**, every real
-  composition division algebra is `ℝ`, `ℂ`, `ℍ`, or `𝕆`.
+* `ConicAlgebra.IsComposition.isomorphic_realTower_of_hasTwoSidedInverses` : **`GPR 23.13`**, every
+  real composition division algebra is `ℝ`, `ℂ`, `ℍ`, or `𝕆`.
 * `ConicAlgebra.IsComposition.isSplitOfRank_or_isomorphic_realTower` : the complete list — a real
   composition algebra of dimension `2`, `4`, or `8` is either split or one of the three division
   algebras of that dimension.
@@ -84,9 +90,9 @@ theorem posDef_norm_of_anisotropic (C : ConicAlgebra ℝ A) (hani : C.norm.Aniso
   C.norm.posDef_of_anisotropic hani C.norm_one_pos
 
 /-- **A real composition division algebra has positive definite norm.** -/
-theorem IsComposition.posDef_norm_of_isDivision (h : C.IsComposition.{0, v, 0})
-    (hdiv : C.IsDivision) : C.norm.PosDef :=
-  C.posDef_norm_of_anisotropic (h.isMultiplicative.isDivision_iff_anisotropic.mp hdiv)
+theorem IsComposition.posDef_norm_of_hasTwoSidedInverses (h : C.IsComposition.{0, v, 0})
+    (hdiv : C.HasTwoSidedInverses) : C.norm.PosDef :=
+  C.posDef_norm_of_anisotropic (h.isMultiplicative.hasTwoSidedInverses_iff_anisotropic.mp hdiv)
 
 /-! ### Uniqueness in each dimension -/
 
@@ -102,11 +108,11 @@ theorem IsComposition.isomorphic_of_anisotropic (hC : C.IsComposition.{0, v, 0})
 
 /-- **The real division composition algebra of a given dimension is unique**, stated for division
 algebras. -/
-theorem IsComposition.isomorphic_of_isDivision (hC : C.IsComposition.{0, v, 0})
-    (hD : D.IsComposition.{0, w, 0}) (hCdiv : C.IsDivision) (hDdiv : D.IsDivision)
+theorem IsComposition.isomorphic_of_hasTwoSidedInverses (hC : C.IsComposition.{0, v, 0})
+    (hD : D.IsComposition.{0, w, 0}) (hCdiv : C.HasTwoSidedInverses) (hDdiv : D.HasTwoSidedInverses)
     (hdim : Module.finrank ℝ A = Module.finrank ℝ B) : C.Isomorphic D :=
-  hC.isomorphic_of_anisotropic hD (hC.isMultiplicative.isDivision_iff_anisotropic.mp hCdiv)
-    (hD.isMultiplicative.isDivision_iff_anisotropic.mp hDdiv) hdim
+  hC.isomorphic_of_anisotropic hD (hC.isMultiplicative.hasTwoSidedInverses_iff_anisotropic.mp hCdiv)
+    (hD.isMultiplicative.hasTwoSidedInverses_iff_anisotropic.mp hDdiv) hdim
 
 /-! ### The classical tower realizes every dimension -/
 
@@ -143,11 +149,11 @@ end Tower
 /-- **`GPR 23.13`.** Every composition division algebra over `ℝ` is isomorphic to one of `ℝ`, `ℂ`,
 `ℍ`, `𝕆`. The dimension is `1`, `2`, `4`, or `8` by `GPR 19.18`, the norm is positive definite,
 and in each dimension the tower supplies a positive definite composition algebra to compare with. -/
-theorem IsComposition.isomorphic_realTower_of_isDivision (h : C.IsComposition.{0, v, 0})
-    (hdiv : C.IsDivision) :
+theorem IsComposition.isomorphic_realTower_of_hasTwoSidedInverses (h : C.IsComposition.{0, v, 0})
+    (hdiv : C.HasTwoSidedInverses) :
     C.Isomorphic (baseRing ℝ) ∨ C.Isomorphic realComplex ∨ C.Isomorphic realQuaternion ∨
       C.Isomorphic realOctonion := by
-  have hani := h.isMultiplicative.isDivision_iff_anisotropic.mp hdiv
+  have hani := h.isMultiplicative.hasTwoSidedInverses_iff_anisotropic.mp hdiv
   rcases h.finrank_eq_one_or_two_or_four_or_eight with h1 | h2 | h4 | h8
   · exact Or.inl (h.isomorphic_of_anisotropic (isComposition_baseRing ℝ) hani
       anisotropic_norm_baseRing (by rw [h1, Module.finrank_self]))
@@ -166,9 +172,9 @@ theorem IsComposition.isSplitOfRank_or_isomorphic_realTower {r : ℕ}
     (hr : r = 2 ∨ r = 4 ∨ r = 8) :
     C.IsSplitOfRank r ∨ C.Isomorphic realComplex ∨ C.Isomorphic realQuaternion ∨
       C.Isomorphic realOctonion := by
-  rcases h.isSplitOfRank_or_isDivision hA hr with hs | hdiv
+  rcases h.isSplitOfRank_or_hasTwoSidedInverses hA hr with hs | hdiv
   · exact Or.inl hs
-  have hani := h.isMultiplicative.isDivision_iff_anisotropic.mp hdiv
+  have hani := h.isMultiplicative.hasTwoSidedInverses_iff_anisotropic.mp hdiv
   rcases hr with rfl | rfl | rfl
   · exact Or.inr (Or.inl (h.isomorphic_of_anisotropic isComposition_realComplex hani
       anisotropic_norm_realComplex (by rw [hA, finrank_realComplex])))

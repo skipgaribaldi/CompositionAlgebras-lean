@@ -19,6 +19,12 @@ free, the latter two presentations are the standard split models. This proves th
 of `GPR 22.16`; the LG-ring theorem follows because idempotent factors remain LG and their
 constant-rank projectives are free (`GPR 11.24`, `GN 2.6(b)`).
 
+⚠ **On "division".** In this file "division algebra" is expressed by
+`ConicAlgebra.HasTwoSidedInverses` — every nonzero element has a two-sided inverse — which in
+general is weaker than being a division algebra in the sense of `GPR 8.6`. For the composition
+algebras considered here, which are alternative, the two agree once `1 ≠ 0` (`GPR 13.8`), but that
+equivalence is not formalized; see the docstring of `ConicAlgebra.HasTwoSidedInverses`.
+
 ## Main results
 
 * `ConicAlgebra.isSplitOfRank_one` : the rank-one case.
@@ -33,8 +39,8 @@ constant-rank projectives are free (`GPR 11.24`, `GN 2.6(b)`).
   equivalence of **`GPR 22.18`** in ranks two, four, and eight.
 * `ConicAlgebra.IsComposition.isSplitOfRank_of_isometryEquiv_dualProd_of_isUnimodular` : the
   hyperbolic-to-split implication of **`GPR 22.18`**.
-* `ConicAlgebra.IsComposition.isSplitOfRank_iff_not_isDivision` : over a field, splitness is
-  equivalent to failure of the division property (**`GPR 22.18`**).
+* `ConicAlgebra.IsComposition.isSplitOfRank_iff_not_hasTwoSidedInverses` : over a field, splitness
+  is equivalent to failure of the division property (**`GPR 22.18`**).
 * `ConicAlgebra.IsComposition.isSplitOfRank_iff_not_anisotropic_of_pid` : over a PID, splitness
   is equivalent to the existence of a nonzero null vector (**`GPR 22.19`**).
 * `ConicAlgebra.IsComposition.isSplitOfRank_iff_not_noZeroDivisors_of_pid` : over a PID,
@@ -372,15 +378,15 @@ omit [IsAlternative A] in
 /-- **`GPR 22.18`, split ⟺ not division over a field.** For a constant-rank composition algebra
 of rank two, four, or eight, splitness is equivalent to the failure of the property that every
 nonzero element has a two-sided inverse. -/
-theorem isSplitOfRank_iff_not_isDivision {K : Type u} [Field K] {B : Type v}
+theorem isSplitOfRank_iff_not_hasTwoSidedInverses {K : Type u} [Field K] {B : Type v}
     [NonAssocRing B] [Module K B] [SMulCommClass K B B] [IsScalarTower K B B]
     [Module.Finite K B] [Module.Projective K B] {D : ConicAlgebra K B}
     (hcomp : D.IsComposition.{u, v, u})
     (hB : Module.rankAtStalk (R := K) B = fun _ ↦ r)
-    (hr : r = 2 ∨ r = 4 ∨ r = 8) : D.IsSplitOfRank r ↔ ¬ D.IsDivision :=
+    (hr : r = 2 ∨ r = 4 ∨ r = 8) : D.IsSplitOfRank r ↔ ¬ D.HasTwoSidedInverses :=
   ((hcomp.isSplitOfRank_iff_isGPRIsotropic_of_isLGRing (isLGRing_of_field K) hB hr).trans
     QuadraticMap.isGPRIsotropic_iff_not_anisotropic).trans
-      (not_congr hcomp.isMultiplicative.isDivision_iff_anisotropic.symm)
+      (not_congr hcomp.isMultiplicative.hasTwoSidedInverses_iff_anisotropic.symm)
 
 omit [IsAlternative A] in
 /-- **`GPR 22.19`, split ⟺ GPR-isotropic over a PID.** For a constant-rank composition algebra
