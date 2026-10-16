@@ -198,7 +198,6 @@ theorem IsComposition.exists_isUnit_elementDiscriminant (h : C.IsComposition.{u,
     have htK : ∀ X : K ⊗[F] A, (C.baseChangeOfProjective K).trace X = 0 := by
       intro X
       induction X with
-      | zero => simp
       | tmul s a => rw [baseChangeOfProjective_trace_apply_tmul, ht, zero_smul]
       | add X Y hX hY => rw [map_add, hX, hY, add_zero]
     have hrankK : 1 < Module.finrank K (K ⊗[F] A) := by rwa [Module.finrank_baseChange]

@@ -241,10 +241,8 @@ theorem bilin_ext_of_tmul {N₁ : Type*} [AddCommGroup N₁] [Module A N₁]
     simp only [ha, ha', map_smul, LinearMap.smul_apply, h]
   refine LinearMap.ext fun x ↦ LinearMap.ext fun y ↦ ?_
   induction x with
-  | zero => simp
   | tmul a m =>
     induction y with
-    | zero => simp
     | tmul a' m' => exact key a a' m m'
     | add y z hy hz => simp only [map_add, hy, hz]
   | add x z hx hz => simp only [map_add, LinearMap.add_apply, hx, hz]

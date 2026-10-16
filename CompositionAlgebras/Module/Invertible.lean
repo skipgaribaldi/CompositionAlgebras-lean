@@ -129,8 +129,7 @@ private theorem bilinMap_baseChange_apply_self_eq_zero
         add_neg_cancel, TensorProduct.tmul_zero]
   have hskewS (x y : S ⊗[R] M) : B.baseChange S x y + B.baseChange S y x = 0 :=
     DFunLike.congr_fun (DFunLike.congr_fun hkey x) y
-  induction z using TensorProduct.induction_on with
-  | zero => simp
+  induction z using TensorProduct.inductionOn with
   | add x y hx hy =>
     rw [((B.baseChange S) (x + y)).map_add, (B.baseChange S).map_add,
       LinearMap.add_apply, LinearMap.add_apply, hx, hy]
@@ -272,8 +271,7 @@ private theorem invertible_of_finite_projective_of_rankAtStalk_eq_one
         simp only [z, Finset.smul_sum]
         exact Finset.sum_congr rfl fun i _ ↦ (TensorProduct.smul_tmul' _ _ _).symm
   have hreconstruct (w : Module.Dual R M ⊗[R] M) : w = contractLeft R M w • z := by
-    induction w using TensorProduct.induction_on with
-    | zero => simp
+    induction w using TensorProduct.inductionOn with
     | add x y hx hy => rw [map_add, add_smul, ← hx, ← hy]
     | tmul ψ x => exact htensor ψ x
   refine ⟨?_, ?_⟩

@@ -93,13 +93,11 @@ theorem smul_add_smul_baseChange_eq_zero {φ : M →ₗ[R] R} (h : ∀ x : M, φ
     (z w : S ⊗[R] M) :
     baseChangeToBase S φ z • w + baseChangeToBase S φ w • z = 0 := by
   induction z with
-  | zero => simp
   | add z₁ z₂ h₁ h₂ =>
     simp only [map_add, add_smul, smul_add]
     linear_combination (norm := module) h₁ + h₂
   | tmul s x =>
     induction w with
-    | zero => simp
     | add w₁ w₂ h₁ h₂ =>
       simp only [map_add, add_smul, smul_add]
       linear_combination (norm := module) h₁ + h₂
@@ -112,7 +110,6 @@ theorem smul_add_smul_baseChange_eq_zero {φ : M →ₗ[R] R} (h : ∀ x : M, φ
 theorem smul_self_baseChange_eq_zero {φ : M →ₗ[R] R} (h : ∀ x : M, φ x • x = 0)
     (z : S ⊗[R] M) : baseChangeToBase S φ z • z = 0 := by
   induction z with
-  | zero => simp
   | tmul s x =>
     rw [baseChangeToBase_tmul, smul_smul_tmul, h x, TensorProduct.tmul_zero]
   | add z w hz hw =>

@@ -88,8 +88,7 @@ private theorem cross_apply_crossDual_of_orientation
       e (1 ⊗ₜ[k] crossOfOrientation theta v w) x =
         AlternatingMap.baseChangeFinThree (S := S) (orientationAlternating theta)
           vS wS x := by
-    induction x using TensorProduct.induction_on with
-    | zero => simp
+    induction x using TensorProduct.inductionOn with
     | add x y hx hy => simp [hx, hy]
     | tmul s x =>
       rw [AlternatingMap.baseChangeFinThree_tmul]
@@ -122,8 +121,7 @@ private theorem cross_apply_crossDual_of_orientation
     change e q (1 ⊗ₜ[k] crossDualOfOrientation theta f g) =
       AlternatingMap.baseChangeFinThree (S := S) (dualOrientationAlternating theta)
         (1 ⊗ₜ[k] f) (1 ⊗ₜ[k] g) q
-    induction q using TensorProduct.induction_on with
-    | zero => simp
+    induction q using TensorProduct.inductionOn with
     | add x y hx hy => simp [hx, hy]
     | tmul r q =>
       rw [AlternatingMap.baseChangeFinThree_tmul]

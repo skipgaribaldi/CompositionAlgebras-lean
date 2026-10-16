@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
 import CompositionAlgebras.Composition.Octonion
-import Mathlib.Data.Real.Basic
+import Mathlib.Basic.Real.Basic
 
 /-!
 # The classical tower `ℝ, ℂ, ℍ, 𝕆`

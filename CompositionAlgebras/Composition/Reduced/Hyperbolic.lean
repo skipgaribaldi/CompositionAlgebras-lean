@@ -111,7 +111,7 @@ theorem bijective_peirceHyperbolicTo (hc : C.IsElementaryIdempotent c)
         rw [peirceHyperbolicTo_apply, peirceHyperbolicTo_apply,
           hc.peirceProjection_peirceElement, hc.peirceProjection_peirceElement] at h
         simp only [Prod.mk.injEq, Bool.true_eq_false, and_self, false_and, and_false,
-          if_false] at h
+          ite_false] at h
         have ht : C.trace (IsAlternative.peirceIdempotent c true) = 1 :=
           (hc.peirceIdempotent true).trace_eq_one
         simpa only [map_smul, ht, smul_eq_mul, mul_one] using h

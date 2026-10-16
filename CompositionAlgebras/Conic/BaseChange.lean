@@ -117,13 +117,11 @@ theorem mul_add_mul_baseChangeOfProjective (x y : S ⊗[k] A) :
         polar (C.norm.baseChangeOfProjective S) 1 y • x -
         polar (C.norm.baseChangeOfProjective S) x y • (1 : S ⊗[k] A) := by
   induction x with
-  | zero => simp
   | add x₁ x₂ h₁ h₂ =>
     simp only [add_mul, mul_add, QuadraticMap.polar_add_left, QuadraticMap.polar_add_right]
     linear_combination (norm := module) h₁ + h₂
   | tmul s a =>
     induction y with
-    | zero => simp
     | add y₁ y₂ h₁ h₂ =>
       simp only [add_mul, mul_add, QuadraticMap.polar_add_right]
       linear_combination (norm := module) h₁ + h₂
@@ -142,7 +140,6 @@ theorem mul_self_baseChangeOfProjective (x : S ⊗[k] A) :
     x * x = polar (C.norm.baseChangeOfProjective S) 1 x • x -
       (C.norm.baseChangeOfProjective S) x • (1 : S ⊗[k] A) := by
   induction x with
-  | zero => simp
   | tmul s a =>
     rw [Algebra.TensorProduct.tmul_mul_tmul, baseChangeOfProjective_trace_tmul,
       baseChangeOfProjective_norm_tmul, C.mul_self_eq a,

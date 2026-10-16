@@ -151,8 +151,7 @@ theorem IsLGRing.exists_isUnimodular [Module.Finite R M] [Module.Projective R M]
       have hek :
           ∀ y : (R ⧸ 𝔪) ⊗[R] (Fin n → R), LinearMap.baseChange (R ⧸ 𝔪) e y = 0 := by
         intro y
-        induction y using TensorProduct.induction_on with
-        | zero => simp
+        induction y using TensorProduct.inductionOn with
         | tmul a t =>
           rw [LinearMap.baseChange_tmul]
           conv_lhs => rw [← sum_smul_single_eq_self (e t)]

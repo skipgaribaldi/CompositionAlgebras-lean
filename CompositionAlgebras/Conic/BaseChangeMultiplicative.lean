@@ -85,25 +85,21 @@ theorem polar_mul_add_polar_mul_baseChangeOfProjective (h : C.IsMultiplicative)
       polar (C.norm.baseChangeOfProjective S) x y *
         polar (C.norm.baseChangeOfProjective S) z w := by
   induction x with
-  | zero => simp
   | add x₁ x₂ h₁ h₂ =>
     simp only [add_mul, QuadraticMap.polar_add_left]
     linear_combination h₁ + h₂
   | tmul s a =>
     induction y with
-    | zero => simp
     | add y₁ y₂ h₁ h₂ =>
       simp only [add_mul, QuadraticMap.polar_add_right]
       linear_combination h₁ + h₂
     | tmul s' a' =>
       induction z with
-      | zero => simp
       | add z₁ z₂ h₁ h₂ =>
         simp only [mul_add, QuadraticMap.polar_add_left, QuadraticMap.polar_add_right]
         linear_combination h₁ + h₂
       | tmul u c =>
         induction w with
-        | zero => simp
         | add w₁ w₂ h₁ h₂ =>
           simp only [mul_add, QuadraticMap.polar_add_left, QuadraticMap.polar_add_right]
           linear_combination h₁ + h₂
@@ -125,19 +121,16 @@ theorem polar_mul_mul_right_baseChangeOfProjective (h : C.IsMultiplicative) (x y
     polar (C.norm.baseChangeOfProjective S) (x * z) (y * z) =
       polar (C.norm.baseChangeOfProjective S) x y * (C.norm.baseChangeOfProjective S) z := by
   induction x with
-  | zero => simp
   | add x₁ x₂ h₁ h₂ =>
     simp only [add_mul, QuadraticMap.polar_add_left]
     linear_combination h₁ + h₂
   | tmul s a =>
     induction y with
-    | zero => simp
     | add y₁ y₂ h₁ h₂ =>
       simp only [add_mul, QuadraticMap.polar_add_right]
       linear_combination h₁ + h₂
     | tmul s' a' =>
       induction z with
-      | zero => simp
       | add z₁ z₂ h₁ h₂ =>
         have key :=
           h.polar_mul_add_polar_mul_baseChangeOfProjective S (s ⊗ₜ[k] a) (s' ⊗ₜ[k] a')
@@ -161,19 +154,16 @@ theorem polar_mul_mul_left_baseChangeOfProjective (h : C.IsMultiplicative) (x y 
     polar (C.norm.baseChangeOfProjective S) (x * y) (x * z) =
       (C.norm.baseChangeOfProjective S) x * polar (C.norm.baseChangeOfProjective S) y z := by
   induction y with
-  | zero => simp
   | add y₁ y₂ h₁ h₂ =>
     simp only [mul_add, QuadraticMap.polar_add_left]
     linear_combination h₁ + h₂
   | tmul t b =>
     induction z with
-    | zero => simp
     | add z₁ z₂ h₁ h₂ =>
       simp only [mul_add, QuadraticMap.polar_add_right]
       linear_combination h₁ + h₂
     | tmul u c =>
       induction x with
-      | zero => simp
       | add x₁ x₂ h₁ h₂ =>
         have key := h.polar_mul_add_polar_mul_baseChangeOfProjective S x₁ x₂ (t ⊗ₜ[k] b)
           (u ⊗ₜ[k] c)
@@ -200,14 +190,12 @@ theorem baseChangeOfProjective (h : C.IsMultiplicative) :
   intro x y
   simp only [baseChangeOfProjective_norm]
   induction x with
-  | zero => simp
   | add x₁ x₂ h₁ h₂ =>
     rw [add_mul, norm_baseChangeOfProjective_add, norm_baseChangeOfProjective_add, h₁, h₂,
       h.polar_mul_mul_right_baseChangeOfProjective S]
     ring
   | tmul s a =>
     induction y with
-    | zero => simp
     | add y₁ y₂ h₁ h₂ =>
       rw [mul_add, norm_baseChangeOfProjective_add, norm_baseChangeOfProjective_add, h₁, h₂,
         h.polar_mul_mul_left_baseChangeOfProjective S]

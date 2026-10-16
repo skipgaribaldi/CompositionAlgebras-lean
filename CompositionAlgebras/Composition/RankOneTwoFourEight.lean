@@ -473,7 +473,6 @@ theorem IsComposition.exists_conj_ne_of_rankAtStalk_eq_two [Nontrivial k]
   have hconjF : ∀ x : F ⊗[k] A, CF.conj x = x := by
     intro x
     induction x with
-    | zero => simp
     | tmul r a => simp [CF, hn]
     | add x y hx hy => simpa only [map_add] using congrArg₂ (· + ·) hx hy
   have hdim : Module.finrank F (F ⊗[k] A) = 2 :=

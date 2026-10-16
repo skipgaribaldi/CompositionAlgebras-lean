@@ -229,7 +229,7 @@ theorem peirceIdempotent_mul_of_mem {c : A} (hc : c * c = c) {x : A} {k l : Bool
   have hkx := (mem_peirceComponent_iff_mul_eq hc k l).mp hx |>.1
   by_cases hik : i = k
   · simpa [hik] using hkx
-  · rw [if_neg hik, ← hkx, peirce_left_associate,
+  · rw [ite_eq_right hik, ← hkx, peirce_left_associate,
       peirceIdempotent_mul_eq_zero hc hik, zero_mul]
 
 /-- A complementary idempotent acts on the right of a Peirce component by either the identity or
@@ -240,7 +240,7 @@ theorem mul_peirceIdempotent_of_mem {c : A} (hc : c * c = c) {x : A} {k l : Bool
   have hxl := (mem_peirceComponent_iff_mul_eq hc k l).mp hx |>.2
   by_cases hjl : j = l
   · simpa [hjl] using hxl
-  · rw [if_neg hjl, ← hxl, peirce_right_associate,
+  · rw [ite_eq_right hjl, ← hxl, peirce_right_associate,
       peirceIdempotent_mul_eq_zero hc (Ne.symm hjl), mul_zero]
 
 /-- Opposite off-diagonal Peirce components multiply into the corresponding diagonal component:
@@ -251,13 +251,13 @@ theorem mul_mem_peirceComponent_of_opposite {c : A} (hc : c * c = c)
     (hy : y ∈ peirceComponent (R := R) c j i) :
     x * y ∈ peirceComponent (R := R) c i i := by
   have hxei : x * peirceIdempotent c i = 0 := by
-    rw [mul_peirceIdempotent_of_mem hc hx, if_neg hij]
+    rw [mul_peirceIdempotent_of_mem hc hx, ite_eq_right hij]
   have heiy : peirceIdempotent c i * y = 0 := by
-    rw [peirceIdempotent_mul_of_mem hc hy, if_neg hij]
+    rw [peirceIdempotent_mul_of_mem hc hy, ite_eq_right hij]
   have heix : peirceIdempotent c i * x = x := by
-    rw [peirceIdempotent_mul_of_mem hc hx, if_pos rfl]
+    rw [peirceIdempotent_mul_of_mem hc hx, ite_eq_left rfl]
   have hyei : y * peirceIdempotent c i = y := by
-    rw [mul_peirceIdempotent_of_mem hc hy, if_pos rfl]
+    rw [mul_peirceIdempotent_of_mem hc hy, ite_eq_left rfl]
   apply (mem_peirceComponent_iff_mul_eq hc i i).mpr
   constructor
   · have ha : associator (peirceIdempotent c i) x y = 0 := by
@@ -275,17 +275,17 @@ theorem mul_mem_peirceComponent_swap {c : A} (hc : c * c = c)
     (hy : y ∈ peirceComponent (R := R) c i j) :
     x * y ∈ peirceComponent (R := R) c j i := by
   have hejx : peirceIdempotent c j * x = 0 := by
-    rw [peirceIdempotent_mul_of_mem hc hx, if_neg (Ne.symm hij)]
+    rw [peirceIdempotent_mul_of_mem hc hx, ite_eq_right (Ne.symm hij)]
   have hxej : x * peirceIdempotent c j = x := by
-    rw [mul_peirceIdempotent_of_mem hc hx, if_pos rfl]
+    rw [mul_peirceIdempotent_of_mem hc hx, ite_eq_left rfl]
   have hxei : x * peirceIdempotent c i = 0 := by
-    rw [mul_peirceIdempotent_of_mem hc hx, if_neg hij]
+    rw [mul_peirceIdempotent_of_mem hc hx, ite_eq_right hij]
   have hejy : peirceIdempotent c j * y = 0 := by
-    rw [peirceIdempotent_mul_of_mem hc hy, if_neg (Ne.symm hij)]
+    rw [peirceIdempotent_mul_of_mem hc hy, ite_eq_right (Ne.symm hij)]
   have hyei : y * peirceIdempotent c i = 0 := by
-    rw [mul_peirceIdempotent_of_mem hc hy, if_neg hij]
+    rw [mul_peirceIdempotent_of_mem hc hy, ite_eq_right hij]
   have heiy : peirceIdempotent c i * y = y := by
-    rw [peirceIdempotent_mul_of_mem hc hy, if_pos rfl]
+    rw [peirceIdempotent_mul_of_mem hc hy, ite_eq_left rfl]
   apply (mem_peirceComponent_iff_mul_eq hc j i).mpr
   constructor
   · have hinner : associator x (peirceIdempotent c j) y = x * y := by
@@ -308,9 +308,9 @@ theorem peirceProjection_apply_of_mem {c : A} (hc : c * c = c) {i j k l : Bool}
   rw [← hy]
   by_cases h : (i, j) = (k, l)
   · rcases Prod.mk.inj h with ⟨rfl, rfl⟩
-    rw [if_pos rfl]
+    rw [ite_eq_left rfl]
     exact (LinearMap.congr_fun (peirceProjection_idem (R := R) hc i j) y).trans hy
-  · rw [if_neg h]
+  · rw [ite_eq_right h]
     exact LinearMap.congr_fun (peirceProjection_comp_eq_zero (R := R) hc h) y
 
 /-- The map sending an element to its four Peirce components. -/

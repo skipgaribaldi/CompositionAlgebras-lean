@@ -94,16 +94,13 @@ private theorem fin_three_swap_one_two (a : M [⋀^Fin 3]→ₗ[R] R) (x y z : M
 theorem baseChangeFinThree_swap_zero_one (a : M [⋀^Fin 3]→ₗ[R] R)
     (x y z : S ⊗[R] M) :
     baseChangeFinThree (S := S) a x y z = -baseChangeFinThree (S := S) a y x z := by
-  induction x using TensorProduct.induction_on with
-  | zero => simp
+  induction x using TensorProduct.inductionOn with
   | add x x' hx hx' => simp [hx, hx']; abel
   | tmul r x =>
-    induction y using TensorProduct.induction_on with
-    | zero => simp
+    induction y using TensorProduct.inductionOn with
     | add y y' hy hy' => simp [hy, hy']; abel
     | tmul s y =>
-      induction z using TensorProduct.induction_on with
-      | zero => simp
+      induction z using TensorProduct.inductionOn with
       | add z z' hz hz' => simp [hz, hz']; abel
       | tmul t z =>
         rw [baseChangeFinThree_tmul, baseChangeFinThree_tmul, fin_three_swap_zero_one]
@@ -113,16 +110,13 @@ theorem baseChangeFinThree_swap_zero_one (a : M [⋀^Fin 3]→ₗ[R] R)
 theorem baseChangeFinThree_swap_one_two (a : M [⋀^Fin 3]→ₗ[R] R)
     (x y z : S ⊗[R] M) :
     baseChangeFinThree (S := S) a x y z = -baseChangeFinThree (S := S) a x z y := by
-  induction x using TensorProduct.induction_on with
-  | zero => simp
+  induction x using TensorProduct.inductionOn with
   | add x x' hx hx' => simp [hx, hx']; abel
   | tmul r x =>
-    induction y using TensorProduct.induction_on with
-    | zero => simp
+    induction y using TensorProduct.inductionOn with
     | add y y' hy hy' => simp [hy, hy']; abel
     | tmul s y =>
-      induction z using TensorProduct.induction_on with
-      | zero => simp
+      induction z using TensorProduct.inductionOn with
       | add z z' hz hz' => simp [hz, hz']; abel
       | tmul t z =>
         rw [baseChangeFinThree_tmul, baseChangeFinThree_tmul, fin_three_swap_one_two]
@@ -131,15 +125,13 @@ theorem baseChangeFinThree_swap_one_two (a : M [⋀^Fin 3]→ₗ[R] R)
 
 theorem baseChangeFinThree_self_zero_one (a : M [⋀^Fin 3]→ₗ[R] R)
     (x z : S ⊗[R] M) : baseChangeFinThree (S := S) a x x z = 0 := by
-  induction x using TensorProduct.induction_on with
-  | zero => simp
+  induction x using TensorProduct.inductionOn with
   | add x y hx hy =>
     simp only [map_add, LinearMap.add_apply]
     rw [hx, hy, baseChangeFinThree_swap_zero_one a y x z]
     abel
   | tmul r x =>
-    induction z using TensorProduct.induction_on with
-    | zero => simp
+    induction z using TensorProduct.inductionOn with
     | add z z' hz hz' => simp [hz, hz']
     | tmul t z =>
       rw [baseChangeFinThree_tmul]
@@ -213,11 +205,7 @@ theorem baseChangeFinThree_mul_eq_det
         Matrix.det !![e q₀ x₀, e q₀ x₁, e q₀ x₂;
           e q₁ x₀, e q₁ x₁, e q₁ x₂;
           e q₂ x₀, e q₂ x₁, e q₂ x₂] := by
-  induction x₀ using TensorProduct.induction_on with
-  | zero =>
-    rw [Matrix.det_fin_three]
-    simp [Matrix.of_apply, Matrix.cons_val', Matrix.empty_val', Matrix.cons_val_fin_one,
-      Matrix.cons_val_one, Matrix.cons_val_zero, Matrix.cons_val]
+  induction x₀ using TensorProduct.inductionOn with
   | add x y hx hy =>
     simp only [map_add, LinearMap.add_apply, add_mul]
     rw [hx, hy]
@@ -226,11 +214,7 @@ theorem baseChangeFinThree_mul_eq_det
       Matrix.cons_val_one, Matrix.cons_val_zero, Matrix.cons_val]
     ring
   | tmul s₀ v₀ =>
-    induction x₁ using TensorProduct.induction_on with
-    | zero =>
-      rw [Matrix.det_fin_three]
-      simp [Matrix.of_apply, Matrix.cons_val', Matrix.empty_val', Matrix.cons_val_fin_one,
-        Matrix.cons_val_one, Matrix.cons_val_zero, Matrix.cons_val]
+    induction x₁ using TensorProduct.inductionOn with
     | add x y hx hy =>
       simp only [map_add, LinearMap.add_apply, add_mul]
       rw [hx, hy]
@@ -239,11 +223,7 @@ theorem baseChangeFinThree_mul_eq_det
         Matrix.cons_val_one, Matrix.cons_val_zero, Matrix.cons_val]
       ring
     | tmul s₁ v₁ =>
-      induction x₂ using TensorProduct.induction_on with
-      | zero =>
-        rw [Matrix.det_fin_three]
-        simp [Matrix.of_apply, Matrix.cons_val', Matrix.empty_val', Matrix.cons_val_fin_one,
-          Matrix.cons_val_one, Matrix.cons_val_zero, Matrix.cons_val]
+      induction x₂ using TensorProduct.inductionOn with
       | add x y hx hy =>
         simp only [map_add, add_mul]
         rw [hx, hy]
@@ -252,12 +232,7 @@ theorem baseChangeFinThree_mul_eq_det
           Matrix.cons_val_one, Matrix.cons_val_zero, Matrix.cons_val]
         ring
       | tmul s₂ v₂ =>
-        induction q₀ using TensorProduct.induction_on with
-        | zero =>
-          rw [Matrix.det_fin_three]
-          simp [Matrix.of_apply, Matrix.cons_val', Matrix.empty_val',
-            Matrix.cons_val_fin_one, Matrix.cons_val_one, Matrix.cons_val_zero,
-            Matrix.cons_val]
+        induction q₀ using TensorProduct.inductionOn with
         | add x y hx hy =>
           simp only [map_add, LinearMap.add_apply, mul_add]
           rw [hx, hy]
@@ -267,12 +242,7 @@ theorem baseChangeFinThree_mul_eq_det
             Matrix.cons_val]
           ring
         | tmul r₀ f₀ =>
-          induction q₁ using TensorProduct.induction_on with
-          | zero =>
-            rw [Matrix.det_fin_three]
-            simp [Matrix.of_apply, Matrix.cons_val', Matrix.empty_val',
-              Matrix.cons_val_fin_one, Matrix.cons_val_one, Matrix.cons_val_zero,
-              Matrix.cons_val]
+          induction q₁ using TensorProduct.inductionOn with
           | add x y hx hy =>
             simp only [map_add, LinearMap.add_apply, mul_add]
             rw [hx, hy]
@@ -282,12 +252,7 @@ theorem baseChangeFinThree_mul_eq_det
               Matrix.cons_val]
             ring
           | tmul r₁ f₁ =>
-            induction q₂ using TensorProduct.induction_on with
-            | zero =>
-              rw [Matrix.det_fin_three]
-              simp [Matrix.of_apply, Matrix.cons_val', Matrix.empty_val',
-                Matrix.cons_val_fin_one, Matrix.cons_val_one, Matrix.cons_val_zero,
-                Matrix.cons_val]
+            induction q₂ using TensorProduct.inductionOn with
             | add x y hx hy =>
               simp only [map_add, mul_add]
               rw [hx, hy]
