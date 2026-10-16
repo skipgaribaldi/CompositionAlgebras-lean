@@ -9,12 +9,17 @@ public import CompositionAlgebras.Composition.Defs
 public import CompositionAlgebras.Conic.CayleyDicksonMultiplicative
 
 /-!
-# Doubling a composition algebra (`GPR 19.14`)
+# Doubling a composition algebra (`GPR 19.14`, one direction)
 
 If `B` is an **associative** composition algebra whose norm is **regular**, and `μ ∈ kˣ`, then
 `Cay(B, μ)` is again a composition algebra. This is the engine of the tower: it produces the
 quaternion algebras from the quadratic étale algebras and the octonion algebras from the quaternion
 algebras, and — because octonion algebras are not associative — it stops there.
+
+⚠ This is the direction `⇐` of `GPR 19.14`, which is an equivalence: conversely, if `Cay(B, μ)` is
+a composition algebra then `B` is a regular associative composition algebra and `μ` is a unit, and
+in that case the double is regular. That converse and the regularity of the double are not
+formalized.
 
 Each of the three clauses of `ConicAlgebra.IsComposition` is supplied by an earlier file:
 

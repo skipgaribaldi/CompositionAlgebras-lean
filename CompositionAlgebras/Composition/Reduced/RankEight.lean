@@ -19,7 +19,10 @@ the associated vector products
 The second linearization of norm multiplicativity is exactly their Binet–Cauchy identity. Thus
 the Peirce-coordinate map identifies the algebra with the twisted Zorn vector matrices attached
 to this vector-product pair. In constant rank eight the rank count makes `M` projective of
-constant rank three. This is Petersson's converse theorem `GPR 22.15`.
+constant rank three. This is Petersson's converse theorem `GPR 22.15`, in vector-product-pair
+form. ⚠ `GPR 22.15` states it with an **orientation** `θ` of `M`, as `C ≅ Zor(M, θ)`. The bridge
+from the Peirce pair to an orientation — an orientation whose induced pair
+(`Module.VectorProductPair.ofOrientation`) is the Peirce one — is not formalized.
 
 ## Main definitions
 

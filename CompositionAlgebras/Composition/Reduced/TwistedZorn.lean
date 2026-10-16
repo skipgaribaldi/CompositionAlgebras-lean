@@ -32,8 +32,8 @@ multiply through the two vector products.
 
 `GPR 22.14` builds the pair of vector products from an orientation `θ : ⋀³ M ≅ k` of a
 projective module of rank three, and calls the result `Zor(M, θ)`. By `GPR 22.15` (Petersson)
-**every**
-reduced octonion algebra is one of these, and `Zor(M, θ)` is split exactly when `M` is free.
+**every** reduced octonion algebra is one of these, and `Zor(M, θ)` is split when `M` is free
+(`GPR` asserts only this implication).
 
 ## What is proved here
 

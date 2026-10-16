@@ -14,7 +14,8 @@ public import CompositionAlgebras.QuadraticForm.Real
 
 Over `ℝ` there is exactly one composition **division** algebra in each of the dimensions `1`, `2`,
 `4`, `8` — the classical tower `ℝ, ℂ, ℍ, 𝕆` — and, besides these, only the split algebra in each of
-the dimensions `2`, `4`, `8`.
+the dimensions `2`, `4`, `8`. `GPR 23.13` notes that the same holds over any real closed field; only
+`ℝ` is treated here.
 
 Two inputs do all the work.
 

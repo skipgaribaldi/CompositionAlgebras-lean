@@ -35,8 +35,12 @@ using `n(y, y) = 2n(y)`. Both are `ConicAlgebra.IsMultiplicative.mem_radical_con
 and similarly for the second identity.
 
 Consequently the hypothesis that lets `w` be cancelled is exactly **`GPR`'s non-degeneracy**,
-`QuadraticForm.IsGPRNondegenerate` — the vanishing of `QuadraticMap.radical` — which is precisely
-what `GPR 19.3` assumes. Nothing here needs the polar form to be injective, so nothing here is
+`QuadraticForm.IsGPRNondegenerate` — the vanishing of `QuadraticMap.radical` — which is the
+hypothesis `GPR 19.3` puts on the norm. ⚠ `GPR 19.3` is more than this file proves: it starts from
+a unital projective algebra with such a form and *derives* the conic structure, and it also shows
+that the polar radical is a central ideal annihilated by `2` and by every `n(x, y)`. Here the conic
+structure is assumed; the derivation and the statements about the polar radical are not
+formalized. Nothing here needs the polar form to be injective, so nothing here is
 troubled by characteristic 2, where the polar form of a non-singular form of odd rank has a kernel.
 
 ⚠ **Non-degeneracy is not implied by non-singularity over a ring**, so this is not yet `GPR 19.3`
@@ -189,9 +193,10 @@ norm is alternative.**
 Each alternative law is one of Kirmse's identities rewritten with `conj x = t(x)·1 - x` and the
 degree-two identity `x² = t(x)·x - n(x)·1`.
 
-The hypotheses are exactly `GPR`'s: the norm multiplicative and its radical zero. Nothing is
-assumed about `2`, about the rank, or about the module — in particular no projectivity, which
-`GPR 19.3` carries only for its other conclusion (that the norm is the unique conic norm). -/
+The hypotheses on the norm are `GPR`'s: multiplicative, with zero radical. Nothing is assumed
+about `2`, about the rank, or about the module — in particular no projectivity, which `GPR 19.3`
+carries for its other conclusions. ⚠ Unlike `GPR 19.3`, the conic structure (the degree-two
+identity) is an input here rather than a conclusion; see the module docstring. -/
 theorem isAlternative (h : C.IsMultiplicative) : IsAlternative A where
   left_alt x y := by
     have hk := h.conj_mul_mul hrad x y

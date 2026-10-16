@@ -117,20 +117,20 @@ section Equiv
 variable {B : Type w} [NonAssocRing B] [Module k B] [SMulCommClass k B B]
   [IsScalarTower k B B] [Module.Finite k B] [Module.Projective k B]
 
-/-- **`GPR 23.4(a)`.** A unital multiplicative linear equivalence between conic algebras is an
-isometry of their norm forms.  In particular, every isomorphism of composition algebras preserves
-the norm; the converse, in rank two, is `Composition/NormEquivalence.lean`.
-
-⚠ Mathlib's `AlgEquiv` requires associative multiplication, so the non-associative algebra
-isomorphism is deliberately expressed as a `LinearEquiv` plus `map_one` and `map_mul`. -/
-noncomputable def isometryEquivOfLinearEquiv (C : ConicAlgebra k A) (D : ConicAlgebra k B)
-    (e : A ≃ₗ[k] B) (map_one : e (1 : A) = 1) (map_mul : ∀ x y, e (x * y) = e x * e y) :
-    C.norm.IsometryEquiv D.norm := by
+/-- **The engine of `GPR 23.4(a)`.** A unital linear equivalence between finitely generated
+projective conic algebras that preserves squares, `e (x * x) = e x * e x`, is an isometry of their
+norm forms: pulling the norm of `B` back along `e` gives a second conic norm on `A`, and the conic
+norm of a finitely generated projective algebra is unique (`ConicAlgebra.norm_eq_of_projective`,
+`GPR 16.16`). Isomorphisms (`isometryEquivOfLinearEquiv`) and anti-isomorphisms
+(`isometryEquivOfLinearEquivOfMapMulRev`) both preserve squares. -/
+noncomputable def isometryEquivOfLinearEquivOfMapMulSelf (C : ConicAlgebra k A)
+    (D : ConicAlgebra k B) (e : A ≃ₗ[k] B) (map_one : e (1 : A) = 1)
+    (map_mul_self : ∀ x, e (x * x) = e x * e x) : C.norm.IsometryEquiv D.norm := by
   let E : ConicAlgebra k A :=
     { norm := D.norm.comp e.toLinearMap
       norm_one := by simp [QuadraticMap.comp_apply, map_one, D.norm_one]
       mul_self := fun x ↦ e.injective (by
-        simp only [map_mul, D.mul_self_eq, map_smul, map_sub, map_one,
+        simp only [map_mul_self, D.mul_self_eq, map_smul, map_sub, map_one,
           QuadraticMap.comp_apply]
         rw [QuadraticMap.polar]
         simp only [map_add, QuadraticMap.comp_apply]
@@ -145,6 +145,25 @@ noncomputable def isometryEquivOfLinearEquiv (C : ConicAlgebra k A) (D : ConicAl
         change E.norm x = C.norm x
         rw [norm_eq_of_projective C E] }
 
+/-- **`GPR 23.4(a)`, isomorphisms.** A unital multiplicative linear equivalence between conic
+algebras is an isometry of their norm forms. In particular, every isomorphism of composition
+algebras preserves the norm; the converse, in rank two, is `Composition/NormEquivalence.lean`.
+
+⚠ Mathlib's `AlgEquiv` requires associative multiplication, so the non-associative algebra
+isomorphism is deliberately expressed as a `LinearEquiv` plus `map_one` and `map_mul`. -/
+noncomputable def isometryEquivOfLinearEquiv (C : ConicAlgebra k A) (D : ConicAlgebra k B)
+    (e : A ≃ₗ[k] B) (map_one : e (1 : A) = 1) (map_mul : ∀ x y, e (x * y) = e x * e y) :
+    C.norm.IsometryEquiv D.norm :=
+  isometryEquivOfLinearEquivOfMapMulSelf C D e map_one fun x ↦ map_mul x x
+
+/-- **`GPR 23.4(a)`, anti-isomorphisms.** A unital linear equivalence reversing multiplication,
+`e (x * y) = e y * e x`, between conic algebras is an isometry of their norm forms. For example
+the conjugation of a quaternion algebra is one. -/
+noncomputable def isometryEquivOfLinearEquivOfMapMulRev (C : ConicAlgebra k A)
+    (D : ConicAlgebra k B) (e : A ≃ₗ[k] B) (map_one : e (1 : A) = 1)
+    (map_mul_rev : ∀ x y, e (x * y) = e y * e x) : C.norm.IsometryEquiv D.norm :=
+  isometryEquivOfLinearEquivOfMapMulSelf C D e map_one fun x ↦ map_mul_rev x x
+
 omit [SMulCommClass k A A] [IsScalarTower k A A] [SMulCommClass k B B]
   [IsScalarTower k B B] [Module.Finite k B] [Module.Projective k B] in
 /-- A unital multiplicative linear equivalence preserves the conic norm. -/
@@ -152,6 +171,15 @@ theorem norm_map_of_linearEquiv (C : ConicAlgebra k A) (D : ConicAlgebra k B)
     (e : A ≃ₗ[k] B) (map_one : e (1 : A) = 1) (map_mul : ∀ x y, e (x * y) = e x * e y)
     (x : A) : D.norm (e x) = C.norm x :=
   (isometryEquivOfLinearEquiv C D e map_one map_mul).map_app x
+
+omit [SMulCommClass k A A] [IsScalarTower k A A] [SMulCommClass k B B]
+  [IsScalarTower k B B] [Module.Finite k B] [Module.Projective k B] in
+/-- A unital linear equivalence reversing multiplication preserves the conic norm
+(`GPR 23.4(a)` for anti-isomorphisms). -/
+theorem norm_map_of_linearEquiv_of_map_mul_rev (C : ConicAlgebra k A) (D : ConicAlgebra k B)
+    (e : A ≃ₗ[k] B) (map_one : e (1 : A) = 1) (map_mul_rev : ∀ x y, e (x * y) = e y * e x)
+    (x : A) : D.norm (e x) = C.norm x :=
+  (isometryEquivOfLinearEquivOfMapMulRev C D e map_one map_mul_rev).map_app x
 
 omit [SMulCommClass k A A] [IsScalarTower k A A] [SMulCommClass k B B]
   [IsScalarTower k B B] [Module.Finite k B] [Module.Projective k B] in

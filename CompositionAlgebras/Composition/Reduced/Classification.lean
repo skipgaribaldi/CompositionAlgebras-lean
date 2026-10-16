@@ -50,6 +50,9 @@ with `IsDivision`; both are in `Composition/Fields/Basic.lean`.
 * `ConicAlgebra.IsComposition.isSplitOfRank_iff_not_noZeroDivisors_of_pid` : over a PID,
   splitness is equivalent to having zero divisors (**`GPR 22.19`**).
 
+Together with `isSplitOfRank_iff_isGPRIsotropic_of_pid` these are conditions (ii)–(v) of
+`GPR 22.19`. Condition (i), splitness after extension to the fraction field, is not formalized.
+
 ## References
 
 * [GN] Gille, Neher, *Group schemes over LG-rings and applications to cancellation theorems and

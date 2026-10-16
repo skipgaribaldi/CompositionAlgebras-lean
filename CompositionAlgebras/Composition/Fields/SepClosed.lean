@@ -16,6 +16,10 @@ public import Mathlib.FieldTheory.IsSepClosed
 Over such a field there is exactly one composition algebra in each of the dimensions `1`, `2`, `4`,
 `8` — the split one — and no division algebra beyond the base field itself.
 
+⚠ `GPR 23.12` also treats fields in which every element is a square (of interest in
+characteristic 2, e.g. perfect fields), where every quaternion and octonion algebra is split
+because every quadratic étale norm is surjective. That paragraph is not formalized here.
+
 Two forms of the hypothesis appear here.
 
 * **As a hypothesis.** `ConicAlgebra.IsComposition.isSplitOfRank_of_forall_isSplit_adjoinElement`
