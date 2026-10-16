@@ -393,8 +393,8 @@ source's sense is meant.
 
 **(c) GPR isotropy is *unimodular*, mathlib's is *nonzero*.** Do not implement GPR's isotropy as
 `¬ QuadraticMap.Anisotropic`. Use mathlib's `Module.IsUnimodular` predicate. They agree over fields
-and, for finitely generated projective modules, over PIDs (`GPR 22.19`), and differ in general. As
-with the regularity words in (b), the predicate carries its source's name:
+and, for finitely generated projective modules, over PIDs (`GPR Exc. 12.38(c)`), and differ in
+general. As with the regularity words in (b), the predicate carries its source's name:
 `QuadraticMap.IsGPRIsotropic`, never a bare `IsIsotropic`.
 
 **(d) The Cayley–Dickson scalar is arbitrary.** `Cay(B, μ)` takes `μ : k`, **not** `μ : kˣ`. Unit

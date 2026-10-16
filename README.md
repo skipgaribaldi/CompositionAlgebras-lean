@@ -533,14 +533,13 @@ and §23 is the comparison between those and algebra isomorphisms.
   condition is **proved** as `IsComposition.isSplitOfRank_iff_not_isDivision`: multiplicativity
   makes a two-sided inverse impossible for a nonzero null vector, while anisotropy gives the
   explicit inverse `n(x)⁻¹ x̄`.
-- **`GPR 22.19`.** Over a PID, the two isotropy notions (unimodular null vector vs. represents
-  zero) coincide, and both are equivalent to splitness and to having zero divisors. This is
-  **proved** for constant ranks 2, 4, and 8 in
-  `Composition/Reduced/Classification.lean`. The coordinate-ideal argument in
-  `QuadraticForm/Isotropic.lean` divides a nonzero null vector by a generator of its coordinates
-  to obtain a unimodular null vector. Projective twisting modules are finite free over the PID,
-  giving splitness, while norm multiplicativity identifies anisotropy with mathlib's
-  `NoZeroDivisors`. This is the one place the two isotropy notions merge.
+- **`GPR 22.19`.** Over a PID, the two isotropy notions (unimodular null vector vs. represents zero)
+  coincide, and both are equivalent to splitness and to having zero divisors. This is **proved** for
+  constant ranks 2, 4, and 8 in `Composition/Reduced/Classification.lean`. The coordinate-ideal
+  argument in `QuadraticForm/Isotropic.lean` (`GPR Exc. 12.38(c)`) divides a nonzero null vector by
+  a generator of its coordinates to obtain a unimodular null vector. Projective twisting modules are
+  finite free over the PID, giving splitness, while norm multiplicativity identifies anisotropy with
+  mathlib's `NoZeroDivisors`. This is the one place the two isotropy notions merge.
 
 **Capstone (`GN Example 3.15`, final paragraph, due to Garibaldi).** *Let `R` be an LG ring in
 which every quadratic étale `R`-algebra is split. Then every octonion algebra over `R` is split.*
@@ -707,10 +706,10 @@ a field, ≠ GPR's non-degenerate). Always say — and name — which source's s
 **2. mathlib's isotropy is *nonzero*; GPR's is *unimodular*.** `QuadraticMap.Anisotropic Q` means
 `Q x = 0 → x = 0`, so its negation means a **nonzero** null vector. GPR (`11.17`) requires a
 **unimodular** null vector. Over a field these coincide; over a ring unimodular is strictly
-stronger. `GPR 22.19` proves their equivalence only for finitely generated projective modules over a
-PID — and lists them as separate conditions precisely because they are separate. The reduced-algebra
-layer must use the GPR notion, which is named after its source (`QuadraticMap.IsGPRIsotropic`),
-never left as a bare `IsIsotropic`.
+stronger. `GPR Exc. 12.38(c)` proves their equivalence only for free modules of finite rank over a
+PID, and `GPR 22.19` lists them as separate conditions, (ii) and (iii), precisely because they are
+separate. The reduced-algebra layer must use the GPR notion, which is named after its source
+(`QuadraticMap.IsGPRIsotropic`), never left as a bare `IsIsotropic`.
 
 **3. `QuaternionAlgebra` is a free rank-4 presentation, not "the rank-4 composition algebras".**
 The two notions are incomparable over a general base:

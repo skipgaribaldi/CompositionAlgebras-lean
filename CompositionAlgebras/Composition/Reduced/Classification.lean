@@ -407,7 +407,8 @@ theorem isSplitOfRank_iff_isGPRIsotropic_of_pid [IsDomain k] [IsPrincipalIdealRi
 
 omit [IsAlternative A] in
 /-- **`GPR 22.19`, split ⟺ a nonzero null vector over a PID.** This is where GPR's
-unimodular-vector isotropy and mathlib's failure of anisotropy become equivalent. -/
+unimodular-vector isotropy and mathlib's failure of anisotropy become equivalent, by
+`GPR Exc. 12.38(c)` (`QuadraticMap.isGPRIsotropic_iff_not_anisotropic_of_pid`). -/
 theorem isSplitOfRank_iff_not_anisotropic_of_pid [IsDomain k] [IsPrincipalIdealRing k]
     (hcomp : C.IsComposition.{u, v, u})
     (hA : Module.rankAtStalk (R := k) A = fun _ ↦ r)

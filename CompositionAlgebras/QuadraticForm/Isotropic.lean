@@ -21,11 +21,11 @@ Defines `QuadraticMap.IsGPRIsotropic`: `Q` is isotropic iff it has a **unimodula
 *nonzero* `x` with `Q x = 0`". GPR's isotropy demands a *unimodular* null vector — strictly stronger
 over a general ring, since unimodularity (mathlib's `Module.IsUnimodular`: some functional takes the
 value `1` at `u`, equivalently `R·u` is a free rank-1 direct summand, `GPR 9.13`, `GPR 9.17`) asks
-for more than `u ≠ 0`. The two notions coincide over a field, and `GPR 22.19` shows they also
-coincide for finitely generated projective modules over a PID (the module hypothesis is needed: the
-zero form on the `ℤ`-module `ℤ/2` has a nonzero null vector but no unimodular element); in general
-they do not, and the reduced-composition-algebra layer (`GPR 22.9` ff.) needs the GPR notion
-specifically. See `AGENTS.md` §6(c).
+for more than `u ≠ 0`. The two notions coincide over a field, and `GPR Exc. 12.38(c)` shows they
+also coincide for finitely generated projective (that is, finite free) modules over a PID (the
+module hypothesis is needed: the zero form on the `ℤ`-module `ℤ/2` has a nonzero null vector but no
+unimodular element); in general they do not, and the reduced-composition-algebra layer (`GPR 22.9`
+ff.) needs the GPR notion specifically. See `AGENTS.md` §6(c).
 
 The name carries its source, as for the regularity ladder (`QuadraticForm.IsGPRNondegenerate`,
 `IsGPRNonsingular`, `IsGPRRegular` in `QuadraticForm/Regularity.lean`): there is no bare
@@ -63,15 +63,16 @@ cancelled are only assumed non-singular (`GN 6.5`, not `GPR 11.27`).
   every nonzero vector is unimodular (`Module.isUnimodular_of_ne_zero`), so the extra strength GPR's
   definition carries over a general ring disappears entirely over a field.
 
-`GPR 22.19`'s further statement — that the two notions already coincide for a finitely generated
-projective module over a **PID**, more generally than a field — is proved below by generating the
-ideal of the coordinates of a nonzero vector. A generator divides every coordinate; dividing by it
-gives a primitive, hence unimodular, vector. Homogeneity and the domain hypothesis preserve the
-null-vector equation.
+`GPR Exc. 12.38(c)` — that the two notions already coincide for a finitely generated projective,
+hence finite free, module over a **PID**, more generally than a field — is proved below by
+generating the ideal of the coordinates of a nonzero vector. A generator divides every coordinate;
+dividing by it gives a primitive, hence unimodular, vector. Homogeneity and the domain hypothesis
+preserve the null-vector equation.
 
 ## References
 
-* [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 11.17, 22.19.
+* [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 11.17,
+  Exc. 12.38, 22.19.
 * [GN] Gille, Neher, *Group schemes over LG-rings…*, European Journal of Mathematics **11** (2025),
   article 42, 6.5.
 -/
@@ -120,7 +121,7 @@ theorem QuadraticMap.isGPRIsotropic_iff_not_anisotropic {K : Type u} [Field K] {
     {Q : QuadraticMap K M N} : Q.IsGPRIsotropic ↔ ¬ Q.Anisotropic :=
   ⟨fun h ↦ h.not_anisotropic, QuadraticMap.isGPRIsotropic_of_not_anisotropic⟩
 
-/-! ### `GPR 22.19`: isotropy over a PID -/
+/-! ### `GPR Exc. 12.38(c)`: isotropy over a PID -/
 
 private theorem exists_smul_isUnimodular_of_ne_zero_of_pid
     {R : Type u} [CommRing R] [IsDomain R] [IsPrincipalIdealRing R]
@@ -172,8 +173,10 @@ private theorem exists_smul_isUnimodular_of_ne_zero_of_pid
     exact hsum
   exact ⟨d, hd, u, Module.isUnimodular_of_apply_eq_one (f := l) hlu, hxu⟩
 
-/-- **`GPR 22.19`:** over a PID, a quadratic form has a unimodular null vector if and only if it
-has a nonzero null vector. The module is only assumed finitely generated projective. -/
+/-- **`GPR Exc. 12.38(c)`**, for quadratic forms and with its trivial converse: over a PID, a
+quadratic form has a unimodular null vector if and only if it has a nonzero null vector. The module
+is only assumed finitely generated projective, which over a PID means finite free. `GPR 22.19`
+applies this to the norm of a composition algebra (its conditions (ii) and (iii)). -/
 theorem QuadraticMap.isGPRIsotropic_iff_not_anisotropic_of_pid
     {R : Type u} [CommRing R] [IsDomain R] [IsPrincipalIdealRing R]
     {M : Type v} [AddCommGroup M] [Module R M] [Module.Finite R M] [Module.Projective R M]
