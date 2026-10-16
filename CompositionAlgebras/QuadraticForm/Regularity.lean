@@ -3,25 +3,28 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import Mathlib.LinearAlgebra.QuadraticForm.Basic
-import Mathlib.LinearAlgebra.QuadraticForm.Prod
-import Mathlib.LinearAlgebra.QuadraticForm.Radical
-import Mathlib.LinearAlgebra.Dual.BaseChange
-import Mathlib.LinearAlgebra.Dual.Lemmas
-import Mathlib.LinearAlgebra.PerfectPairing.Basic
-import Mathlib.LinearAlgebra.FiniteDimensional.Lemmas
-import Mathlib.RingTheory.Finiteness.Prod
-import Mathlib.RingTheory.Flat.Stability
-import Mathlib.RingTheory.Ideal.Nonunits
-import Mathlib.RingTheory.Ideal.Quotient.Operations
-import Mathlib.RingTheory.LocalProperties.Exactness
-import Mathlib.RingTheory.LocalRing.Module
-import Mathlib.RingTheory.Localization.AtPrime.Basic
-import Mathlib.RingTheory.Localization.BaseChange
-import Mathlib.RingTheory.Spectrum.Prime.FreeLocus
-import Mathlib.RingTheory.TensorProduct.Free
-import Mathlib.LinearAlgebra.TensorProduct.Tower
-import CompositionAlgebras.QuadraticForm.BaseChangeProjective
+module
+
+public import Mathlib.LinearAlgebra.QuadraticForm.Basic
+public import Mathlib.LinearAlgebra.QuadraticForm.Prod
+public import Mathlib.LinearAlgebra.QuadraticForm.Radical
+public import Mathlib.LinearAlgebra.Dual.BaseChange
+public import Mathlib.LinearAlgebra.Dual.Lemmas
+public import Mathlib.LinearAlgebra.PerfectPairing.Basic
+public import Mathlib.LinearAlgebra.FiniteDimensional.Lemmas
+public import Mathlib.RingTheory.Finiteness.Prod
+public import Mathlib.RingTheory.Flat.Stability
+public import Mathlib.RingTheory.Ideal.Nonunits
+public import Mathlib.RingTheory.Ideal.Quotient.Operations
+public import Mathlib.RingTheory.LocalProperties.Exactness
+public import Mathlib.RingTheory.LocalRing.Module
+public import Mathlib.RingTheory.Localization.AtPrime.Basic
+public import Mathlib.RingTheory.Localization.BaseChange
+public import Mathlib.RingTheory.Spectrum.Prime.FreeLocus
+public import Mathlib.RingTheory.TensorProduct.Free
+public import Mathlib.LinearAlgebra.TensorProduct.Prod
+public import Mathlib.LinearAlgebra.TensorProduct.Tower
+public import CompositionAlgebras.QuadraticForm.BaseChangeProjective
 
 /-!
 # Regularity of quadratic forms: the radical, `IsGPRNondegenerate`, `IsGPRRegular`,
@@ -237,6 +240,8 @@ does not reprove and which `AGENTS.md` §8 asks us not to import wholesale. That
 * [EKM] Elman, Karpenko, Merkurjev, *The Algebraic and Geometric Theory of Quadratic Forms*,
   AMS Colloquium Publications vol. 56, 2008. §7.A, Lemma 7.16, Definition 7.17.
 -/
+
+@[expose] public section
 
 universe u v w s t₁ t₂ t₃
 

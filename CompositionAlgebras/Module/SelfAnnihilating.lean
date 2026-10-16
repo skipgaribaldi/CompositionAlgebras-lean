@@ -3,14 +3,16 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import Mathlib.LinearAlgebra.Dual.BaseChange
-import Mathlib.LinearAlgebra.TensorProduct.Tower
-import Mathlib.Tactic.LinearCombination
-import Mathlib.Tactic.Module
-import Mathlib.RingTheory.LocalProperties.Basic
-import Mathlib.RingTheory.LocalProperties.Projective
-import Mathlib.RingTheory.LocalRing.Module
-import Mathlib.RingTheory.TensorProduct.Free
+module
+
+public import Mathlib.LinearAlgebra.Dual.BaseChange
+public import Mathlib.LinearAlgebra.TensorProduct.Tower
+public import Mathlib.Tactic.LinearCombination
+public import Mathlib.Tactic.Module
+public import Mathlib.RingTheory.LocalProperties.Basic
+public import Mathlib.RingTheory.LocalProperties.Projective
+public import Mathlib.RingTheory.LocalRing.Module
+public import Mathlib.RingTheory.TensorProduct.Free
 
 /-!
 # Functionals that annihilate their own argument
@@ -42,6 +44,8 @@ bi-additive and so reduces to pure tensors, and the hypothesis itself then follo
 linearization by induction. This is the same two-step shape as the degree-two identity in
 `CompositionAlgebras/Conic/BaseChange.lean`.
 -/
+
+@[expose] public section
 
 universe u v
 

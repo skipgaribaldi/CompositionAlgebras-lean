@@ -3,11 +3,13 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.LGRing.ConstantRank
-import CompositionAlgebras.Module.AlternatingBaseChange
-import CompositionAlgebras.Module.VectorProduct
-import CompositionAlgebras.QuadraticForm.Regularity
-import Mathlib.LinearAlgebra.ExteriorPower.Basis
+module
+
+public import CompositionAlgebras.LGRing.ConstantRank
+public import CompositionAlgebras.Module.AlternatingBaseChange
+public import CompositionAlgebras.Module.VectorProduct
+public import CompositionAlgebras.QuadraticForm.Regularity
+public import Mathlib.LinearAlgebra.ExteriorPower.Basis
 
 /-!
 # Oriented rank-three projective modules (`GPR 22.14`)
@@ -33,6 +35,8 @@ localizations proves the global identity.
   Rings*, 9.15, 21.7, 22.14.
 -/
 
+@[expose] public section
+
 universe u v
 
 namespace Module
@@ -40,7 +44,7 @@ namespace Module
 variable {k : Type u} {M : Type v} [CommRing k] [AddCommGroup M] [Module k M]
   [Module.Finite k M] [Module.Projective k M]
 
-private theorem cross_apply_crossDual_of_orientation
+theorem cross_apply_crossDual_of_orientation
     (hM : Module.rankAtStalk (R := k) M = fun _ ↦ 3)
     (theta : (⋀[k]^3 M) ≃ₗ[k] k) (v w : M) (f g : Module.Dual k M) :
     crossOfOrientation theta v w (crossDualOfOrientation theta f g) =

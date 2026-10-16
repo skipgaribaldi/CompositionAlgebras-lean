@@ -3,12 +3,14 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import Mathlib.LinearAlgebra.QuadraticForm.TensorProduct
-import Mathlib.LinearAlgebra.QuadraticForm.Basis
-import Mathlib.LinearAlgebra.QuadraticForm.IsometryEquiv
-import Mathlib.LinearAlgebra.Pi
-import Mathlib.RingTheory.Finiteness.Cardinality
-import Mathlib.Algebra.Module.Projective
+module
+
+public import Mathlib.LinearAlgebra.QuadraticForm.TensorProduct
+public import Mathlib.LinearAlgebra.QuadraticForm.Basis
+public import Mathlib.LinearAlgebra.QuadraticForm.IsometryEquiv
+public import Mathlib.LinearAlgebra.Pi
+public import Mathlib.RingTheory.Finiteness.Cardinality
+public import Mathlib.Algebra.Module.Projective
 
 /-!
 # Base change of quadratic maps along `R → A`, without inverting `2`
@@ -73,6 +75,8 @@ and the `QuadraticForm`-valued construction is given a distinct name.
 * GN's definition of non-singularity (`QuadraticForm/Regularity.lean`) needs base change along
   finitely generated projective modules specifically — matching this file's hypothesis exactly.
 -/
+
+@[expose] public section
 
 open scoped TensorProduct
 open LinearMap (BilinMap BilinForm)

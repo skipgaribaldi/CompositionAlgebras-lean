@@ -3,9 +3,11 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import Mathlib.Algebra.MvPolynomial.Eval
-import Mathlib.RingTheory.Ideal.Quotient.Operations
-import Mathlib.Tactic.FieldSimp
+module
+
+public import Mathlib.Algebra.MvPolynomial.Eval
+public import Mathlib.RingTheory.Ideal.Quotient.Operations
+public import Mathlib.Tactic.FieldSimp
 
 /-!
 # LG rings
@@ -62,6 +64,8 @@ content of the LG axiom is in the converse.
 * [GN] Gille, Neher, *Group schemes over LG-rings and applications to cancellation theorems and
   Azumaya algebras*, European Journal of Mathematics **11** (2025), article 42, §2.1.
 -/
+
+@[expose] public section
 
 universe u v
 

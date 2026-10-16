@@ -3,8 +3,10 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.QuadraticForm.Cancellation
-import CompositionAlgebras.QuadraticForm.PlaneTransitivity
+module
+
+public import CompositionAlgebras.QuadraticForm.Cancellation
+public import CompositionAlgebras.QuadraticForm.PlaneTransitivity
 
 /-!
 # Witt cancellation over LG rings (`GN 6.5`, `GPR 11.27`)
@@ -46,6 +48,8 @@ dropped there.
 * I. Dias, *Formas Quadráticas Sobre LG-Anéis*, Ph.D. thesis, Universidade Estadual de Campinas,
   1988, II.6.4.
 -/
+
+@[expose] public section
 
 universe u v v₁ v₂ v₃
 

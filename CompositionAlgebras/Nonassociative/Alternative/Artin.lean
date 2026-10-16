@@ -3,8 +3,10 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Nonassociative.Alternative.Moufang
-import Mathlib.RingTheory.NonUnitalSubring.Basic
+module
+
+public import CompositionAlgebras.Nonassociative.Alternative.Moufang
+public import Mathlib.RingTheory.NonUnitalSubring.Basic
 
 /-!
 # Artin's theorem
@@ -48,6 +50,8 @@ that proves `generators_nuclear`.
 * Zhevlakov, Slin'ko, Shestakov, Shirshov, *Rings That Are Nearly Associative*, ch. 2.
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, Ch. 13.
 -/
+
+@[expose] public section
 
 universe u
 

@@ -3,10 +3,12 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import Mathlib.Tactic.LinearCombination
-import Mathlib.Tactic.Module
-import CompositionAlgebras.Conic.Defs
-import CompositionAlgebras.Nonassociative.Alternative.Defs
+module
+
+public import Mathlib.Tactic.LinearCombination
+public import Mathlib.Tactic.Module
+public import CompositionAlgebras.Conic.Defs
+public import CompositionAlgebras.Nonassociative.Alternative.Defs
 
 /-!
 # Trace, conjugation, and the conic calculus
@@ -73,6 +75,8 @@ out in general, via a localization argument — `GPR 16.14(b)`. It is a small va
   conic calculus), 16.10 and 16.14 (when conjugation is an involution), 17.6 and Exc. 17.8 (the
   role of projectivity, and McCrimmon's counterexample without it).
 -/
+
+@[expose] public section
 
 universe u v
 

@@ -3,7 +3,9 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import Mathlib.Algebra.Ring.Associator
+module
+
+public import Mathlib.Algebra.Ring.Associator
 
 /-!
 # The associator
@@ -36,6 +38,8 @@ moves or renames it, fix the import — do not introduce a local copy. See `AGEN
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, Ch. 13.
 * Schafer, *An Introduction to Nonassociative Algebras*, §3.
 -/
+
+@[expose] public section
 
 universe u
 

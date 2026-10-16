@@ -3,9 +3,11 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Composition.CayleyDickson
-import CompositionAlgebras.Conic.CayleyDicksonAlternative
-import CompositionAlgebras.Conic.CayleyDicksonAssociative
+module
+
+public import CompositionAlgebras.Composition.CayleyDickson
+public import CompositionAlgebras.Conic.CayleyDicksonAlternative
+public import CompositionAlgebras.Conic.CayleyDicksonAssociative
 
 /-!
 # The Cayley–Dickson tower: rank 2, 4 and 8 (`GPR 19.18`)
@@ -84,6 +86,8 @@ them is the job of a later file.
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 18.14, Exc. 18.18,
   19.18.
 -/
+
+@[expose] public section
 
 universe u
 

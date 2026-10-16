@@ -3,12 +3,14 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.LGRing.Defs
-import CompositionAlgebras.Module.Unimodular
-import Mathlib.LinearAlgebra.StdBasis
-import Mathlib.LinearAlgebra.TensorProduct.Tower
-import Mathlib.RingTheory.Finiteness.Projective
-import Mathlib.RingTheory.Ideal.Quotient.Defs
+module
+
+public import CompositionAlgebras.LGRing.Defs
+public import CompositionAlgebras.Module.Unimodular
+public import Mathlib.LinearAlgebra.StdBasis
+public import Mathlib.LinearAlgebra.TensorProduct.Tower
+public import Mathlib.RingTheory.Finiteness.Projective
+public import Mathlib.RingTheory.Ideal.Quotient.Defs
 
 /-!
 # Faithfully projective modules over an LG-ring contain a unimodular element (`GN 2.6(a)`)
@@ -75,6 +77,8 @@ polynomial axiom, at the cost of choosing a presentation of `M`.
   Azumaya algebras*, European Journal of Mathematics **11** (2025), article 42, Lemma 2.6(a).
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 9.13, 11.24.
 -/
+
+@[expose] public section
 
 universe u v
 

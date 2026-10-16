@@ -3,10 +3,13 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import Mathlib.LinearAlgebra.CrossProduct
-import Mathlib.LinearAlgebra.Determinant
-import Mathlib.LinearAlgebra.Dual.Basis
-import Mathlib.LinearAlgebra.ExteriorPower.Basis
+module
+
+public import Mathlib.LinearAlgebra.CrossProduct
+public import Mathlib.LinearAlgebra.Determinant
+public import Mathlib.LinearAlgebra.Dual.Basis
+public import Mathlib.LinearAlgebra.Dual.Lemmas
+public import Mathlib.LinearAlgebra.ExteriorPower.Basis
 
 /-!
 # Vector product pairs (`GPR 22.14`)
@@ -73,6 +76,8 @@ axiom, and neither is the alternating character of the trilinear form
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 21.7, 21.8, 22.14.
 -/
 
+@[expose] public section
+
 universe u v
 
 open Matrix
@@ -115,7 +120,7 @@ structure VectorProductPair where
 a `Fin 3`-indexed tuple whenever two distinct entries agree. This is the combinatorial half of
 `map_eq_zero_of_eq'` for both alternating forms below. For each vector product, two hypotheses
 come from fields of `VectorProductPair`; the third is the derived right-orthogonality identity. -/
-private theorem fin_three_eq_zero_of_apply_eq {X N : Type*} [Zero N] (f : X → X → X → N)
+theorem fin_three_eq_zero_of_apply_eq {X N : Type*} [Zero N] (f : X → X → X → N)
     (h₁ : ∀ v w, f v v w = 0) (h₂ : ∀ v w, f v w v = 0) (h₃ : ∀ v w, f v w w = 0)
     (x : Fin 3 → X) {i j : Fin 3} (hij : x i = x j) (hne : i ≠ j) :
     f (x 0) (x 1) (x 2) = 0 := by

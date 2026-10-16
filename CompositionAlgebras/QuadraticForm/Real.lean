@@ -3,7 +3,9 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import Mathlib.LinearAlgebra.QuadraticForm.Real
+module
+
+public import Mathlib.LinearAlgebra.QuadraticForm.Real
 
 /-!
 # Anisotropic real quadratic forms are definite, and determined by their dimension and sign
@@ -33,6 +35,8 @@ needs; the composition norm takes the value `1` at the identity element.
   reducible by real orthogonal substitutions to the form of a sum of positive and negative
   squares*, Philosophical Magazine **4** (1852), 138–142.
 -/
+
+@[expose] public section
 
 universe v w
 

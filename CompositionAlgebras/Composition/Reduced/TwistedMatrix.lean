@@ -3,10 +3,12 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Composition.Reduced.Defs
-import CompositionAlgebras.Composition.Reduced.Peirce
-import CompositionAlgebras.Composition.Reduced.Splitness
-import CompositionAlgebras.Module.Invertible
+module
+
+public import CompositionAlgebras.Composition.Reduced.Defs
+public import CompositionAlgebras.Composition.Reduced.Peirce
+public import CompositionAlgebras.Composition.Reduced.Splitness
+public import CompositionAlgebras.Module.Invertible
 
 /-!
 # `L`-twisted 2-by-2 matrices (`GPR 22.12`, `22.13`)
@@ -71,6 +73,8 @@ every invertible `L`, with no freeness assumption.
 
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 22.9, 22.12, 22.13.
 -/
+
+@[expose] public section
 
 universe u v
 

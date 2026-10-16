@@ -3,8 +3,10 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Composition.RankDichotomy
-import CompositionAlgebras.Composition.Reduced.Defs
+module
+
+public import CompositionAlgebras.Composition.RankDichotomy
+public import CompositionAlgebras.Composition.Reduced.Defs
 
 /-!
 # Reduced algebras of rank two are split (`GPR 22.10`)
@@ -50,6 +52,8 @@ apply, and the norm has to be carried explicitly in any case (`AGENTS.md` ยง2 โ€
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 19.11, 21.19,
   22.9, 22.10, 22.18.
 -/
+
+@[expose] public section
 
 universe u v w
 

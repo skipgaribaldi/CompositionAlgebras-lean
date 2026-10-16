@@ -3,12 +3,14 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import Mathlib.Algebra.Algebra.Bilinear
-import Mathlib.Algebra.BigOperators.Group.Finset.Sigma
-import Mathlib.Algebra.Module.BigOperators
-import Mathlib.Algebra.Module.Projective
-import Mathlib.RingTheory.Finiteness.Basic
-import CompositionAlgebras.Nonassociative.Alternative.Defs
+module
+
+public import Mathlib.Algebra.Algebra.Bilinear
+public import Mathlib.Algebra.BigOperators.Group.Finset.Sigma
+public import Mathlib.Algebra.Module.BigOperators
+public import Mathlib.Algebra.Module.Projective
+public import Mathlib.RingTheory.Finiteness.Basic
+public import CompositionAlgebras.Nonassociative.Alternative.Defs
 
 /-!
 # Peirce projections in alternative algebras
@@ -44,6 +46,8 @@ the Peirce component `Aᵢⱼ`.
 
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, Exc. 14.12.
 -/
+
+@[expose] public section
 
 universe u v
 

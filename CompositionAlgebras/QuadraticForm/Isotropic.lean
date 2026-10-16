@@ -3,13 +3,15 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import Mathlib.LinearAlgebra.QuadraticForm.Radical
-import Mathlib.LinearAlgebra.FreeModule.PID
-import Mathlib.RingTheory.Flat.TorsionFree
-import CompositionAlgebras.Module.Unimodular
-import CompositionAlgebras.QuadraticForm.Hyperbolic
-import CompositionAlgebras.QuadraticForm.HyperbolicPair
-import CompositionAlgebras.QuadraticForm.Regularity
+module
+
+public import Mathlib.LinearAlgebra.QuadraticForm.Radical
+public import Mathlib.LinearAlgebra.FreeModule.PID
+public import Mathlib.RingTheory.Flat.TorsionFree
+public import CompositionAlgebras.Module.Unimodular
+public import CompositionAlgebras.QuadraticForm.Hyperbolic
+public import CompositionAlgebras.QuadraticForm.HyperbolicPair
+public import CompositionAlgebras.QuadraticForm.Regularity
 
 /-!
 # GPR-sense isotropy
@@ -76,6 +78,8 @@ preserve the null-vector equation.
 * [GN] Gille, Neher, *Group schemes over LG-rings…*, European Journal of Mathematics **11** (2025),
   article 42, 6.5.
 -/
+
+@[expose] public section
 
 universe u v w
 

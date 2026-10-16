@@ -3,7 +3,9 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Composition.Reduced.TwistedZorn
+module
+
+public import CompositionAlgebras.Composition.Reduced.TwistedZorn
 
 /-!
 # Reduced composition algebras of rank eight (`GPR 22.15`)
@@ -38,6 +40,8 @@ constant rank three. This is Petersson's converse theorem `GPR 22.15`.
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, Exc. 19.35, 22.15.
 -/
 
+@[expose] public section
+
 universe u v
 
 namespace ConicAlgebra.IsElementaryIdempotent
@@ -50,7 +54,9 @@ variable {k : Type u} {A : Type v} [CommRing k] [NonAssocRing A] [Module k A]
 abbrev ZornTwistingModule (c : A) :=
   IsAlternative.peirceComponent (R := k) c true false
 
-private noncomputable def lowerProduct (hc : C.IsElementaryIdempotent c) :
+/-- Multiplication of two elements of the lower-left Peirce component `ZornTwistingModule c`,
+which lands in the upper-right component. -/
+noncomputable def lowerProduct (hc : C.IsElementaryIdempotent c) :
     ZornTwistingModule (k := k) c →ₗ[k] ZornTwistingModule (k := k) c →ₗ[k]
       IsAlternative.peirceComponent (R := k) c false true :=
   LinearMap.mk₂ k (fun x y ↦
@@ -61,7 +67,9 @@ private noncomputable def lowerProduct (hc : C.IsElementaryIdempotent c) :
     (fun _ _ _ ↦ Subtype.ext (mul_add ..))
     (fun _ _ _ ↦ Subtype.ext (mul_smul_comm ..))
 
-private noncomputable def upperProduct (hc : C.IsElementaryIdempotent c) :
+/-- Multiplication of two elements of the upper-right Peirce component, which lands in
+`ZornTwistingModule c`. -/
+noncomputable def upperProduct (hc : C.IsElementaryIdempotent c) :
     IsAlternative.peirceComponent (R := k) c false true →ₗ[k]
       IsAlternative.peirceComponent (R := k) c false true →ₗ[k]
         ZornTwistingModule (k := k) c :=
@@ -73,11 +81,11 @@ private noncomputable def upperProduct (hc : C.IsElementaryIdempotent c) :
     (fun _ _ _ ↦ Subtype.ext (mul_add ..))
     (fun _ _ _ ↦ Subtype.ext (mul_smul_comm ..))
 
-@[simp] private theorem lowerProduct_apply (hc : C.IsElementaryIdempotent c)
+@[simp] theorem lowerProduct_apply (hc : C.IsElementaryIdempotent c)
     (x y : ZornTwistingModule (k := k) c) :
     (hc.lowerProduct x y : A) = (x : A) * y := rfl
 
-@[simp] private theorem upperProduct_apply (hc : C.IsElementaryIdempotent c)
+@[simp] theorem upperProduct_apply (hc : C.IsElementaryIdempotent c)
     (x y : IsAlternative.peirceComponent (R := k) c false true) :
     (hc.upperProduct x y : A) = (x : A) * y := rfl
 

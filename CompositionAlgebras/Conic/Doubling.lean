@@ -3,10 +3,12 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Conic.CayleyDickson
-import CompositionAlgebras.Conic.Subalgebra
-import CompositionAlgebras.Nonassociative.Alternative.Moufang
-import CompositionAlgebras.QuadraticForm.Regularity
+module
+
+public import CompositionAlgebras.Conic.CayleyDickson
+public import CompositionAlgebras.Conic.Subalgebra
+public import CompositionAlgebras.Nonassociative.Alternative.Moufang
+public import CompositionAlgebras.QuadraticForm.Regularity
 
 /-!
 # Doubling inside an ambient conic algebra (`GPR 18.1`)
@@ -75,6 +77,8 @@ multiplicativity of the norm; those enter only when the norm of the doubled alge
 
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 18.1, 18.3.
 -/
+
+@[expose] public section
 
 universe u v
 

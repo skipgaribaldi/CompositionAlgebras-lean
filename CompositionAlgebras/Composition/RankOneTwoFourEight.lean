@@ -3,10 +3,12 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Composition.Tower
-import CompositionAlgebras.Conic.CayleyDicksonAlternative
-import CompositionAlgebras.Conic.CayleyDicksonAssociative
-import CompositionAlgebras.LGRing.Semilocal
+module
+
+public import CompositionAlgebras.Composition.Tower
+public import CompositionAlgebras.Conic.CayleyDicksonAlternative
+public import CompositionAlgebras.Conic.CayleyDicksonAssociative
+public import CompositionAlgebras.LGRing.Semilocal
 
 /-!
 # The rank of a composition algebra is 1, 2, 4 or 8 (`GPR 19.18`)
@@ -81,6 +83,8 @@ of the previous one and so a different type.
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 18.14(c), 19.3,
   19.11, 19.17, 19.18.
 -/
+
+@[expose] public section
 
 universe u v w
 

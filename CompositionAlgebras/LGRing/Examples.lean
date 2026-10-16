@@ -3,7 +3,9 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.LGRing.Defs
+module
+
+public import CompositionAlgebras.LGRing.Defs
 
 /-!
 # Examples of LG rings
@@ -31,6 +33,8 @@ property transfer). Both halves of `GPR 11.21` are now proved — `LGRing/Jacobs
 * [EG] Estes, Guralnick, *Module equivalences: local to global when primitive polynomials represent
   units*, Journal of Algebra **77** (1982), 138–157.
 -/
+
+@[expose] public section
 
 universe u
 

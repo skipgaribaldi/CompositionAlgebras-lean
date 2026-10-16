@@ -3,7 +3,9 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Conic.CayleyDickson
+module
+
+public import CompositionAlgebras.Conic.CayleyDickson
 
 /-!
 # Commutativity and associativity of the double (`GPR 18.14(a),(b)`)
@@ -64,6 +66,8 @@ finitely generated projective, or the base is a field.
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 18.13,
   18.14(a),(b).
 -/
+
+@[expose] public section
 
 universe u v
 

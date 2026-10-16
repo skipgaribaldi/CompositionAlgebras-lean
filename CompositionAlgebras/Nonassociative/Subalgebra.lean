@@ -3,7 +3,9 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import Mathlib.Algebra.Algebra.NonUnitalSubalgebra
+module
+
+public import Mathlib.Algebra.Algebra.NonUnitalSubalgebra
 
 /-!
 # Unital subalgebras of non-associative algebras
@@ -25,6 +27,8 @@ The underlying multiplication and scalar-action API is inherited from
 from which mathlib supplies the unit, the casts and the `NonAssocRing` structure on each
 subalgebra (`SubringClass.toNonAssocRing`).
 -/
+
+@[expose] public section
 
 universe u v
 

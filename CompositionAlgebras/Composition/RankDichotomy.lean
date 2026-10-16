@@ -3,8 +3,10 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Composition.Basic
-import CompositionAlgebras.Composition.RankTwoSubalgebra
+module
+
+public import CompositionAlgebras.Composition.Basic
+public import CompositionAlgebras.Composition.RankTwoSubalgebra
 
 /-!
 # The regular-or-rank-one dichotomy for composition algebras
@@ -32,6 +34,8 @@ whole polar form to vanish, and its one-dimensional kernel is therefore the whol
 
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 19.9, 19.11.
 -/
+
+@[expose] public section
 
 universe u v
 

@@ -3,10 +3,12 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import Mathlib.LinearAlgebra.Dual.Basis
-import Mathlib.LinearAlgebra.Dual.BaseChange
-import Mathlib.LinearAlgebra.ExteriorPower.Basis
-import Mathlib.RingTheory.TensorProduct.Basic
+module
+
+public import Mathlib.LinearAlgebra.Dual.Basis
+public import Mathlib.LinearAlgebra.Dual.BaseChange
+public import Mathlib.LinearAlgebra.ExteriorPower.Basis
+public import Mathlib.RingTheory.TensorProduct.Basic
 
 /-!
 # Exterior powers of finite projective modules
@@ -30,6 +32,8 @@ pairing transports the inverse across that retraction, avoiding any choice of lo
 * [GPR] Skip Garibaldi, Holger Petersson, and Michel Racine, *Albert Algebras over Commutative
   Rings*, 21.7.
 -/
+
+@[expose] public section
 
 universe u v w
 

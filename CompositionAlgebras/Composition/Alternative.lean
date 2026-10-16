@@ -3,8 +3,10 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Composition.RankDichotomy
-import CompositionAlgebras.Module.RankDecomposition
+module
+
+public import CompositionAlgebras.Composition.RankDichotomy
+public import CompositionAlgebras.Module.RankDecomposition
 
 /-!
 # Composition algebras are alternative, over an arbitrary commutative ring
@@ -61,6 +63,8 @@ decomposition is empty and the module is a subsingleton, so the argument is vacu
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 19.3, 19.6,
   19.7(c), 19.11, Exc. 9.31.
 -/
+
+@[expose] public section
 
 universe u v w
 

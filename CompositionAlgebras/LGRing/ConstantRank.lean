@@ -3,8 +3,10 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.LGRing.Unimodular
-import Mathlib.RingTheory.Spectrum.Prime.FreeLocus
+module
+
+public import CompositionAlgebras.LGRing.Unimodular
+public import Mathlib.RingTheory.Spectrum.Prime.FreeLocus
 
 /-!
 # Constant-rank projective modules over an LG-ring are free (`GN 2.6(b)`, `GPR 11.24`)
@@ -55,6 +57,8 @@ reading the rank at that field's unique prime `⊥` gives back the rank of `M` a
   also stated as 2.1(c).
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 11.24.
 -/
+
+@[expose] public section
 
 universe u v
 

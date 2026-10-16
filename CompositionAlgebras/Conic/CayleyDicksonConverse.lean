@@ -3,10 +3,12 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Conic.CayleyDicksonAlternative
-import CompositionAlgebras.Conic.CayleyDicksonAssociative
-import CompositionAlgebras.Conic.Multiplicative
-import CompositionAlgebras.Conic.Projective
+module
+
+public import CompositionAlgebras.Conic.CayleyDicksonAlternative
+public import CompositionAlgebras.Conic.CayleyDicksonAssociative
+public import CompositionAlgebras.Conic.Multiplicative
+public import CompositionAlgebras.Conic.Projective
 
 /-!
 # The converse halves of `GPR 18.14` and `GPR 18.15`
@@ -54,6 +56,8 @@ well-chosen instance, exactly as in `GPR 18.14(c)`:
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 18.14, 18.15,
   16.14(b).
 -/
+
+@[expose] public section
 
 universe u v
 

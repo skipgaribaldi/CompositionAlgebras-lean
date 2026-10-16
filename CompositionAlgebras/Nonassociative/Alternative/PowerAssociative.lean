@@ -3,8 +3,10 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Nonassociative.Alternative.Artin
-import Mathlib.Algebra.Group.PNatPowAssoc
+module
+
+public import CompositionAlgebras.Nonassociative.Alternative.Artin
+public import Mathlib.Algebra.Group.PNatPowAssoc
 
 /-!
 # Power-associativity of alternative rings
@@ -41,18 +43,20 @@ local instance then gives mathlib's API (`ppow_mul_assoc`, `ppow_mul_comm`, `ppo
 * Schafer, *An Introduction to Nonassociative Algebras*, §3.
 -/
 
+@[expose] public section
+
 universe u
 
 /-- Left-recursive power for positive exponents: `nonassocPow n a = a ^ (n + 1)`.
 Private implementation detail — see the module docstring. -/
-private def nonassocPow {α : Type u} [Mul α] : ℕ → α → α
+def nonassocPow {α : Type u} [Mul α] : ℕ → α → α
   | 0, a => a
   | n + 1, a => a * nonassocPow n a
 
 @[simp]
-private theorem nonassocPow_zero {α : Type u} [Mul α] (a : α) : nonassocPow 0 a = a := rfl
+theorem nonassocPow_zero {α : Type u} [Mul α] (a : α) : nonassocPow 0 a = a := rfl
 
-@[simp] private theorem nonassocPow_succ {α : Type u} [Mul α] (n : ℕ) (a : α) :
+@[simp] theorem nonassocPow_succ {α : Type u} [Mul α] (n : ℕ) (a : α) :
     nonassocPow (n + 1) a = a * nonassocPow n a := rfl
 
 /-- Positive powers by left recursion, `a ^ 1 = a` and `a ^ (n + 1) = a * a ^ n`, as a power by

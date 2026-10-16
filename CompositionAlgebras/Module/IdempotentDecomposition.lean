@@ -3,8 +3,10 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import Mathlib.RingTheory.Idempotents
-import Mathlib.RingTheory.QuotSMulTop
+module
+
+public import Mathlib.RingTheory.Idempotents
+public import Mathlib.RingTheory.QuotSMulTop
 
 /-!
 # Decomposing a module along a complete orthogonal system of idempotents
@@ -39,6 +41,8 @@ The factors are `QuotSMulTop (1 - eᵢ) M`, mathlib's abbreviation for `M ⧸ (1
 than the tensor products `(R ⧸ (1 - eᵢ)) ⊗[R] M`, because the quotient form is what the proof
 manipulates. `linearEquivPiQuotientTensor` converts.
 -/
+
+@[expose] public section
 
 universe u v w
 

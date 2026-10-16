@@ -305,6 +305,16 @@ Keep imports minimal in general: import the specific mathlib files you need, not
 `import Mathlib`. (`import Mathlib` is acceptable only in scratch files that are not part of the
 build.)
 
+### The module system
+
+Every file is a Lean **module**, as in mathlib: the copyright header, then `module`, then the
+imports as `public import …`, then the module docstring, then `@[expose] public section`.
+Under the module system a file sees only what its imports export, so a declaration that a
+mathlib file imports privately must be imported directly; and a `private` declaration may be used
+in proofs but not in a public statement or in the body of an exposed (public) definition —
+including the proof fields of a structure or instance. Make such a helper public, with a
+docstring, rather than working around the check.
+
 ---
 
 ## 4. Documentation
@@ -475,7 +485,8 @@ contradicts the source, suspect the paraphrase before the source.
   with the build verified.
 - `lake exe cache get` before `lake build`.
 - New files must be added to the root import file (`CompositionAlgebras.lean`) so that
-  `lake build` covers them.
+  `lake build` covers them, and must be modules (§3, *The module system*).
+- The build must be warning-free, and `lake lint` must pass.
 - CI must be green before merge. A red build is never "fixed later".
 
 ---

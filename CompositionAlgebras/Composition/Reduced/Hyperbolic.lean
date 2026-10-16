@@ -3,8 +3,10 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Composition.Reduced.Peirce
-import CompositionAlgebras.Composition.Reduced.TwistedMatrix
+module
+
+public import CompositionAlgebras.Composition.Reduced.Peirce
+public import CompositionAlgebras.Composition.Reduced.TwistedMatrix
 
 /-!
 # The norm of a reduced composition algebra is hyperbolic (`GPR 22.9(iv)`)
@@ -34,6 +36,8 @@ as an isometry equivalence and completes clause (iv) of `GPR 22.9`.
 
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, Exc. 19.35, 22.9.
 -/
+
+@[expose] public section
 
 universe u v
 

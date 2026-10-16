@@ -3,10 +3,12 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.LGRing.Jacobson
-import CompositionAlgebras.LGRing.ValueIdeal
-import Mathlib.RingTheory.Ideal.Maps
-import Mathlib.RingTheory.KrullDimension.Basic
+module
+
+public import CompositionAlgebras.LGRing.Jacobson
+public import CompositionAlgebras.LGRing.ValueIdeal
+public import Mathlib.RingTheory.Ideal.Maps
+public import Mathlib.RingTheory.KrullDimension.Basic
 
 /-!
 # Von Neumann regular and zero-dimensional rings are LG
@@ -73,6 +75,8 @@ transporting polynomials back and forth for no gain.
 * [EG] Estes, Guralnick, *Module equivalences: local to global when primitive polynomials represent
   units*, Journal of Algebra **77** (1982), 138–157.
 -/
+
+@[expose] public section
 
 universe u
 

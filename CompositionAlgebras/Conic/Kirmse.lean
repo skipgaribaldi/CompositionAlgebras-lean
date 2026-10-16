@@ -3,8 +3,10 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Conic.Multiplicative
-import CompositionAlgebras.QuadraticForm.Regularity
+module
+
+public import CompositionAlgebras.Conic.Multiplicative
+public import CompositionAlgebras.QuadraticForm.Regularity
 
 /-!
 # Kirmse's identities, and alternativity of a multiplicative conic algebra
@@ -84,6 +86,8 @@ regularity where the rank exceeds one, and commutativity and associativity outri
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 19.3 (composition
   algebras are alternative), 16.5 (norm-associativity).
 -/
+
+@[expose] public section
 
 universe u v
 

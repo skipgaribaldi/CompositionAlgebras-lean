@@ -3,8 +3,10 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Conic.BaseChange
-import CompositionAlgebras.Conic.Multiplicative
+module
+
+public import CompositionAlgebras.Conic.BaseChange
+public import CompositionAlgebras.Conic.Multiplicative
 
 /-!
 # Base change preserves multiplicativity (`GPR 19.7`)
@@ -47,6 +49,8 @@ change the norm at all.
 
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 19.1, 19.7.
 -/
+
+@[expose] public section
 
 universe u v w
 

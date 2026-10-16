@@ -3,8 +3,10 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.QuadraticForm.Regularity
-import Mathlib.LinearAlgebra.QuadraticForm.Dual
+module
+
+public import CompositionAlgebras.QuadraticForm.Regularity
+public import Mathlib.LinearAlgebra.QuadraticForm.Dual
 
 /-!
 # Hyperbolic quadratic forms
@@ -65,6 +67,8 @@ finitely generated projective modules. The second is mathlib's
 * R. Baeza, *Quadratic Forms over Semilocal Rings*, Lecture Notes in Math. **655**, Springer 1978,
   I, (4.7).
 -/
+
+@[expose] public section
 
 universe u v w t₁
 

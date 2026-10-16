@@ -3,10 +3,12 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Composition.BaseChange
-import CompositionAlgebras.Composition.NormClassification
-import CompositionAlgebras.Composition.Reduced.Defs
-import CompositionAlgebras.Module.RankDecomposition
+module
+
+public import CompositionAlgebras.Composition.BaseChange
+public import CompositionAlgebras.Composition.NormClassification
+public import CompositionAlgebras.Composition.Reduced.Defs
+public import CompositionAlgebras.Module.RankDecomposition
 
 /-!
 # Split composition algebras (`GPR 21.19`)
@@ -56,6 +58,8 @@ for `r = 1, 2, 4, 8`, exactly as in the rank decomposition. Zero factors are ret
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, Exc. 9.31,
   21.19, 22.16.
 -/
+
+@[expose] public section
 
 universe u v w t
 

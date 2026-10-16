@@ -3,9 +3,11 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Conic.Multiplicative
-import CompositionAlgebras.Nonassociative.Alternative.Defs
-import CompositionAlgebras.Nonassociative.Division
+module
+
+public import CompositionAlgebras.Conic.Multiplicative
+public import CompositionAlgebras.Nonassociative.Alternative.Defs
+public import CompositionAlgebras.Nonassociative.Division
 
 /-!
 # Division conic algebras (`GPR 8.6`, `GPR 13.8`)
@@ -48,6 +50,8 @@ So when `n(x)` is invertible, `n(x)⁻¹ x̄` inverts left and right multiplicat
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 8.6, 13.8,
   Exc. 19.29.
 -/
+
+@[expose] public section
 
 universe u v
 

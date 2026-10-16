@@ -3,8 +3,10 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Composition.RankTwoSubalgebra
-import CompositionAlgebras.Composition.Reduced.Classification
+module
+
+public import CompositionAlgebras.Composition.RankTwoSubalgebra
+public import CompositionAlgebras.Composition.Reduced.Classification
 
 /-!
 # Splitting octonion algebras from their quadratic étale subalgebras
@@ -39,6 +41,8 @@ which is the step that transports the elementary idempotent into the octonion al
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 19.8, 19.16(b),
   22.9, 22.16.
 -/
+
+@[expose] public section
 
 universe u v
 

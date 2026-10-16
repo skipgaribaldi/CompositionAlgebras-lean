@@ -3,7 +3,9 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Conic.Basic
+module
+
+public import CompositionAlgebras.Conic.Basic
 
 /-!
 # An associative conic algebra whose conjugation is not an anti-homomorphism
@@ -80,6 +82,8 @@ escape into the rest of the development.
   17.6, and Exc. 17.8.
 * K. McCrimmon, the source of `GPR Exc. 17.8` (`GPR`'s reference [189]).
 -/
+
+@[expose] public section
 
 namespace ConicAlgebra
 

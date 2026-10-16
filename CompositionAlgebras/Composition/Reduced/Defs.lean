@@ -3,9 +3,11 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Composition.Reduced.Split
-import CompositionAlgebras.QuadraticForm.Isotropic
-import CompositionAlgebras.QuadraticForm.PlaneSplitting
+module
+
+public import CompositionAlgebras.Composition.Reduced.Split
+public import CompositionAlgebras.QuadraticForm.Isotropic
+public import CompositionAlgebras.QuadraticForm.PlaneSplitting
 
 /-!
 # Elementary idempotents and reduced composition algebras (`GPR 22.6–22.9`)
@@ -84,6 +86,8 @@ the same data, presented once.
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 9.13,
   Exc. 16.23, 21.19, 22.6, 22.7, 22.9.
 -/
+
+@[expose] public section
 
 universe u v
 

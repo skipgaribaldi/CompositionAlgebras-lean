@@ -3,7 +3,9 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import Mathlib.LinearAlgebra.QuadraticForm.Basic
+module
+
+public import Mathlib.LinearAlgebra.QuadraticForm.Basic
 
 /-!
 # Conic algebras
@@ -51,6 +53,8 @@ implies exactly these four for such `A`, so associative examples need no extra w
 
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 16.1.
 -/
+
+@[expose] public section
 
 universe u v
 

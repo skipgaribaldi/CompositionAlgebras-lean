@@ -3,10 +3,12 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Composition.Fields.Basic
-import CompositionAlgebras.Composition.QuadraticEtale
-import CompositionAlgebras.QuadraticForm.FiniteField
-import Mathlib.FieldTheory.Finite.Extension
+module
+
+public import CompositionAlgebras.Composition.Fields.Basic
+public import CompositionAlgebras.Composition.QuadraticEtale
+public import CompositionAlgebras.QuadraticForm.FiniteField
+public import Mathlib.FieldTheory.Finite.Extension
 
 /-!
 # Composition algebras over a finite field (`GPR 23.14`)
@@ -67,6 +69,8 @@ give the dimension-two half of `GPR 23.14` in full.
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 8.6, 13.8, 22.18,
   23.14.
 -/
+
+@[expose] public section
 
 universe u v w
 

@@ -3,9 +3,11 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Composition.Examples
-import CompositionAlgebras.Conic.Division
-import CompositionAlgebras.Composition.RankOneTwoFourEight
+module
+
+public import CompositionAlgebras.Composition.Examples
+public import CompositionAlgebras.Conic.Division
+public import CompositionAlgebras.Composition.RankOneTwoFourEight
 
 /-!
 # The sedenions: a conic algebra that is not a composition algebra (`GPR 19.23`)
@@ -69,6 +71,8 @@ instance, obtained without proving that converse in general.
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 8.6, 13.8,
   18.14(c), Exc. 18.18, 19.3, 19.18, 19.23, Exc. 19.29.
 -/
+
+@[expose] public section
 
 universe u v
 

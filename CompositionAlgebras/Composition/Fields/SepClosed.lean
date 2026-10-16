@@ -3,10 +3,12 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Composition.Fields.Basic
-import CompositionAlgebras.Composition.QuadraticEtale
-import CompositionAlgebras.Composition.Reduced.Capstone
-import Mathlib.FieldTheory.IsSepClosed
+module
+
+public import CompositionAlgebras.Composition.Fields.Basic
+public import CompositionAlgebras.Composition.QuadraticEtale
+public import CompositionAlgebras.Composition.Reduced.Capstone
+public import Mathlib.FieldTheory.IsSepClosed
 
 /-!
 # Fields over which every quadratic étale algebra splits (`GPR 23.12`)
@@ -58,6 +60,8 @@ therefore never needs a square root of a general element in characteristic two.
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 19.11, 22.18,
   23.12.
 -/
+
+@[expose] public section
 
 universe u v w
 

@@ -3,10 +3,12 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Module.RankDecomposition
-import CompositionAlgebras.QuadraticForm.Isotropic
-import CompositionAlgebras.QuadraticForm.PlaneCancellation
-import CompositionAlgebras.QuadraticForm.Representation
+module
+
+public import CompositionAlgebras.Module.RankDecomposition
+public import CompositionAlgebras.QuadraticForm.Isotropic
+public import CompositionAlgebras.QuadraticForm.PlaneCancellation
+public import CompositionAlgebras.QuadraticForm.Representation
 
 /-!
 # `Dias II.6.1`–`II.6.2`: transitivity on hyperbolic pairs
@@ -75,6 +77,8 @@ with no hypothesis on the support of `M₀` at all.
 * R. Baeza, *Quadratic Forms over Semilocal Rings*, Lecture Notes in Math. **655**, Springer 1978,
   III, (2.3).
 -/
+
+@[expose] public section
 
 universe u v v₁
 

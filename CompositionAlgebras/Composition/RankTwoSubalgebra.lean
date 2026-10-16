@@ -3,12 +3,14 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Composition.Basic
-import CompositionAlgebras.Composition.BaseChange
-import CompositionAlgebras.Composition.QuadraticSubalgebra
-import CompositionAlgebras.LGRing.Defs
-import CompositionAlgebras.QuadraticForm.Polynomial
-import Mathlib.FieldTheory.IsAlgClosed.AlgebraicClosure
+module
+
+public import CompositionAlgebras.Composition.Basic
+public import CompositionAlgebras.Composition.BaseChange
+public import CompositionAlgebras.Composition.QuadraticSubalgebra
+public import CompositionAlgebras.LGRing.Defs
+public import CompositionAlgebras.QuadraticForm.Polynomial
+public import Mathlib.FieldTheory.IsAlgClosed.AlgebraicClosure
 
 /-!
 # `GPR 19.16(b)`: rank greater than one gives a separable quadratic subalgebra
@@ -79,6 +81,8 @@ LG axiom and not `GPR 11.26` that does the work.
 
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 19.8, 19.16(b).
 -/
+
+@[expose] public section
 
 universe u v
 

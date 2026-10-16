@@ -3,9 +3,11 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Composition.Doubling
-import CompositionAlgebras.Composition.RankDichotomy
-import CompositionAlgebras.Composition.RankTwoSubalgebra
+module
+
+public import CompositionAlgebras.Composition.Doubling
+public import CompositionAlgebras.Composition.RankDichotomy
+public import CompositionAlgebras.Composition.RankTwoSubalgebra
 
 /-!
 # The Cayley–Dickson tower exhausts a composition algebra (`GPR 19.17`)
@@ -82,6 +84,8 @@ closure under multiplication needs the orthogonality and invertibility hypothese
 * [GN] Gille, Neher, *Group schemes over LG-rings…*, European J. Math. **11** (2025), art. 42,
   C.8.3.
 -/
+
+@[expose] public section
 
 universe u v
 

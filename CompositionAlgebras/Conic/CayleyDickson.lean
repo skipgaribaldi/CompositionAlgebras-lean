@@ -3,11 +3,13 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Conic.Basic
-import Mathlib.LinearAlgebra.QuadraticForm.Prod
-import Mathlib.RingTheory.Finiteness.Prod
-import Mathlib.Algebra.Module.Projective
-import Mathlib.LinearAlgebra.FreeModule.StrongRankCondition
+module
+
+public import CompositionAlgebras.Conic.Basic
+public import Mathlib.LinearAlgebra.QuadraticForm.Prod
+public import Mathlib.RingTheory.Finiteness.Prod
+public import Mathlib.Algebra.Module.Projective
+public import Mathlib.LinearAlgebra.FreeModule.StrongRankCondition
 
 /-!
 # The Cayley–Dickson construction (`GPR 18.3`, `GPR 18.4`)
@@ -62,6 +64,8 @@ the one used here and in `GPR 18.3` ff.
 
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 18.1–18.4.
 -/
+
+@[expose] public section
 
 universe u v w
 

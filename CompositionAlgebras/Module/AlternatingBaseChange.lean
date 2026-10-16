@@ -3,10 +3,12 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import Mathlib.LinearAlgebra.Alternating.Curry
-import Mathlib.LinearAlgebra.Dual.BaseChange
-import Mathlib.LinearAlgebra.Matrix.Determinant.Basic
-import Mathlib.RingTheory.TensorProduct.Basic
+module
+
+public import Mathlib.LinearAlgebra.Alternating.Curry
+public import Mathlib.LinearAlgebra.Dual.BaseChange
+public import Mathlib.LinearAlgebra.Matrix.Determinant.Basic
+public import Mathlib.RingTheory.TensorProduct.Basic
 
 /-!
 # Base change of alternating trilinear forms
@@ -27,6 +29,8 @@ the resulting form remains alternating, without any assumption that two is inver
 * `AlternatingMap.baseChangeFinThree_mul_eq_det` : scalar extension preserves the determinant
   identity coupling a form on a module to one on its dual.
 -/
+
+@[expose] public section
 
 universe u v w
 

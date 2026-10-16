@@ -3,7 +3,9 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.QuadraticForm.Hyperbolic
+module
+
+public import CompositionAlgebras.QuadraticForm.Hyperbolic
 
 /-!
 # Witt cancellation: the reduction to the hyperbolic case
@@ -107,6 +109,8 @@ holds in full generality, and the rank decomposition `GPR Exc. 9.31` is availabl
   Forms*, AMS Colloquium Publications **56**, 2008, p. 49: the counterexample bounding the
   hypothesis on `q₃`.
 -/
+
+@[expose] public section
 
 universe u v₁ v₂ v₃
 

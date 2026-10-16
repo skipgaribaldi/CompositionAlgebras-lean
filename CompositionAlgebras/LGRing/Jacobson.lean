@@ -3,9 +3,11 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.LGRing.Defs
-import Mathlib.RingTheory.Jacobson.Ideal
-import Mathlib.RingTheory.Jacobson.Radical
+module
+
+public import CompositionAlgebras.LGRing.Defs
+public import Mathlib.RingTheory.Jacobson.Ideal
+public import Mathlib.RingTheory.Jacobson.Radical
 
 /-!
 # `R` is LG iff `R ⧸ Jac(R)` is LG
@@ -43,6 +45,8 @@ unit for `j ∈ Jac(R)` actually gets used.
 * [GN] Gille, Neher, *Group schemes over LG-rings and applications to cancellation theorems and
   Azumaya algebras*, European Journal of Mathematics **11** (2025), article 42, §2.1(b).
 -/
+
+@[expose] public section
 
 universe u v
 

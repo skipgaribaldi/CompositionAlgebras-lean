@@ -3,8 +3,10 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Conic.CayleyDickson
-import CompositionAlgebras.Conic.Multiplicative
+module
+
+public import CompositionAlgebras.Conic.CayleyDickson
+public import CompositionAlgebras.Conic.Multiplicative
 
 /-!
 # The double of an associative multiplicative conic algebra is multiplicative (`GPR Exc. 18.18`)
@@ -45,6 +47,8 @@ underlying `B`.
 
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 18.13, Exc. 18.18.
 -/
+
+@[expose] public section
 
 universe u v
 

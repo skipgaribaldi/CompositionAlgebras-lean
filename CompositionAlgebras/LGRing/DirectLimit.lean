@@ -3,9 +3,11 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.LGRing.ValueIdeal
-import Mathlib.Algebra.Colimit.Ring
-import Mathlib.Data.Finset.Order
+module
+
+public import CompositionAlgebras.LGRing.ValueIdeal
+public import Mathlib.Algebra.Colimit.Ring
+public import Mathlib.Data.Finset.Order
 
 /-!
 # Direct limits of LG-rings
@@ -49,6 +51,8 @@ the value ideal removes maximal ideals from the argument entirely, which is the 
 * [EG] Estes, Guralnick, *Module equivalences: local to global when primitive polynomials represent
   units*, Journal of Algebra **77** (1982), 138–157.
 -/
+
+@[expose] public section
 
 universe u v
 

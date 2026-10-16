@@ -3,8 +3,10 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import Mathlib.LinearAlgebra.Unimodular
-import Mathlib.LinearAlgebra.Dual.Lemmas
+module
+
+public import Mathlib.LinearAlgebra.Unimodular
+public import Mathlib.LinearAlgebra.Dual.Lemmas
 
 /-!
 # Unimodular elements of a module
@@ -55,6 +57,8 @@ summand" in the `GPR 9.13` characterization rather than inventing a submodule-sp
 
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 9.13, 9.17, 11.24.
 -/
+
+@[expose] public section
 
 universe u v
 

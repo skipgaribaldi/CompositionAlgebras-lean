@@ -3,8 +3,10 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Composition.Examples
-import Mathlib.Analysis.Quaternion
+module
+
+public import CompositionAlgebras.Composition.Examples
+public import Mathlib.Analysis.Quaternion
 
 /-!
 # The first two rungs are mathlib's `ℂ` and `ℍ`
@@ -49,6 +51,8 @@ algebra).
 
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 18.4, 19.18.
 -/
+
+@[expose] public section
 
 namespace ConicAlgebra
 
@@ -139,12 +143,12 @@ private theorem quaternion_star_mk (a b c d : ℝ) :
   exact ⟨by ring, rfl, rfl, rfl⟩
 
 /-- The underlying map `((a, b), (c, d)) ↦ a + bi + cj + dk`. -/
-private def toQuaternion (x : RealQuaternion) : ℍ[ℝ] := ⟨x.1.1, x.1.2, x.2.1, x.2.2⟩
+def toQuaternion (x : RealQuaternion) : ℍ[ℝ] := ⟨x.1.1, x.1.2, x.2.1, x.2.2⟩
 
-private theorem toQuaternion_apply (x : RealQuaternion) :
+theorem toQuaternion_apply (x : RealQuaternion) :
     toQuaternion x = ⟨x.1.1, x.1.2, x.2.1, x.2.2⟩ := rfl
 
-private theorem toQuaternion_mul (x y : RealQuaternion) :
+theorem toQuaternion_mul (x y : RealQuaternion) :
     toQuaternion (x * y) = toQuaternion x * toQuaternion y := by
   change (⟨(x * y).1.1, (x * y).1.2, (x * y).2.1, (x * y).2.2⟩ : ℍ[ℝ, -1, 0, -1]) =
     (⟨x.1.1, x.1.2, x.2.1, x.2.2⟩ : ℍ[ℝ, -1, 0, -1]) * ⟨y.1.1, y.1.2, y.2.1, y.2.2⟩

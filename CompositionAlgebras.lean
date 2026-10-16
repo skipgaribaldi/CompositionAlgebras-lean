@@ -3,101 +3,103 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Composition.BaseChange
-import CompositionAlgebras.Composition.Basic
-import CompositionAlgebras.Composition.Alternative
-import CompositionAlgebras.Composition.CayleyDickson
-import CompositionAlgebras.Composition.ComplexQuaternion
-import CompositionAlgebras.Composition.Defs
-import CompositionAlgebras.Composition.Doubling
-import CompositionAlgebras.Composition.Examples
-import CompositionAlgebras.Composition.Fields.Basic
-import CompositionAlgebras.Composition.Fields.Finite
-import CompositionAlgebras.Composition.Fields.Real
-import CompositionAlgebras.Composition.Fields.SepClosed
-import CompositionAlgebras.Composition.Fields.SurjectiveNorm
-import CompositionAlgebras.Composition.Inseparable
-import CompositionAlgebras.Composition.InseparableAnisotropic
-import CompositionAlgebras.Composition.NormClassification
-import CompositionAlgebras.Composition.NormEquivalence
-import CompositionAlgebras.Composition.Octonion
-import CompositionAlgebras.Composition.QuadraticEtale
-import CompositionAlgebras.Composition.QuadraticSubalgebra
-import CompositionAlgebras.Composition.RankDichotomy
-import CompositionAlgebras.Composition.RankOneTwoFourEight
-import CompositionAlgebras.Composition.RankTwoSubalgebra
-import CompositionAlgebras.Composition.Reduced.Defs
-import CompositionAlgebras.Composition.Reduced.Classification
-import CompositionAlgebras.Composition.Reduced.Capstone
-import CompositionAlgebras.Composition.Reduced.Hyperbolic
-import CompositionAlgebras.Composition.Reduced.Orientation
-import CompositionAlgebras.Composition.Reduced.Peirce
-import CompositionAlgebras.Composition.Reduced.RankTwo
-import CompositionAlgebras.Composition.Reduced.Reducedness
-import CompositionAlgebras.Composition.Reduced.Split
-import CompositionAlgebras.Composition.Reduced.Splitness
-import CompositionAlgebras.Composition.Reduced.TwistedMatrix
-import CompositionAlgebras.Composition.Reduced.TwistedZorn
-import CompositionAlgebras.Composition.Reduced.RankEight
-import CompositionAlgebras.Composition.Reduced.Zorn
-import CompositionAlgebras.Composition.Sedenion
-import CompositionAlgebras.Composition.Tower
-import CompositionAlgebras.Conic.BaseChange
-import CompositionAlgebras.Conic.BaseChangeMultiplicative
-import CompositionAlgebras.Conic.Basic
-import CompositionAlgebras.Conic.CayleyDickson
-import CompositionAlgebras.Conic.CayleyDicksonAlternative
-import CompositionAlgebras.Conic.CayleyDicksonAssociative
-import CompositionAlgebras.Conic.CayleyDicksonConverse
-import CompositionAlgebras.Conic.CayleyDicksonMultiplicative
-import CompositionAlgebras.Conic.Defs
-import CompositionAlgebras.Conic.Division
-import CompositionAlgebras.Conic.Doubling
-import CompositionAlgebras.Conic.Kirmse
-import CompositionAlgebras.Conic.Multiplicative
-import CompositionAlgebras.Conic.Projective
-import CompositionAlgebras.Conic.Subalgebra
-import CompositionAlgebras.Conic.TraceDefectCounterexample
-import CompositionAlgebras.LGRing.ConstantRank
-import CompositionAlgebras.LGRing.Defs
-import CompositionAlgebras.LGRing.DirectLimit
-import CompositionAlgebras.LGRing.Examples
-import CompositionAlgebras.LGRing.Jacobson
-import CompositionAlgebras.LGRing.NonExamples
-import CompositionAlgebras.LGRing.Products
-import CompositionAlgebras.LGRing.Semilocal
-import CompositionAlgebras.LGRing.Unimodular
-import CompositionAlgebras.LGRing.ValueIdeal
-import CompositionAlgebras.LGRing.ZeroDimensional
-import CompositionAlgebras.Module.AlternatingBaseChange
-import CompositionAlgebras.Module.ExteriorPower
-import CompositionAlgebras.Module.IdempotentDecomposition
-import CompositionAlgebras.Module.Invertible
-import CompositionAlgebras.Module.RankDecomposition
-import CompositionAlgebras.Module.SelfAnnihilating
-import CompositionAlgebras.Module.Unimodular
-import CompositionAlgebras.Module.VectorProduct
-import CompositionAlgebras.Nonassociative.Alternative.Artin
-import CompositionAlgebras.Nonassociative.Alternative.Defs
-import CompositionAlgebras.Nonassociative.Alternative.Moufang
-import CompositionAlgebras.Nonassociative.Alternative.Peirce
-import CompositionAlgebras.Nonassociative.Alternative.PowerAssociative
-import CompositionAlgebras.Nonassociative.Associator
-import CompositionAlgebras.Nonassociative.Division
-import CompositionAlgebras.Nonassociative.Subalgebra
-import CompositionAlgebras.QuadraticForm.BaseChangeProjective
-import CompositionAlgebras.QuadraticForm.Cancellation
-import CompositionAlgebras.QuadraticForm.FiniteField
-import CompositionAlgebras.QuadraticForm.Hyperbolic
-import CompositionAlgebras.QuadraticForm.HyperbolicPair
-import CompositionAlgebras.QuadraticForm.Isotropic
-import CompositionAlgebras.QuadraticForm.NonsingularOverFields
-import CompositionAlgebras.QuadraticForm.OrthogonalComplement
-import CompositionAlgebras.QuadraticForm.PlaneCancellation
-import CompositionAlgebras.QuadraticForm.PlaneSplitting
-import CompositionAlgebras.QuadraticForm.PlaneTransitivity
-import CompositionAlgebras.QuadraticForm.Polynomial
-import CompositionAlgebras.QuadraticForm.Real
-import CompositionAlgebras.QuadraticForm.Regularity
-import CompositionAlgebras.QuadraticForm.Representation
-import CompositionAlgebras.QuadraticForm.WittCancellation
+module
+
+public import CompositionAlgebras.Composition.BaseChange
+public import CompositionAlgebras.Composition.Basic
+public import CompositionAlgebras.Composition.Alternative
+public import CompositionAlgebras.Composition.CayleyDickson
+public import CompositionAlgebras.Composition.ComplexQuaternion
+public import CompositionAlgebras.Composition.Defs
+public import CompositionAlgebras.Composition.Doubling
+public import CompositionAlgebras.Composition.Examples
+public import CompositionAlgebras.Composition.Fields.Basic
+public import CompositionAlgebras.Composition.Fields.Finite
+public import CompositionAlgebras.Composition.Fields.Real
+public import CompositionAlgebras.Composition.Fields.SepClosed
+public import CompositionAlgebras.Composition.Fields.SurjectiveNorm
+public import CompositionAlgebras.Composition.Inseparable
+public import CompositionAlgebras.Composition.InseparableAnisotropic
+public import CompositionAlgebras.Composition.NormClassification
+public import CompositionAlgebras.Composition.NormEquivalence
+public import CompositionAlgebras.Composition.Octonion
+public import CompositionAlgebras.Composition.QuadraticEtale
+public import CompositionAlgebras.Composition.QuadraticSubalgebra
+public import CompositionAlgebras.Composition.RankDichotomy
+public import CompositionAlgebras.Composition.RankOneTwoFourEight
+public import CompositionAlgebras.Composition.RankTwoSubalgebra
+public import CompositionAlgebras.Composition.Reduced.Defs
+public import CompositionAlgebras.Composition.Reduced.Classification
+public import CompositionAlgebras.Composition.Reduced.Capstone
+public import CompositionAlgebras.Composition.Reduced.Hyperbolic
+public import CompositionAlgebras.Composition.Reduced.Orientation
+public import CompositionAlgebras.Composition.Reduced.Peirce
+public import CompositionAlgebras.Composition.Reduced.RankTwo
+public import CompositionAlgebras.Composition.Reduced.Reducedness
+public import CompositionAlgebras.Composition.Reduced.Split
+public import CompositionAlgebras.Composition.Reduced.Splitness
+public import CompositionAlgebras.Composition.Reduced.TwistedMatrix
+public import CompositionAlgebras.Composition.Reduced.TwistedZorn
+public import CompositionAlgebras.Composition.Reduced.RankEight
+public import CompositionAlgebras.Composition.Reduced.Zorn
+public import CompositionAlgebras.Composition.Sedenion
+public import CompositionAlgebras.Composition.Tower
+public import CompositionAlgebras.Conic.BaseChange
+public import CompositionAlgebras.Conic.BaseChangeMultiplicative
+public import CompositionAlgebras.Conic.Basic
+public import CompositionAlgebras.Conic.CayleyDickson
+public import CompositionAlgebras.Conic.CayleyDicksonAlternative
+public import CompositionAlgebras.Conic.CayleyDicksonAssociative
+public import CompositionAlgebras.Conic.CayleyDicksonConverse
+public import CompositionAlgebras.Conic.CayleyDicksonMultiplicative
+public import CompositionAlgebras.Conic.Defs
+public import CompositionAlgebras.Conic.Division
+public import CompositionAlgebras.Conic.Doubling
+public import CompositionAlgebras.Conic.Kirmse
+public import CompositionAlgebras.Conic.Multiplicative
+public import CompositionAlgebras.Conic.Projective
+public import CompositionAlgebras.Conic.Subalgebra
+public import CompositionAlgebras.Conic.TraceDefectCounterexample
+public import CompositionAlgebras.LGRing.ConstantRank
+public import CompositionAlgebras.LGRing.Defs
+public import CompositionAlgebras.LGRing.DirectLimit
+public import CompositionAlgebras.LGRing.Examples
+public import CompositionAlgebras.LGRing.Jacobson
+public import CompositionAlgebras.LGRing.NonExamples
+public import CompositionAlgebras.LGRing.Products
+public import CompositionAlgebras.LGRing.Semilocal
+public import CompositionAlgebras.LGRing.Unimodular
+public import CompositionAlgebras.LGRing.ValueIdeal
+public import CompositionAlgebras.LGRing.ZeroDimensional
+public import CompositionAlgebras.Module.AlternatingBaseChange
+public import CompositionAlgebras.Module.ExteriorPower
+public import CompositionAlgebras.Module.IdempotentDecomposition
+public import CompositionAlgebras.Module.Invertible
+public import CompositionAlgebras.Module.RankDecomposition
+public import CompositionAlgebras.Module.SelfAnnihilating
+public import CompositionAlgebras.Module.Unimodular
+public import CompositionAlgebras.Module.VectorProduct
+public import CompositionAlgebras.Nonassociative.Alternative.Artin
+public import CompositionAlgebras.Nonassociative.Alternative.Defs
+public import CompositionAlgebras.Nonassociative.Alternative.Moufang
+public import CompositionAlgebras.Nonassociative.Alternative.Peirce
+public import CompositionAlgebras.Nonassociative.Alternative.PowerAssociative
+public import CompositionAlgebras.Nonassociative.Associator
+public import CompositionAlgebras.Nonassociative.Division
+public import CompositionAlgebras.Nonassociative.Subalgebra
+public import CompositionAlgebras.QuadraticForm.BaseChangeProjective
+public import CompositionAlgebras.QuadraticForm.Cancellation
+public import CompositionAlgebras.QuadraticForm.FiniteField
+public import CompositionAlgebras.QuadraticForm.Hyperbolic
+public import CompositionAlgebras.QuadraticForm.HyperbolicPair
+public import CompositionAlgebras.QuadraticForm.Isotropic
+public import CompositionAlgebras.QuadraticForm.NonsingularOverFields
+public import CompositionAlgebras.QuadraticForm.OrthogonalComplement
+public import CompositionAlgebras.QuadraticForm.PlaneCancellation
+public import CompositionAlgebras.QuadraticForm.PlaneSplitting
+public import CompositionAlgebras.QuadraticForm.PlaneTransitivity
+public import CompositionAlgebras.QuadraticForm.Polynomial
+public import CompositionAlgebras.QuadraticForm.Real
+public import CompositionAlgebras.QuadraticForm.Regularity
+public import CompositionAlgebras.QuadraticForm.Representation
+public import CompositionAlgebras.QuadraticForm.WittCancellation

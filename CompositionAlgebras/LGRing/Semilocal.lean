@@ -3,10 +3,12 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.LGRing.Examples
-import CompositionAlgebras.LGRing.Jacobson
-import CompositionAlgebras.LGRing.Products
-import Mathlib.RingTheory.LocalRing.MaximalIdeal.Basic
+module
+
+public import CompositionAlgebras.LGRing.Examples
+public import CompositionAlgebras.LGRing.Jacobson
+public import CompositionAlgebras.LGRing.Products
+public import Mathlib.RingTheory.LocalRing.MaximalIdeal.Basic
 
 /-!
 # Semilocal rings are LG-rings
@@ -45,6 +47,8 @@ set `s` of maximal ideals, with the empty set giving the zero ring
 * [GN] Gille, Neher, *Group schemes over LG-rings and applications to cancellation theorems and
   Azumaya algebras*, European Journal of Mathematics **11** (2025), article 42, §2.1.
 -/
+
+@[expose] public section
 
 universe u
 

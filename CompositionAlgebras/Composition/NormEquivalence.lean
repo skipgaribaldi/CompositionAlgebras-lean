@@ -3,8 +3,10 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Composition.NormClassification
-import CompositionAlgebras.Composition.Reduced.Splitness
+module
+
+public import CompositionAlgebras.Composition.NormClassification
+public import CompositionAlgebras.Composition.Reduced.Splitness
 
 /-!
 # Automorphisms are the unital norm equivalences (`GPR 23.4`)
@@ -59,6 +61,8 @@ introduced.
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 16.7, 19.3, 19.8,
   19.11, 19.16(b), 23.2--23.5.
 -/
+
+@[expose] public section
 
 universe u v w
 

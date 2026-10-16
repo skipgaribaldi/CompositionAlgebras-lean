@@ -3,10 +3,12 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Composition.Reduced.TwistedMatrix
-import CompositionAlgebras.Composition.Reduced.Zorn
-import CompositionAlgebras.Conic.Kirmse
-import CompositionAlgebras.Module.VectorProduct
+module
+
+public import CompositionAlgebras.Composition.Reduced.TwistedMatrix
+public import CompositionAlgebras.Composition.Reduced.Zorn
+public import CompositionAlgebras.Conic.Kirmse
+public import CompositionAlgebras.Module.VectorProduct
 
 /-!
 # Twisted Zorn vector matrices (`GPR 22.14`)
@@ -102,6 +104,8 @@ exterior-power duality argument in `GPR 21.7`. The converse `GPR 22.15` is prove
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 21.18, 22.9, 22.12,
   22.14, 22.15.
 -/
+
+@[expose] public section
 
 universe u v w
 

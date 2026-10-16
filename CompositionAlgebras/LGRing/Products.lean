@@ -3,9 +3,11 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.LGRing.ValueIdeal
-import Mathlib.Algebra.Group.Pi.Units
-import Mathlib.RingTheory.Ideal.Prod
+module
+
+public import CompositionAlgebras.LGRing.ValueIdeal
+public import Mathlib.Algebra.Group.Pi.Units
+public import Mathlib.RingTheory.Ideal.Prod
 
 /-!
 # Products of LG-rings
@@ -65,6 +67,8 @@ first components witness `p₁` over `R₁`.
 * [EG] Estes, Guralnick, *Module equivalences: local to global when primitive polynomials represent
   units*, Journal of Algebra **77** (1982), 138–157.
 -/
+
+@[expose] public section
 
 universe u v
 

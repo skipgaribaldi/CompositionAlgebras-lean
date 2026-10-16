@@ -3,11 +3,13 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Composition.Reduced.RankEight
-import CompositionAlgebras.Composition.Reduced.RankTwo
-import CompositionAlgebras.Composition.Reduced.Reducedness
-import CompositionAlgebras.LGRing.ConstantRank
-import CompositionAlgebras.LGRing.Semilocal
+module
+
+public import CompositionAlgebras.Composition.Reduced.RankEight
+public import CompositionAlgebras.Composition.Reduced.RankTwo
+public import CompositionAlgebras.Composition.Reduced.Reducedness
+public import CompositionAlgebras.LGRing.ConstantRank
+public import CompositionAlgebras.LGRing.Semilocal
 
 /-!
 # Reduced and split composition algebras (`GPR 22.16`)
@@ -55,6 +57,8 @@ with `IsDivision`; both are in `Composition/Fields/Basic.lean`.
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 11.24,
   22.16, 22.18--22.19.
 -/
+
+@[expose] public section
 
 universe u v
 

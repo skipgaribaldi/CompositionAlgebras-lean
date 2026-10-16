@@ -3,12 +3,14 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.QuadraticForm.Regularity
-import Mathlib.LinearAlgebra.QuadraticForm.Radical
-import Mathlib.LinearAlgebra.QuadraticForm.Prod
-import Mathlib.FieldTheory.IsAlgClosed.AlgebraicClosure
-import Mathlib.RingTheory.Flat.Equalizer
-import Mathlib.Algebra.Polynomial.Degree.SmallDegree
+module
+
+public import CompositionAlgebras.QuadraticForm.Regularity
+public import Mathlib.LinearAlgebra.QuadraticForm.Radical
+public import Mathlib.LinearAlgebra.QuadraticForm.Prod
+public import Mathlib.FieldTheory.IsAlgClosed.AlgebraicClosure
+public import Mathlib.RingTheory.Flat.Equalizer
+public import Mathlib.Algebra.Polynomial.Degree.SmallDegree
 
 /-!
 # Non-singular quadratic forms over fields: `EKM Lemma 7.16` and `GPR Exercise 11.37`
@@ -84,6 +86,8 @@ nor the Pfaffian, and proving it means the usual induction: split off a hyperbol
 self-contained piece of bilinear algebra, better placed in a file of its own (or upstreamed)
 than bolted on here. It is not attempted in this file.
 -/
+
+@[expose] public section
 
 universe u v w
 

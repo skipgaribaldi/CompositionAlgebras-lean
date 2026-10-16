@@ -3,8 +3,10 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.QuadraticForm.Polynomial
-import Mathlib.FieldTheory.ChevalleyWarning
+module
+
+public import CompositionAlgebras.QuadraticForm.Polynomial
+public import Mathlib.FieldTheory.ChevalleyWarning
 
 /-!
 # Quadratic forms over finite fields are isotropic in three or more variables
@@ -38,6 +40,8 @@ directly, the proof assumes anisotropy, deduces that the subtype is a singleton,
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 11.8, 23.14.
 * [EKM] Elman, Karpenko, Merkurjev, *The Algebraic and Geometric Theory of Quadratic Forms*.
 -/
+
+@[expose] public section
 
 universe u v
 

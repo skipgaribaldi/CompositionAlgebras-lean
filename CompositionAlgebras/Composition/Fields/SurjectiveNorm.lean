@@ -3,8 +3,10 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Composition.Fields.Basic
-import CompositionAlgebras.Composition.Tower
+module
+
+public import CompositionAlgebras.Composition.Fields.Basic
+public import CompositionAlgebras.Composition.Tower
 
 /-!
 # Surjective quaternion norms split the octonions (`GPR 23.21`)
@@ -48,6 +50,8 @@ mechanism above is therefore stated with surjectivity as a hypothesis, which is 
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 19.17, 22.18,
   23.21, 23.22.
 -/
+
+@[expose] public section
 
 universe u v
 

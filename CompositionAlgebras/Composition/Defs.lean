@@ -3,8 +3,10 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Conic.Multiplicative
-import CompositionAlgebras.QuadraticForm.Regularity
+module
+
+public import CompositionAlgebras.Conic.Multiplicative
+public import CompositionAlgebras.QuadraticForm.Regularity
 
 /-!
 # Composition algebras (`GPR 19.5`)
@@ -72,6 +74,8 @@ names it the same way `QuadraticForm.IsEKMNondegenerate` does.
 * [GN] Gille, Neher, *Group schemes over LG-rings…*, European J. Math. **11** (2025), art. 42,
   C.8 (non-singularity).
 -/
+
+@[expose] public section
 
 universe u v w
 

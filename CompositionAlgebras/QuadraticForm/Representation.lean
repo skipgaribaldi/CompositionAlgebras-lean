@@ -3,12 +3,14 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.LGRing.Semilocal
-import CompositionAlgebras.LGRing.Unimodular
-import CompositionAlgebras.QuadraticForm.Polynomial
-import CompositionAlgebras.QuadraticForm.Regularity
-import Mathlib.RingTheory.Flat.FaithfullyFlat.Basic
-import Mathlib.RingTheory.LocalRing.ResidueField.Ideal
+module
+
+public import CompositionAlgebras.LGRing.Semilocal
+public import CompositionAlgebras.LGRing.Unimodular
+public import CompositionAlgebras.QuadraticForm.Polynomial
+public import CompositionAlgebras.QuadraticForm.Regularity
+public import Mathlib.RingTheory.Flat.FaithfullyFlat.Basic
+public import Mathlib.RingTheory.LocalRing.ResidueField.Ideal
 
 /-!
 # The representation lemma (`GPR 11.26`, `GN Lemma C.13(a)`)
@@ -67,6 +69,8 @@ The pullback is compared with base change by `QuadraticForm.baseChangeOfProjecti
 * [GN] Gille, Neher, *Group schemes over LG-rings and applications to cancellation theorems and
   Azumaya algebras*, European Journal of Mathematics **11** (2025), article 42, Lemma C.13(a).
 -/
+
+@[expose] public section
 
 universe u v
 

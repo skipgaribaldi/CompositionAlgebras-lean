@@ -3,10 +3,12 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import Mathlib.RingTheory.LocalProperties.Submodule
-import Mathlib.RingTheory.PicardGroup
-import Mathlib.RingTheory.Spectrum.Prime.FreeLocus
-import Mathlib.LinearAlgebra.BilinearForm.TensorProduct
+module
+
+public import Mathlib.RingTheory.LocalProperties.Submodule
+public import Mathlib.RingTheory.PicardGroup
+public import Mathlib.RingTheory.Spectrum.Prime.FreeLocus
+public import Mathlib.LinearAlgebra.BilinearForm.TensorProduct
 
 /-!
 # Invertible modules and line bundles
@@ -45,6 +47,8 @@ definition of `Module.Invertible`.
 
 * [Stacks, Tag 00NX] The Stacks Project, *Finite projective modules*.
 -/
+
+@[expose] public section
 
 universe u v
 

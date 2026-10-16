@@ -3,7 +3,9 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Composition.Reduced.Splitness
+module
+
+public import CompositionAlgebras.Composition.Reduced.Splitness
 
 /-!
 # Reduced composition algebras (`GPR 22.6–22.7`)
@@ -45,6 +47,8 @@ because `0 = 1`; retaining all three factors therefore matches the convention in
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, Exc. 9.31,
   21.19, 22.1, 22.6, 22.7, 22.16.
 -/
+
+@[expose] public section
 
 universe u v
 

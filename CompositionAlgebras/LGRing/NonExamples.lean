@@ -3,10 +3,12 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.LGRing.Defs
-import Mathlib.RingTheory.Polynomial.Content
-import Mathlib.Algebra.Polynomial.Div
-import Mathlib.Tactic.NormNum
+module
+
+public import CompositionAlgebras.LGRing.Defs
+public import Mathlib.RingTheory.Polynomial.Content
+public import Mathlib.Algebra.Polynomial.Div
+public import Mathlib.Tactic.NormNum
 
 /-!
 # Non-examples of LG rings
@@ -43,6 +45,8 @@ admitting an element of odd negative valuation is not LG) is not formalized here
 
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, Exercise Exc. 11.42.
 -/
+
+@[expose] public section
 
 open Polynomial
 

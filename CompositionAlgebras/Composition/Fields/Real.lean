@@ -3,9 +3,11 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Composition.Examples
-import CompositionAlgebras.Composition.Fields.Basic
-import CompositionAlgebras.QuadraticForm.Real
+module
+
+public import CompositionAlgebras.Composition.Examples
+public import CompositionAlgebras.Composition.Fields.Basic
+public import CompositionAlgebras.QuadraticForm.Real
 
 /-!
 # Composition algebras over the reals (`GPR 23.13`)
@@ -68,6 +70,8 @@ files in this layer need a separate argument for each class of field.
   reducible by real orthogonal substitutions to the form of a sum of positive and negative
   squares*, Philosophical Magazine **4** (1852), 138–142.
 -/
+
+@[expose] public section
 
 universe v w
 

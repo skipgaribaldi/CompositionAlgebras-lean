@@ -3,12 +3,14 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Composition.Alternative
-import CompositionAlgebras.LGRing.Examples
-import CompositionAlgebras.Conic.Doubling
-import CompositionAlgebras.Conic.Projective
-import CompositionAlgebras.QuadraticForm.OrthogonalComplement
-import CompositionAlgebras.QuadraticForm.Representation
+module
+
+public import CompositionAlgebras.Composition.Alternative
+public import CompositionAlgebras.LGRing.Examples
+public import CompositionAlgebras.Conic.Doubling
+public import CompositionAlgebras.Conic.Projective
+public import CompositionAlgebras.QuadraticForm.OrthogonalComplement
+public import CompositionAlgebras.QuadraticForm.Representation
 
 /-!
 # A regular subalgebra of a composition algebra splits off (`GPR 19.16(a)`)
@@ -64,6 +66,8 @@ lemma consumes, and it is the honest hypothesis.
 * [GN] Gille, Neher, *Group schemes over LG-rings and applications to cancellation theorems and
   Azumaya algebras*, European Journal of Mathematics **11** (2025), article 42, (C.8.3), C.13(a).
 -/
+
+@[expose] public section
 
 universe u v
 

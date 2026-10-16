@@ -3,8 +3,10 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Composition.Defs
-import CompositionAlgebras.Conic.CayleyDicksonMultiplicative
+module
+
+public import CompositionAlgebras.Composition.Defs
+public import CompositionAlgebras.Conic.CayleyDicksonMultiplicative
 
 /-!
 # Doubling a composition algebra (`GPR 19.14`)
@@ -53,6 +55,8 @@ conjugation of `B`, and nothing about `2`.
 * [GN] Gille, Neher, *Group schemes over LG-rings…*, European J. Math. **11** (2025), art. 42,
   (C.8.3).
 -/
+
+@[expose] public section
 
 universe u v w
 

@@ -3,8 +3,10 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Composition.Reduced.Classification
-import CompositionAlgebras.Conic.Division
+module
+
+public import CompositionAlgebras.Composition.Reduced.Classification
+public import CompositionAlgebras.Conic.Division
 
 /-!
 # Composition algebras over a field: the classification mechanism (`GPR 23.12`)
@@ -70,6 +72,8 @@ the base field, it is split and a division algebra at once, and its norm `x ↦ 
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 8.6, 13.8, 19.3,
   19.18, 22.18, 23.12.
 -/
+
+@[expose] public section
 
 universe u v w
 

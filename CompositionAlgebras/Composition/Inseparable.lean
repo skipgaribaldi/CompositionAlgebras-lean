@@ -3,9 +3,11 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Composition.RankDichotomy
-import Mathlib.Algebra.DualNumber
-import Mathlib.Algebra.Field.ZMod
+module
+
+public import CompositionAlgebras.Composition.RankDichotomy
+public import Mathlib.Algebra.DualNumber
+public import Mathlib.Algebra.Field.ZMod
 
 /-!
 # Anisotropic conic algebras with vanishing polar form (`GPR 19.4`)
@@ -74,6 +76,8 @@ witness must be a genuine purely inseparable field extension, so it needs an imp
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 19.4, 19.11.
 -/
 
+@[expose] public section
+
 universe u v
 
 namespace ConicAlgebra
@@ -91,10 +95,10 @@ private theorem smul_one_inj {c d : F} (h : c • (1 : A) = d • (1 : A)) : c =
 
 include hn
 
-private theorem inseparable_one : n 1 = 1 :=
+theorem inseparable_one : n 1 = 1 :=
   smul_one_inj (A := A) (by rw [← hn 1, mul_one, one_smul])
 
-private theorem inseparable_smul (a : F) (x : A) : n (a • x) = a * a * n x :=
+theorem inseparable_smul (a : F) (x : A) : n (a • x) = a * a * n x :=
   smul_one_inj (A := A) (by rw [← hn (a • x), smul_mul_smul_comm, hn x, smul_smul])
 
 include hchar
@@ -223,10 +227,10 @@ theorem sq_dualNumber (x : DualNumber (ZMod 2)) :
     rw [show (2 : ZMod 2) = 0 from rfl, mul_zero]
 
 /-- `𝔽₂` has characteristic two. -/
-private theorem dualNumber_char : (2 : ZMod 2) = 0 := by decide
+theorem dualNumber_char : (2 : ZMod 2) = 0 := by decide
 
 /-- `ConicAlgebra.sq_dualNumber` in the `c • 1` form the construction consumes. -/
-private theorem dualNumber_sq (x : DualNumber (ZMod 2)) :
+theorem dualNumber_sq (x : DualNumber (ZMod 2)) :
     x * x = (TrivSqZeroExt.fst x ^ 2) • (1 : DualNumber (ZMod 2)) := by
   rw [sq_dualNumber x, Algebra.algebraMap_eq_smul_one]
 

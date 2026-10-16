@@ -3,10 +3,12 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.QuadraticForm.Regularity
-import Mathlib.LinearAlgebra.BilinearForm.Orthogonal
-import Mathlib.LinearAlgebra.TensorProduct.Prod
-import Mathlib.RingTheory.Spectrum.Prime.FreeLocus
+module
+
+public import CompositionAlgebras.QuadraticForm.Regularity
+public import Mathlib.LinearAlgebra.BilinearForm.Orthogonal
+public import Mathlib.LinearAlgebra.TensorProduct.Prod
+public import Mathlib.RingTheory.Spectrum.Prime.FreeLocus
 
 /-!
 # Splitting off a regular submodule
@@ -62,6 +64,8 @@ the complement is deduced by base change.
 * [GN] Gille, Neher, *Group schemes over LG-rings and applications to cancellation theorems and
   Azumaya algebras*, European Journal of Mathematics **11** (2025), article 42, C.8.
 -/
+
+@[expose] public section
 
 universe u v t
 

@@ -3,8 +3,10 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import Mathlib.Algebra.GroupWithZero.Defs
-import Mathlib.Logic.Function.Defs
+module
+
+public import Mathlib.Algebra.GroupWithZero.Defs
+public import Mathlib.Logic.Function.Defs
 
 /-!
 # Division algebras (`GPR 8.6`)
@@ -37,6 +39,8 @@ stronger than every nonzero element having a two-sided inverse
 
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 8.6.
 -/
+
+@[expose] public section
 
 universe u
 

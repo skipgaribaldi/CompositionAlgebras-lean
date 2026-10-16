@@ -3,10 +3,12 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Composition.Defs
-import CompositionAlgebras.Nonassociative.Alternative.Defs
-import CompositionAlgebras.QuadraticForm.Hyperbolic
-import Mathlib.LinearAlgebra.CrossProduct
+module
+
+public import CompositionAlgebras.Composition.Defs
+public import CompositionAlgebras.Nonassociative.Alternative.Defs
+public import CompositionAlgebras.QuadraticForm.Hyperbolic
+public import Mathlib.LinearAlgebra.CrossProduct
 
 /-!
 # Zorn vector matrices (`GPR 21.18`)
@@ -79,6 +81,8 @@ Cayley–Dickson double `Cay(k, 1)` is *not* the split quadratic étale algebra 
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 21.18, 21.19,
   22.15.
 -/
+
+@[expose] public section
 
 universe u w
 

@@ -3,10 +3,12 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Composition.Reduced.Zorn
-import CompositionAlgebras.QuadraticForm.PlaneSplitting
-import Mathlib.LinearAlgebra.Matrix.Determinant.Basic
-import Mathlib.LinearAlgebra.Dimension.Constructions
+module
+
+public import CompositionAlgebras.Composition.Reduced.Zorn
+public import CompositionAlgebras.QuadraticForm.PlaneSplitting
+public import Mathlib.LinearAlgebra.Matrix.Determinant.Basic
+public import Mathlib.LinearAlgebra.Dimension.Constructions
 
 /-!
 # The split composition algebras (`GPR 21.19`)
@@ -65,6 +67,8 @@ equivalence-composed form read these off; no determinant criterion and no hypoth
 
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 21.18, 21.19.
 -/
+
+@[expose] public section
 
 universe u w
 

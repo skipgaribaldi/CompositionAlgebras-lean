@@ -3,9 +3,11 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Composition.Inseparable
-import Mathlib.FieldTheory.KummerPolynomial
-import Mathlib.FieldTheory.RatFunc.Degree
+module
+
+public import CompositionAlgebras.Composition.Inseparable
+public import Mathlib.FieldTheory.KummerPolynomial
+public import Mathlib.FieldTheory.RatFunc.Degree
 
 /-!
 # An anisotropic witness for `GPR 19.4`
@@ -51,6 +53,8 @@ Together these separate anisotropy from non-singularity, which is what `GPR 19.4
 
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 19.4, 19.11.
 -/
+
+@[expose] public section
 
 open Polynomial
 

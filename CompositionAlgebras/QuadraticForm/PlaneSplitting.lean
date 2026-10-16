@@ -3,9 +3,11 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.QuadraticForm.Hyperbolic
-import CompositionAlgebras.QuadraticForm.HyperbolicPair
-import CompositionAlgebras.QuadraticForm.OrthogonalComplement
+module
+
+public import CompositionAlgebras.QuadraticForm.Hyperbolic
+public import CompositionAlgebras.QuadraticForm.HyperbolicPair
+public import CompositionAlgebras.QuadraticForm.OrthogonalComplement
 
 /-!
 # A hyperbolic pair splits off a hyperbolic plane
@@ -51,6 +53,8 @@ The embedding is injective because the pair recovers coordinates: `q(a u + b v, 
 * R. Baeza, *Quadratic Forms over Semilocal Rings*, Lecture Notes in Math. **655**, Springer 1978,
   I, (3.3).
 -/
+
+@[expose] public section
 
 universe u v
 

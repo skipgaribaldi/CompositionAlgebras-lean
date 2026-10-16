@@ -3,13 +3,15 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import Mathlib.LinearAlgebra.Alternating.Basic
-import Mathlib.Tactic.FinCases
-import Mathlib.Tactic.Module
-import CompositionAlgebras.Composition.RankDichotomy
-import CompositionAlgebras.Composition.Reduced.Defs
-import CompositionAlgebras.Module.Invertible
-import CompositionAlgebras.Nonassociative.Alternative.Peirce
+module
+
+public import Mathlib.LinearAlgebra.Alternating.Basic
+public import Mathlib.Tactic.FinCases
+public import Mathlib.Tactic.Module
+public import CompositionAlgebras.Composition.RankDichotomy
+public import CompositionAlgebras.Composition.Reduced.Defs
+public import CompositionAlgebras.Module.Invertible
+public import CompositionAlgebras.Nonassociative.Alternative.Peirce
 
 /-!
 # Peirce decomposition at an elementary idempotent
@@ -54,6 +56,8 @@ classification is in `Composition/Reduced/TwistedMatrix.lean`.
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, Exc. 14.12,
   Exc. 19.35.
 -/
+
+@[expose] public section
 
 universe u v
 

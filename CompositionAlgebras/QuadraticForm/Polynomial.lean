@@ -3,9 +3,11 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.QuadraticForm.BaseChangeProjective
-import Mathlib.Algebra.MvPolynomial.Eval
-import Mathlib.RingTheory.TensorProduct.Free
+module
+
+public import CompositionAlgebras.QuadraticForm.BaseChangeProjective
+public import Mathlib.Algebra.MvPolynomial.Eval
+public import Mathlib.RingTheory.TensorProduct.Free
 
 /-!
 # A quadratic form on a free module as a polynomial (`GPR 11.8`)
@@ -44,6 +46,8 @@ LG axiom cares about.
 
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 11.8.
 -/
+
+@[expose] public section
 
 universe u v w
 

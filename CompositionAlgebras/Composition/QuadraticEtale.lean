@@ -3,9 +3,11 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Composition.RankTwoSubalgebra
-import Mathlib.Algebra.QuadraticAlgebra.Basic
-import Mathlib.Algebra.QuadraticAlgebra.Discriminant
+module
+
+public import CompositionAlgebras.Composition.RankTwoSubalgebra
+public import Mathlib.Algebra.QuadraticAlgebra.Basic
+public import Mathlib.Algebra.QuadraticAlgebra.Discriminant
 
 /-!
 # A quadratic algebra is a conic algebra, and is composition exactly when étale (`GPR 19.8`)
@@ -71,6 +73,8 @@ exactly the separable quadratic extensions of a field of characteristic two.
 
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 19.8.
 -/
+
+@[expose] public section
 
 universe u v
 

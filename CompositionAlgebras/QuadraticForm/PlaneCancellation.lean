@@ -3,7 +3,9 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.QuadraticForm.HyperbolicPair
+module
+
+public import CompositionAlgebras.QuadraticForm.HyperbolicPair
 
 /-!
 # Cancelling a hyperbolic plane
@@ -35,6 +37,8 @@ its unit case is `QuadraticMap.IsHyperbolicPair.exists_isometryEquiv_of_isUnit`.
 * R. Baeza, *Quadratic Forms over Semilocal Rings*, Lecture Notes in Math. **655**, Springer 1978,
   III, (4.2) and (4.3).
 -/
+
+@[expose] public section
 
 universe u v w
 

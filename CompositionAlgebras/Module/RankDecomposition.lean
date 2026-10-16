@@ -3,10 +3,12 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Module.IdempotentDecomposition
-import Mathlib.LinearAlgebra.TensorProduct.Quotient
-import Mathlib.RingTheory.Spectrum.Prime.FreeLocus
-import Mathlib.RingTheory.Spectrum.Prime.RingHom
+module
+
+public import CompositionAlgebras.Module.IdempotentDecomposition
+public import Mathlib.LinearAlgebra.TensorProduct.Quotient
+public import Mathlib.RingTheory.Spectrum.Prime.FreeLocus
+public import Mathlib.RingTheory.Spectrum.Prime.RingHom
 
 /-!
 # The rank decomposition of a finitely generated projective module (`GPR Exc. 9.31`)
@@ -72,6 +74,8 @@ for the same thing.
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, Exc. 9.29,
   Exc. 9.31.
 -/
+
+@[expose] public section
 
 universe u v
 

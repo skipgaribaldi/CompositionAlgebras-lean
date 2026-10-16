@@ -3,7 +3,9 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Conic.Basic
+module
+
+public import CompositionAlgebras.Conic.Basic
 
 /-!
 # Multiplicative conic algebras and norm-associativity
@@ -62,6 +64,8 @@ symmetry to exploit. They are proved the same way, by specializing the second li
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 16.5,
   16.12--16.13, 19.1, 22.18.
 -/
+
+@[expose] public section
 
 universe u v
 

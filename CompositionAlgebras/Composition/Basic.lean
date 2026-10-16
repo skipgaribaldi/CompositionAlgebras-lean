@@ -3,9 +3,11 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Composition.Defs
-import CompositionAlgebras.Conic.Kirmse
-import CompositionAlgebras.QuadraticForm.NonsingularOverFields
+module
+
+public import CompositionAlgebras.Composition.Defs
+public import CompositionAlgebras.Conic.Kirmse
+public import CompositionAlgebras.QuadraticForm.NonsingularOverFields
 
 /-!
 # Composition algebras are alternative (`GPR 19.3`)
@@ -46,6 +48,8 @@ explains why that fails); alternativity over an arbitrary ring is proved instead
 * [GN] Gille, Neher, *Group schemes over LG-rings…*, European J. Math. **11** (2025), art. 42,
   C.8, (C.8.2).
 -/
+
+@[expose] public section
 
 universe u v
 

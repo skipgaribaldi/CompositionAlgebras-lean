@@ -3,10 +3,12 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Conic.Basic
-import CompositionAlgebras.Module.SelfAnnihilating
-import CompositionAlgebras.Module.Unimodular
-import CompositionAlgebras.QuadraticForm.BaseChangeProjective
+module
+
+public import CompositionAlgebras.Conic.Basic
+public import CompositionAlgebras.Module.SelfAnnihilating
+public import CompositionAlgebras.Module.Unimodular
+public import CompositionAlgebras.QuadraticForm.BaseChangeProjective
 
 /-!
 # Projective conic algebras: the trace defect vanishes (`GPR 16.7`, `GPR 16.14(b)`)
@@ -52,6 +54,8 @@ what the conjugation needs. Only flexibility is used, which alternativity suppli
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 11.15, 16.7,
   16.14(b), 16.16, 17.6.
 -/
+
+@[expose] public section
 
 universe u v
 

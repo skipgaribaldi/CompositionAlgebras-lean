@@ -3,7 +3,9 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Nonassociative.Alternative.Defs
+module
+
+public import CompositionAlgebras.Nonassociative.Alternative.Defs
 
 /-!
 # The Moufang identities
@@ -36,6 +38,8 @@ associator.
 * Schafer, *An Introduction to Nonassociative Algebras*, §3.
 * Zhevlakov et al., *Rings That Are Nearly Associative*, Ch. 2.
 -/
+
+@[expose] public section
 
 universe u
 

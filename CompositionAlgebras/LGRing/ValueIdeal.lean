@@ -3,7 +3,9 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.LGRing.Defs
+module
+
+public import CompositionAlgebras.LGRing.Defs
 
 /-!
 # The value ideal, and a finitary criterion for `IsLGRing`
@@ -47,6 +49,8 @@ witness in `(R ⧸ 𝔪)ⁿ` can be traded for the existence of a witness in `R�
 * [GN] Gille, Neher, *Group schemes over LG-rings and applications to cancellation theorems and
   Azumaya algebras*, European Journal of Mathematics **11** (2025), article 42, §2.1.
 -/
+
+@[expose] public section
 
 universe u
 

@@ -3,8 +3,10 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Conic.Multiplicative
-import CompositionAlgebras.Nonassociative.Subalgebra
+module
+
+public import CompositionAlgebras.Conic.Multiplicative
+public import CompositionAlgebras.Nonassociative.Subalgebra
 
 /-!
 # Restricting a conic structure to a subalgebra
@@ -31,6 +33,8 @@ makes the subalgebra usable as an input to the Cayley–Dickson construction.
 
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 16.1.
 -/
+
+@[expose] public section
 
 universe u v
 

@@ -3,15 +3,17 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Composition.Basic
-import CompositionAlgebras.Composition.QuadraticSubalgebra
-import CompositionAlgebras.Composition.RankOneTwoFourEight
-import CompositionAlgebras.Composition.Tower
-import CompositionAlgebras.Conic.CayleyDickson
-import CompositionAlgebras.Conic.Division
-import CompositionAlgebras.Conic.Projective
-import CompositionAlgebras.QuadraticForm.OrthogonalComplement
-import CompositionAlgebras.QuadraticForm.WittCancellation
+module
+
+public import CompositionAlgebras.Composition.Basic
+public import CompositionAlgebras.Composition.QuadraticSubalgebra
+public import CompositionAlgebras.Composition.RankOneTwoFourEight
+public import CompositionAlgebras.Composition.Tower
+public import CompositionAlgebras.Conic.CayleyDickson
+public import CompositionAlgebras.Conic.Division
+public import CompositionAlgebras.Conic.Projective
+public import CompositionAlgebras.QuadraticForm.OrthogonalComplement
+public import CompositionAlgebras.QuadraticForm.WittCancellation
 
 /-!
 # Algebra isomorphisms and norm isometries
@@ -100,6 +102,8 @@ same displayed identity makes the norms equal.
 * [GN] Gille, Neher, *Group schemes over LG-rings and applications to cancellation theorems and
   Azumaya algebras*, European Journal of Mathematics **11** (2025), article 42, 6.5.
 -/
+
+@[expose] public section
 
 universe u v w
 

@@ -3,9 +3,11 @@ Copyright (c) 2026 Skip Garibaldi. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
-import CompositionAlgebras.Conic.Basic
-import CompositionAlgebras.QuadraticForm.BaseChangeProjective
-import Mathlib.RingTheory.TensorProduct.Basic
+module
+
+public import CompositionAlgebras.Conic.Basic
+public import CompositionAlgebras.QuadraticForm.BaseChangeProjective
+public import Mathlib.RingTheory.TensorProduct.Basic
 
 /-!
 # Base change of conic algebras (the final paragraph of `GPR 16.1`)
@@ -65,6 +67,8 @@ of two possibly non-associative algebras. Nothing has to be constructed here bey
   projectivity hypothesis. This is missing from mathlib too, and is all that stands between
   `ConicAlgebra.baseChangeOfProjective` and `ConicAlgebra.baseChange`.
 -/
+
+@[expose] public section
 
 universe u v w
 
