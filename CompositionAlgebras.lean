@@ -26,7 +26,6 @@ public import CompositionAlgebras.Composition.NormClassification
 public import CompositionAlgebras.Composition.NormEquivalence
 public import CompositionAlgebras.Composition.Octonion
 public import CompositionAlgebras.Composition.QuadraticEtale
-public import CompositionAlgebras.Composition.QuadraticNormEquivalence
 public import CompositionAlgebras.Composition.QuadraticSubalgebra
 public import CompositionAlgebras.Composition.RankDichotomy
 public import CompositionAlgebras.Composition.RankOneTwoFourEight

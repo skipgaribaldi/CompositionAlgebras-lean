@@ -28,6 +28,8 @@ whole polar form to vanish, and its one-dimensional kernel is therefore the whol
 
 * `ConicAlgebra.IsComposition.isGPRRegular_or_finrank_eq_one` : the field-fibre dichotomy in
   `GPR 19.11`.
+* `ConicAlgebra.IsComposition.isGPRRegular_of_forall_rankAtStalk_ne_one` : `GPR 19.11` for a
+  composition algebra whose rank is never `1`, without a constant-rank hypothesis.
 * `ConicAlgebra.IsComposition.isGPRRegular_or_rank_eq_one` : the constant-rank ring statement.
 
 ## References
@@ -111,24 +113,33 @@ variable {k : Type u} {B : Type v} [CommRing k] [NonAssocRing B] [Module k B]
   [SMulCommClass k B B] [IsScalarTower k B B] [Module.Finite k B] [Module.Projective k B]
   {D : ConicAlgebra k B}
 
+/-- **`GPR 19.11`, pointwise on `Spec k`.** A composition algebra whose rank is different from `1`
+at every prime has regular norm. No constant-rank hypothesis is needed: regularity is checked
+after base change to each field `F`
+(`QuadraticForm.isGPRRegular_of_forall_baseChangeOfProjective_isGPRRegular`), and the dimension of
+`F ⊗ A` is the rank of `A` at the single prime under the zero ideal of `F`.
+`ConicAlgebra.IsComposition.isGPRRegular_of_rankAtStalk_ne_one` is the constant-rank case. -/
+theorem IsComposition.isGPRRegular_of_forall_rankAtStalk_ne_one (h : D.IsComposition.{u, v, u})
+    (hrank : ∀ p, Module.rankAtStalk (R := k) B p ≠ 1) : D.norm.IsGPRRegular := by
+  apply QuadraticForm.isGPRRegular_of_forall_baseChangeOfProjective_isGPRRegular
+  intro F _ _
+  rcases (h.baseChangeOfProjective F).isGPRRegular_or_finrank_eq_one with hreg | hdim
+  · exact hreg
+  · refine (hrank ((⊥ : PrimeSpectrum F).comap (algebraMap k F)) ?_).elim
+    have hbase := Module.rankAtStalk_baseChange (R := k) (M := B) (S := F) ⊥
+    rw [Module.rankAtStalk_eq_finrank_of_free] at hbase
+    exact hbase.symm.trans hdim.1
+
 /-- The non-rank-one half of **`GPR 19.11`**. If a composition algebra has constant rank other
 than one, its norm is regular.
 
 The field-fibre dichotomy proves regularity after every field base change. Regularity then descends
-by the local-global principle for the polar map. -/
+by the local-global principle for the polar map
+(`ConicAlgebra.IsComposition.isGPRRegular_of_forall_rankAtStalk_ne_one`). -/
 theorem IsComposition.isGPRRegular_of_rankAtStalk_ne_one (h : D.IsComposition.{u, v, u})
     {r : ℕ} (hrank : Module.rankAtStalk (R := k) B = fun _ ↦ r) (hr : r ≠ 1) :
-    D.norm.IsGPRRegular := by
-  apply QuadraticForm.isGPRRegular_of_forall_baseChangeOfProjective_isGPRRegular
-  intro F _ _
-  have hF := h.baseChangeOfProjective F
-  rcases hF.isGPRRegular_or_finrank_eq_one with hreg | hdim
-  · exact hreg
-  · exfalso
-    apply hr
-    have hbase := Module.rankAtStalk_baseChange (R := k) (M := B) (S := F) ⊥
-    rw [Module.rankAtStalk_eq_finrank_of_free, hrank] at hbase
-    exact hbase.symm.trans hdim.1
+    D.norm.IsGPRRegular :=
+  h.isGPRRegular_of_forall_rankAtStalk_ne_one fun p ↦ by rw [hrank]; exact hr
 
 /-- **`GPR 19.11`, for the repository's finitely generated definition of composition algebra.**
 If a composition algebra has constant rank `r`, then its norm is regular, or `r = 1` and `2` is

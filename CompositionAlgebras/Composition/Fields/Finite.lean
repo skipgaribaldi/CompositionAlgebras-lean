@@ -140,8 +140,8 @@ theorem IsComposition.isomorphic_of_finite_of_hasTwoSidedInverses_two
     (hCdiv : C.HasTwoSidedInverses) (hDdiv : D.HasTwoSidedInverses) : C.Isomorphic D := by
   let : CommRing A :=
     { (inferInstance : NonAssocRing A) with
-      mul_assoc := hC.mul_assoc_of_finrank_eq_two hA
-      mul_comm := hC.mul_comm_of_finrank_eq_two hA }
+      mul_assoc := C.mul_assoc_of_finrank_eq_two hA
+      mul_comm := C.mul_comm_of_finrank_eq_two hA }
   let : Algebra K A := Algebra.ofModule (fun r x y ↦ by exact smul_mul_assoc r x y)
     (fun r x y ↦ by exact mul_smul_comm r x y)
   let : Nontrivial A := Module.nontrivial_of_finrank_pos (by rw [hA]; omega)
@@ -152,8 +152,8 @@ theorem IsComposition.isomorphic_of_finite_of_hasTwoSidedInverses_two
   let : Field A := (IsField.of_isDomain_of_finite K A).toField
   let : CommRing B :=
     { (inferInstance : NonAssocRing B) with
-      mul_assoc := hD.mul_assoc_of_finrank_eq_two hB
-      mul_comm := hD.mul_comm_of_finrank_eq_two hB }
+      mul_assoc := D.mul_assoc_of_finrank_eq_two hB
+      mul_comm := D.mul_comm_of_finrank_eq_two hB }
   let : Algebra K B := Algebra.ofModule (fun r x y ↦ by exact smul_mul_assoc r x y)
     (fun r x y ↦ by exact mul_smul_comm r x y)
   let : Nontrivial B := Module.nontrivial_of_finrank_pos (by rw [hB]; omega)

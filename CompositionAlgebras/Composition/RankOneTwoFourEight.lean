@@ -72,6 +72,9 @@ of the previous one and so a different type.
   structure in each of the four ranks.
 * `ConicAlgebra.IsComposition.rankAtStalk_eq_one_or_two_or_four_or_eight` : its rank-only part.
 * `ConicAlgebra.IsComposition.finrank_eq_one_or_two_or_four_or_eight` : the same over a field.
+* `ConicAlgebra.mul_comm_of_rankAtStalk_eq_two`, `ConicAlgebra.mul_assoc_of_rankAtStalk_eq_two` :
+  a finitely generated projective conic algebra of constant rank two over any commutative ring is
+  commutative and associative (`GPR 16.4`); no composition hypothesis is needed.
 * `ConicAlgebra.IsComposition.finrank_le_four_of_mul_assoc`,
   `ConicAlgebra.IsComposition.finrank_le_two_of_mul_comm`,
   `ConicAlgebra.IsComposition.finrank_le_one_of_conj_eq_id` : the three steps of the descent.
@@ -81,8 +84,8 @@ of the previous one and so a different type.
 
 ## References
 
-* [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 18.14(c), 19.3,
-  19.11, 19.17, 19.18.
+* [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, 16.4, 18.14(c),
+  19.3, 19.11, 19.17, 19.18.
 -/
 
 @[expose] public section
@@ -332,38 +335,6 @@ variable {k : Type u} {A : Type v} [CommRing k] [NonAssocRing A] [Module k A]
   [SMulCommClass k A A] [IsScalarTower k A A] [Module.Finite k A] [Module.Projective k A]
   {C : ConicAlgebra k A}
 
-/-- Over an LG ring, a rank-two composition algebra is exhausted by a single quadratic
-subalgebra: the regular `k[u]` of `GPR 19.16(b)` already has the full rank two, so
-`ConicAlgebra.mem_of_isGPRRegular_of_rankAtStalk_eq` makes every element lie in it. This is what
-transports the commutativity and associativity of `k[u]` to the whole algebra. -/
-private theorem IsComposition.exists_forall_mem_adjoinElement_of_rankAtStalk_eq_two
-    [Nontrivial k] (h : C.IsComposition.{u, v, u}) (hLG : IsLGRing k)
-    (hA : Module.rankAtStalk (R := k) A = fun _ ↦ 2) :
-    ∃ u : A, ∀ x : A, x ∈ C.adjoinElement u := by
-  obtain ⟨u, hu⟩ := h.exists_isRegularRankTwoComposition_of_rankAtStalk hLG (by simp [hA])
-  have hdisc : IsUnit (C.elementDiscriminant u) :=
-    (C.isRegularRankTwoComposition_iff_isUnit_discriminant u).mp hu
-  have hreg : QuadraticForm.IsGPRRegular (C.restrict (C.adjoinElement u)).norm :=
-    C.normAdjoinElement_isGPRRegular hdisc
-  exact ⟨u, mem_of_isGPRRegular_of_rankAtStalk_eq hreg hA (C.rankAtStalk_adjoinElement hdisc)⟩
-
-/-- Over an LG ring, a rank-two composition algebra is commutative. Its regular quadratic
-subalgebra from `GPR 19.16(b)` already has full rank and hence is the whole algebra. -/
-theorem IsComposition.mul_comm_of_isLGRing_of_rankAtStalk_eq_two [Nontrivial k]
-    (h : C.IsComposition.{u, v, u}) (hLG : IsLGRing k)
-    (hA : Module.rankAtStalk (R := k) A = fun _ ↦ 2) (x y : A) : x * y = y * x := by
-  obtain ⟨u, hmem⟩ := h.exists_forall_mem_adjoinElement_of_rankAtStalk_eq_two hLG hA
-  exact congrArg Subtype.val (C.adjoinElement_mul_comm u ⟨x, hmem x⟩ ⟨y, hmem y⟩)
-
-/-- Over an LG ring, a rank-two composition algebra is associative. -/
-theorem IsComposition.mul_assoc_of_isLGRing_of_rankAtStalk_eq_two [Nontrivial k]
-    (h : C.IsComposition.{u, v, u}) (hLG : IsLGRing k)
-    (hA : Module.rankAtStalk (R := k) A = fun _ ↦ 2) (x y z : A) :
-    x * y * z = x * (y * z) := by
-  obtain ⟨u, hmem⟩ := h.exists_forall_mem_adjoinElement_of_rankAtStalk_eq_two hLG hA
-  exact congrArg Subtype.val
-    (C.adjoinElement_mul_assoc u ⟨x, hmem x⟩ ⟨y, hmem y⟩ ⟨z, hmem z⟩)
-
 /-- Over an LG ring, a rank-four composition algebra is associative. It is a double of its
 rank-two associative commutative subalgebra, so `GPR 18.14(b)` applies. -/
 theorem IsComposition.mul_assoc_of_isLGRing_of_rankAtStalk_eq_four [Nontrivial k]
@@ -380,11 +351,9 @@ theorem IsComposition.mul_assoc_of_isLGRing_of_rankAtStalk_eq_four [Nontrivial k
   let : Module.Projective k B := by
     have := QuadraticForm.projective_of_comp_isGPRRegular (Q := C.norm) hreg
     exact Module.Projective.of_equiv (toSubmoduleEquiv B)
-  have hBcomp : (C.restrict B).IsComposition.{u, v, u} :=
-    ⟨hreg.isGPRNonsingular, h.isMultiplicative.restrict⟩
-  have hBassoc := hBcomp.mul_assoc_of_isLGRing_of_rankAtStalk_eq_two hLG
+  have hBassoc := (C.restrict B).mul_assoc_of_isLGRing_of_rankAtStalk_eq_two hLG
     ((rankAtStalk_toSubmodule B).symm.trans hB)
-  have hBcomm := hBcomp.mul_comm_of_isLGRing_of_rankAtStalk_eq_two hLG
+  have hBcomm := (C.restrict B).mul_comm_of_isLGRing_of_rankAtStalk_eq_two hLG
     ((rankAtStalk_toSubmodule B).symm.trans hB)
   let : CommRing B :=
     { (inferInstance : NonAssocRing B) with mul_assoc := hBassoc, mul_comm := hBcomm }
@@ -414,11 +383,12 @@ theorem eq_of_forall_localization_maximal (x y : A)
     (fun P _ ↦ TensorProduct.mk k (Localization.AtPrime P) A 1)
     x y hxy
 
-/-- A constant-rank-two composition algebra over an arbitrary commutative ring is
-commutative. This is the positive part of `GPR 19.18(b)`. -/
-theorem IsComposition.mul_comm_of_rankAtStalk_eq_two
-    (h : C.IsComposition.{u, v, u}) (hA : Module.rankAtStalk (R := k) A = fun _ ↦ 2)
-    (x y : A) : x * y = y * x := by
+/-- A finitely generated projective conic algebra of constant rank two over an arbitrary
+commutative ring is commutative (`GPR 16.4`); for composition algebras this is the positive part of
+`GPR 19.18(b)`. It is checked at each localization at a maximal ideal, where the algebra is `k[u]`
+(`ConicAlgebra.mul_comm_of_isLGRing_of_rankAtStalk_eq_two`). -/
+theorem mul_comm_of_rankAtStalk_eq_two (C : ConicAlgebra k A)
+    (hA : Module.rankAtStalk (R := k) A = fun _ ↦ 2) (x y : A) : x * y = y * x := by
   apply eq_of_forall_localization_maximal (k := k)
   intro P hP
   let S := Localization.AtPrime P
@@ -427,14 +397,15 @@ theorem IsComposition.mul_comm_of_rankAtStalk_eq_two
     rw [Module.rankAtStalk_baseChange, hA]
   have hLG : IsLGRing S := isLGRing_of_isLocalRing S
   simpa only [one_tmul_mul] using
-    (h.baseChangeOfProjective S).mul_comm_of_isLGRing_of_rankAtStalk_eq_two hLG hSrank
+    (C.baseChangeOfProjective S).mul_comm_of_isLGRing_of_rankAtStalk_eq_two hLG hSrank
       (1 ⊗ₜ[k] x) (1 ⊗ₜ[k] y)
 
-/-- A constant-rank-two composition algebra over an arbitrary commutative ring is
-associative. This is the positive part of `GPR 19.18(b)`. -/
-theorem IsComposition.mul_assoc_of_rankAtStalk_eq_two
-    (h : C.IsComposition.{u, v, u}) (hA : Module.rankAtStalk (R := k) A = fun _ ↦ 2)
-    (x y z : A) : x * y * z = x * (y * z) := by
+/-- A finitely generated projective conic algebra of constant rank two over an arbitrary
+commutative ring is associative (`GPR 16.4`); for composition algebras this is the positive part of
+`GPR 19.18(b)`. It is checked at each localization at a maximal ideal, where the algebra is `k[u]`
+(`ConicAlgebra.mul_assoc_of_isLGRing_of_rankAtStalk_eq_two`). -/
+theorem mul_assoc_of_rankAtStalk_eq_two (C : ConicAlgebra k A)
+    (hA : Module.rankAtStalk (R := k) A = fun _ ↦ 2) (x y z : A) : x * y * z = x * (y * z) := by
   apply eq_of_forall_localization_maximal (k := k)
   intro P hP
   let S := Localization.AtPrime P
@@ -443,7 +414,7 @@ theorem IsComposition.mul_assoc_of_rankAtStalk_eq_two
     rw [Module.rankAtStalk_baseChange, hA]
   have hLG : IsLGRing S := isLGRing_of_isLocalRing S
   simpa only [one_tmul_mul] using
-    (h.baseChangeOfProjective S).mul_assoc_of_isLGRing_of_rankAtStalk_eq_two hLG hSrank
+    (C.baseChangeOfProjective S).mul_assoc_of_isLGRing_of_rankAtStalk_eq_two hLG hSrank
       (1 ⊗ₜ[k] x) (1 ⊗ₜ[k] y) (1 ⊗ₜ[k] z)
 
 /-- A constant-rank-four composition algebra over an arbitrary commutative ring is
@@ -574,8 +545,8 @@ theorem IsComposition.rankAtStalk_classification [Nontrivial k]
   · subst r
     exact Or.inl ⟨rfl, exists_linearEquiv_map_one_map_mul_of_rankAtStalk_eq_one C hA⟩
   · subst r
-    exact Or.inr <| Or.inl ⟨rfl, h.mul_comm_of_rankAtStalk_eq_two hA,
-      h.mul_assoc_of_rankAtStalk_eq_two hA, h.exists_conj_ne_of_rankAtStalk_eq_two hA⟩
+    exact Or.inr <| Or.inl ⟨rfl, C.mul_comm_of_rankAtStalk_eq_two hA,
+      C.mul_assoc_of_rankAtStalk_eq_two hA, h.exists_conj_ne_of_rankAtStalk_eq_two hA⟩
   · subst r
     exact Or.inr <| Or.inr <| Or.inl
       ⟨rfl, h.mul_assoc_of_rankAtStalk_eq_four hA, h.not_mul_comm_of_rankAtStalk_eq_four hA⟩

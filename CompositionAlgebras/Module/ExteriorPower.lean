@@ -26,6 +26,7 @@ pairing transports the inverse across that retraction, avoiding any choice of lo
 * `exteriorPower.baseChangeLinear` : the canonical base-change map for exterior powers.
 * `exteriorPower.pairingDual_naturality` : naturality of the determinant pairing.
 * `exteriorPower.pairingDualEquiv` : perfect duality for every finite projective module.
+* `exteriorPower.instProjective` : the exterior powers of a projective module are projective.
 
 ## References
 
@@ -118,3 +119,11 @@ noncomputable def pairingDualEquiv [Module.Finite R M] [Module.Projective R M] (
     pairingDualEquiv (M := M) n x = pairingDual R M n x := rfl
 
 end exteriorPower
+
+/-- The exterior powers of a projective module are projective. -/
+instance exteriorPower.instProjective {R : Type u} [CommRing R] {M : Type v} [AddCommGroup M]
+    [Module R M] [Module.Projective R M] (n : ℕ) : Module.Projective R (⋀[R]^n M) := by
+  obtain ⟨s, hs⟩ := Module.projective_def'.mp ‹Module.Projective R M›
+  exact Module.Projective.of_split (exteriorPower.map n s)
+    (exteriorPower.map n (Finsupp.linearCombination R id))
+    (by rw [← exteriorPower.map_comp, hs, exteriorPower.map_id])

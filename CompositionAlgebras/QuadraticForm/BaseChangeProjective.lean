@@ -11,6 +11,8 @@ public import Mathlib.LinearAlgebra.QuadraticForm.IsometryEquiv
 public import Mathlib.LinearAlgebra.Pi
 public import Mathlib.RingTheory.Finiteness.Cardinality
 public import Mathlib.Algebra.Module.Projective
+public import Mathlib.RingTheory.Flat.TorsionFree
+public import Mathlib.RingTheory.Localization.BaseChange
 
 /-!
 # Base change of quadratic maps along `R → A`, without inverting `2`
@@ -47,6 +49,10 @@ by `baseChange_ext`.
 * `QuadraticForm.baseChangeOfProjective_eq_baseChange`: agreement with mathlib's
   `QuadraticForm.baseChange` when `2` is invertible.
 * `QuadraticMap.IsometryEquiv.baseChangeOfProjective`: base change of an isometry.
+* `QuadraticForm.anisotropic_baseChangeOfProjective_iff_of_isLocalization`,
+  `QuadraticForm.anisotropic_baseChangeOfProjective_iff_of_isFractionRing`: `GPR Exc. 12.38(b)` —
+  anisotropy is unchanged by localizing at non-zero-divisors, in particular by passing to the
+  fraction field.
 
 ## Implementation notes
 
@@ -74,6 +80,7 @@ and the `QuadraticForm`-valued construction is given a distinct name.
   characteristic-2 examples (`GPR 19.4`) this development needs to state.
 * GN's definition of non-singularity (`QuadraticForm/Regularity.lean`) needs base change along
   finitely generated projective modules specifically — matching this file's hypothesis exactly.
+* [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, Exc. 12.38.
 -/
 
 @[expose] public section
@@ -383,5 +390,48 @@ noncomputable def baseChangeOfProjectiveIsometryEquiv (Q : QuadraticForm R M) :
     simp
 
 end Trans
+
+end QuadraticForm
+
+/-! ### Anisotropy and localization (`GPR Exc. 12.38(b)`) -/
+
+namespace QuadraticForm
+
+open scoped nonZeroDivisors
+
+variable {R : Type uR} {M : Type uM} [CommRing R] [AddCommGroup M] [Module R M]
+  [Module.Finite R M] [Module.Projective R M]
+
+/-- **`GPR Exc. 12.38(b)`, for quadratic forms.** Let `L` be the localization of `R` at a
+multiplicative set `S` of non-zero-divisors. A quadratic form on a finitely generated projective
+`R`-module is anisotropic if and only if its base change to `L` is; equivalently, it represents
+zero if and only if its base change does.
+
+A null vector `m ≠ 0` gives the null vector `1 ⊗ m ≠ 0`, since a projective module has no
+`S`-torsion. Conversely a null vector `x` of `L ⊗[R] M` satisfies `s • x = 1 ⊗ m` for some `s ∈ S`
+and `m ∈ M`, and then `Q m` maps to `s² Q_L(x) = 0`. -/
+theorem anisotropic_baseChangeOfProjective_iff_of_isLocalization (S : Submonoid R) (hS : S ≤ R⁰)
+    (L : Type*) [CommRing L] [Algebra R L] [IsLocalization S L] (Q : QuadraticForm R M) :
+    (Q.baseChangeOfProjective L).Anisotropic ↔ Q.Anisotropic := by
+  have hval (m : M) :
+      Q.baseChangeOfProjective L (TensorProduct.mk R L M 1 m) = algebraMap R L (Q m) := by
+    rw [TensorProduct.mk_apply, baseChangeOfProjective_tmul, mul_one, Algebra.smul_def, mul_one]
+  refine ⟨fun h m hm ↦ ?_, fun h x hx ↦ ?_⟩
+  · obtain ⟨s, hs⟩ := (IsLocalizedModule.eq_zero_iff S (TensorProduct.mk R L M 1)).mp <|
+      h _ (by rw [hval, hm, map_zero])
+    exact Module.Flat.isSMulRegular_of_nonZeroDivisors (hS s.2) (hs.trans (smul_zero _).symm)
+  · obtain ⟨⟨m, s⟩, hms⟩ := IsLocalizedModule.surj S (TensorProduct.mk R L M 1) x
+    rw [Submonoid.smul_def, ← algebraMap_smul L] at hms
+    have hm : m = 0 := h m <| IsLocalization.injective L hS <| by
+      rw [map_zero, ← hval, ← hms, QuadraticMap.map_smul, hx, smul_zero]
+    rw [hm, map_zero] at hms
+    exact (IsLocalization.map_units L s).smul_eq_zero.mp hms
+
+/-- **`GPR Exc. 12.38(b)` over the fraction field.** A quadratic form on a finitely generated
+projective module is anisotropic if and only if its base change to the fraction field is. -/
+theorem anisotropic_baseChangeOfProjective_iff_of_isFractionRing (F : Type*) [CommRing F]
+    [Algebra R F] [IsFractionRing R F] (Q : QuadraticForm R M) :
+    (Q.baseChangeOfProjective F).Anisotropic ↔ Q.Anisotropic :=
+  anisotropic_baseChangeOfProjective_iff_of_isLocalization R⁰ le_rfl F Q
 
 end QuadraticForm

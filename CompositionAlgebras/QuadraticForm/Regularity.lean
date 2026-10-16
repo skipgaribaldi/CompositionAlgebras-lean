@@ -24,6 +24,7 @@ public import Mathlib.RingTheory.Spectrum.Prime.FreeLocus
 public import Mathlib.RingTheory.TensorProduct.Free
 public import Mathlib.LinearAlgebra.TensorProduct.Prod
 public import Mathlib.LinearAlgebra.TensorProduct.Tower
+public import Mathlib.LinearAlgebra.Unimodular
 public import CompositionAlgebras.QuadraticForm.BaseChangeProjective
 
 /-!
@@ -120,6 +121,14 @@ for finite-dimensional forms over a field of characteristic not `2` all four not
   concrete witness over `ℤ`.
 * `QuadraticForm.isEKMNondegenerate_iff_isGPRNonsingular` : over a field `R`, `IsEKMNondegenerate`
   and `IsGPRNonsingular` are the same predicate.
+* `QuadraticForm.isGPRRegular_prod_iff` : an orthogonal sum is regular exactly when both summands
+  are.
+* `QuadraticForm.IsGPRRegular.smul_of_isUnit`, `QuadraticForm.isUnit_of_isGPRRegular_smul` :
+  rescaling by a unit preserves regularity, and on a module with a unimodular element a regular
+  rescaling `c • q` forces `c` to be a unit.
+* `QuadraticMap.injOn_ker_polarBilin`, `QuadraticMap.two_smul_eq_zero_of_mem_ker_polarBilin` : for
+  `Q` with vanishing radical, `Q` is injective on the kernel of its polar form, and `2` kills that
+  kernel (the assertion `2 C⊥ = 0` of `GPR 19.3`).
 
 All results in this file are complete; there are no `sorry`s.
 
@@ -226,7 +235,7 @@ does not reprove and which `AGENTS.md` §8 asks us not to import wholesale. That
 ## References
 
 * [GPR] Garibaldi, Petersson, Racine, *Albert Algebras over Commutative Rings*, Cambridge
-  University Press, New Mathematical Monographs vol. 48, 2024.  11.11, 19.4.
+  University Press, New Mathematical Monographs vol. 48, 2024.  11.11, 19.3, 19.4.
 * [GPR 42] Calmès, Fasel, *Groupes classiques*, Panoramas & Synthèses **46** (2015),
   1–133.
 * [GPR 53] Conrad, *Reductive group schemes*, in *Autour des schémas en groupes*, vol. I,
@@ -1220,3 +1229,137 @@ theorem QuadraticForm.isEKMNondegenerate_iff_isGPRNonsingular.{w2} {F : Type u} 
     (Q : QuadraticForm F V) :
     QuadraticForm.IsEKMNondegenerate.{u, v, w2} Q ↔ QuadraticForm.IsGPRNonsingular.{u, v, w2} Q :=
   Iff.rfl
+
+/-! ### Regularity of orthogonal sums and of rescaled forms
+
+The orthogonal sum `q₁ ⊥ q₂` of `GPR 11.12` is mathlib's `QuadraticMap.prod`. -/
+
+namespace QuadraticForm
+
+variable {R : Type*} [CommRing R] {M : Type*} [AddCommGroup M] [Module R M]
+  {M₁ : Type*} [AddCommGroup M₁] [Module R M₁] {M₂ : Type*} [AddCommGroup M₂] [Module R M₂]
+
+/-- **An orthogonal sum of regular forms is regular.** The polar map of `q₁ ⊥ q₂` sends `(x₁, x₂)`
+to `(y₁, y₂) ↦ q₁(x₁, y₁) + q₂(x₂, y₂)`, so it is the product of the two polar maps followed by
+the identification `M₁* × M₂* ≃ (M₁ × M₂)*`. -/
+theorem IsGPRRegular.prod {Q₁ : QuadraticForm R M₁} {Q₂ : QuadraticForm R M₂}
+    (h₁ : Q₁.IsGPRRegular) (h₂ : Q₂.IsGPRRegular) : IsGPRRegular (Q₁.prod Q₂) := by
+  refine ⟨fun x y hxy ↦ ?_, fun f ↦ ?_⟩
+  · have e₁ : QuadraticMap.polarBilin Q₁ x.1 = QuadraticMap.polarBilin Q₁ y.1 :=
+      LinearMap.ext fun z ↦ by simpa using LinearMap.congr_fun hxy (z, 0)
+    have e₂ : QuadraticMap.polarBilin Q₂ x.2 = QuadraticMap.polarBilin Q₂ y.2 :=
+      LinearMap.ext fun z ↦ by simpa using LinearMap.congr_fun hxy (0, z)
+    exact Prod.ext (h₁.1 e₁) (h₂.1 e₂)
+  · obtain ⟨x₁, hx₁⟩ := h₁.2 (f ∘ₗ LinearMap.inl R M₁ M₂)
+    obtain ⟨x₂, hx₂⟩ := h₂.2 (f ∘ₗ LinearMap.inr R M₁ M₂)
+    refine ⟨(x₁, x₂), LinearMap.ext fun z ↦ ?_⟩
+    have e₁ := LinearMap.congr_fun hx₁ z.1
+    have e₂ := LinearMap.congr_fun hx₂ z.2
+    simp only [QuadraticMap.polarBilin_apply_apply, LinearMap.comp_apply, LinearMap.inl_apply,
+      LinearMap.inr_apply] at e₁ e₂
+    rw [QuadraticMap.polarBilin_apply_apply, QuadraticMap.polar_prod, e₁, e₂, ← map_add,
+      Prod.mk_add_mk, add_zero, zero_add]
+
+/-- **The left summand of a regular orthogonal sum is regular.** A preimage of `f ∘ fst` under the
+polar map of `q₁ ⊥ q₂` has first component a preimage of `f` under the polar map of `q₁`. -/
+theorem IsGPRRegular.of_prod_left {Q₁ : QuadraticForm R M₁} {Q₂ : QuadraticForm R M₂}
+    (h : IsGPRRegular (Q₁.prod Q₂)) : Q₁.IsGPRRegular := by
+  refine ⟨fun x y hxy ↦ ?_, fun f ↦ ?_⟩
+  · have e : QuadraticMap.polarBilin (Q₁.prod Q₂) (x, 0) =
+        QuadraticMap.polarBilin (Q₁.prod Q₂) (y, 0) :=
+      LinearMap.ext fun z ↦ by simpa using LinearMap.congr_fun hxy z.1
+    exact congrArg Prod.fst (h.1 e)
+  · obtain ⟨x, hx⟩ := h.2 (f ∘ₗ LinearMap.fst R M₁ M₂)
+    exact ⟨x.1, LinearMap.ext fun z ↦ by simpa using LinearMap.congr_fun hx (z, 0)⟩
+
+/-- **The right summand of a regular orthogonal sum is regular.** -/
+theorem IsGPRRegular.of_prod_right {Q₁ : QuadraticForm R M₁} {Q₂ : QuadraticForm R M₂}
+    (h : IsGPRRegular (Q₁.prod Q₂)) : Q₂.IsGPRRegular := by
+  refine ⟨fun x y hxy ↦ ?_, fun f ↦ ?_⟩
+  · have e : QuadraticMap.polarBilin (Q₁.prod Q₂) (0, x) =
+        QuadraticMap.polarBilin (Q₁.prod Q₂) (0, y) :=
+      LinearMap.ext fun z ↦ by simpa using LinearMap.congr_fun hxy z.2
+    exact congrArg Prod.snd (h.1 e)
+  · obtain ⟨x, hx⟩ := h.2 (f ∘ₗ LinearMap.snd R M₁ M₂)
+    exact ⟨x.2, LinearMap.ext fun z ↦ by simpa using LinearMap.congr_fun hx (0, z)⟩
+
+/-- **Regularity of an orthogonal sum** (`GN C.8(f)`): `q₁ ⊥ q₂` is regular if and only if both
+`q₁` and `q₂` are. Unlike non-singularity (`GN (C.8.3)`,
+`QuadraticForm.IsGPRRegular.prod_isGPRNonsingular`), regularity is symmetric in the two summands,
+and needs no finiteness or projectivity. -/
+theorem isGPRRegular_prod_iff {Q₁ : QuadraticForm R M₁} {Q₂ : QuadraticForm R M₂} :
+    IsGPRRegular (Q₁.prod Q₂) ↔ Q₁.IsGPRRegular ∧ Q₂.IsGPRRegular :=
+  ⟨fun h ↦ ⟨h.of_prod_left, h.of_prod_right⟩, fun h ↦ h.1.prod h.2⟩
+
+/-- **A unit multiple of a regular form is regular**: the polar map of `c q` is `c` times the
+polar map of `q`, and multiplication by a unit is bijective on the dual. -/
+theorem IsGPRRegular.smul_of_isUnit {c : R} (hc : IsUnit c) {Q : QuadraticForm R M}
+    (h : Q.IsGPRRegular) : (c • Q).IsGPRRegular := by
+  have hpolar (x : M) : QuadraticMap.polarBilin (c • Q) x = c • QuadraticMap.polarBilin Q x :=
+    LinearMap.ext fun y ↦ by
+      simp only [QuadraticMap.polarBilin_apply_apply, LinearMap.smul_apply, smul_eq_mul,
+        QuadraticMap.polar, smul_apply]
+      ring
+  refine ⟨fun x y hxy ↦ h.1 ?_, fun f ↦ ?_⟩
+  · rwa [hpolar, hpolar, hc.smul_left_cancel] at hxy
+  · obtain ⟨x, hx⟩ := h.2 ((hc.unit⁻¹ : Rˣ) • f)
+    refine ⟨x, ?_⟩
+    rw [hpolar, hx, Units.smul_def, smul_smul, hc.mul_val_inv, one_smul]
+
+/-- **A regular rescaled form forces the scalar to be a unit**, as soon as the module has a
+unimodular element `m`: if `f m = 1` and `x` is a preimage of `f` under the polar map of `c q`,
+then `c · q(x, m) = 1`. -/
+theorem isUnit_of_isGPRRegular_smul {c : R} {Q : QuadraticForm R M} (h : (c • Q).IsGPRRegular)
+    {m : M} (hm : Module.IsUnimodular R m) : IsUnit c := by
+  obtain ⟨f, hf⟩ := Module.isUnimodular_iff.mp hm
+  obtain ⟨x, hx⟩ := h.2 f
+  refine IsUnit.of_mul_eq_one (QuadraticMap.polar Q x m) ?_
+  rw [← hf, ← hx, QuadraticMap.polarBilin_apply_apply]
+  simp only [QuadraticMap.polar, smul_apply, smul_eq_mul]
+  ring
+
+end QuadraticForm
+
+/-! ### The polar radical of a quadratic map -/
+
+namespace QuadraticMap
+
+variable {R M P : Type*} [CommRing R] [AddCommGroup M] [Module R M] [AddCommGroup P]
+  [Module R P] {Q : QuadraticMap R M P}
+
+/-- Membership in the kernel of the polar form `Q.polarBilin`: `n(z, y) = 0` for every `y`. This
+kernel is `Rad(DQ)` in `GPR`'s notation, not the radical `QuadraticMap.radical Q`. -/
+theorem mem_ker_polarBilin_iff {z : M} :
+    z ∈ LinearMap.ker Q.polarBilin ↔ ∀ y, polar Q z y = 0 := by
+  simp only [LinearMap.mem_ker, LinearMap.ext_iff, polarBilin_apply_apply, LinearMap.zero_apply]
+
+/-- A quadratic map is additive in an argument from the kernel of its polar form. -/
+theorem map_add_of_mem_ker_polarBilin {a : M} (ha : a ∈ LinearMap.ker Q.polarBilin) (b : M) :
+    Q (a + b) = Q a + Q b := by
+  rw [QuadraticMap.map_add Q, mem_ker_polarBilin_iff.mp ha, add_zero]
+
+/-- If the radical of `Q` vanishes (`GPR`'s non-degeneracy), then `Q` is injective on the kernel
+of its polar form. For `a, b` in that kernel with `Q a = Q b`, the difference `a - b` is in the
+kernel too, and `Q (a - b) = Q a + Q b = 2 • Q a = n(a, a) = 0`, so `a - b` is in the radical.
+This is the first step of `GPR 19.3`'s treatment of the polar radical. -/
+theorem injOn_ker_polarBilin (hrad : Q.radical = ⊥) :
+    Set.InjOn Q (LinearMap.ker Q.polarBilin) := by
+  intro a ha b hb hab
+  have hmem : a - b ∈ Q.radical := by
+    refine ⟨?_, LinearMap.mem_ker.mp (Submodule.sub_mem _ ha hb)⟩
+    rw [sub_eq_add_neg, map_add_of_mem_ker_polarBilin ha, QuadraticMap.map_neg, ← hab,
+      ← two_nsmul, ← polar_self, mem_ker_polarBilin_iff.mp ha]
+  rwa [hrad, Submodule.mem_bot, sub_eq_zero] at hmem
+
+/-- **`2` kills the polar radical** of a quadratic map with vanishing radical (the assertion
+`2 C⊥ = 0` of `GPR 19.3`): for `z` in the kernel of the polar form, `Q (2 • z) = 2 • n(z, z) = 0`,
+so `2 • z` is in the radical. No algebra structure is involved. -/
+theorem two_smul_eq_zero_of_mem_ker_polarBilin (hrad : Q.radical = ⊥) {z : M}
+    (hz : z ∈ LinearMap.ker Q.polarBilin) : (2 : R) • z = 0 := by
+  have hmem : (2 : R) • z ∈ Q.radical := by
+    refine ⟨?_, LinearMap.mem_ker.mp (Submodule.smul_mem _ _ hz)⟩
+    rw [QuadraticMap.map_smul, mul_smul, two_smul R (Q z), ← two_nsmul, ← polar_self,
+      mem_ker_polarBilin_iff.mp hz, smul_zero]
+  rwa [hrad, Submodule.mem_bot] at hmem
+
+end QuadraticMap

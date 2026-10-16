@@ -56,6 +56,8 @@ octonion algebra, produces a pair directly and never has to exhibit `θ`.
   produce a vector product pair, and it is stated for an arbitrary finite basis.
 * `Module.orientationAlternating_mul_dualOrientationAlternating` : the primal and dual volume
   coefficients are inverse, the basis calculation behind Binet–Cauchy.
+* `Module.Basis.det_mul_det_dualBasis` : for a finite basis, the product of the determinant forms
+  of the basis and of its dual basis is the determinant of the matrix of pairings.
 
 ## Implementation notes
 
@@ -658,5 +660,20 @@ theorem VectorProductPair.ofOrientationOfBasis_eq
   VectorProductPair.ext rfl rfl
 
 end Orientation
+
+/-- In the coordinates of a finite basis and its dual basis, the product of the two determinant
+forms is the determinant of the matrix of pairings. -/
+theorem Basis.det_mul_det_dualBasis {R : Type u} [CommRing R] {N : Type v} [AddCommGroup N]
+    [Module R N] {ι : Type*} [Fintype ι] [DecidableEq ι] (b : Module.Basis ι R N)
+    (x : ι → N) (f : ι → Module.Dual R N) :
+    b.det x * b.dualBasis.det f = Matrix.det (.of fun i j ↦ f i (x j)) := by
+  rw [Basis.det_apply, Basis.det_apply, mul_comm,
+    ← Matrix.det_transpose (b.dualBasis.toMatrix f), ← Matrix.det_mul]
+  congr 1
+  ext i j
+  rw [Matrix.mul_apply]
+  simp only [Matrix.transpose_apply, Basis.toMatrix_apply, Basis.dualBasis_repr, Matrix.of_apply]
+  conv_rhs => rw [← b.sum_repr (x j)]
+  simp only [map_sum, map_smul, smul_eq_mul, mul_comm]
 
 end Module

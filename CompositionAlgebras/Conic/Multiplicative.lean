@@ -33,6 +33,9 @@ projectivity, and nothing on `2`. Only additivity of the norm's polar form is us
 
 ## Main results
 
+* `QuadraticForm.polar_mul_mul_right_of_map_mul`, `QuadraticForm.polar_mul_mul_left_of_map_mul`,
+  `QuadraticForm.polar_mul_add_polar_mul_of_map_mul` : the linearizations `GPR (19.1.3)`–`(19.1.5)`
+  for any quadratic form permitting composition on a non-associative ring, with no conic structure.
 * `ConicAlgebra.IsMultiplicative.polar_mul_mul_right`,
   `ConicAlgebra.IsMultiplicative.polar_mul_mul_left` : the first linearization, in either variable,
   `n(xz, yz) = n(x, y) n(z)` and `n(xy, xz) = n(x) n(y, z)`.
@@ -68,6 +71,47 @@ symmetry to exploit. They are proved the same way, by specializing the second li
 @[expose] public section
 
 universe u v
+
+/-! ### Quadratic forms permitting composition -/
+
+open QuadraticMap
+
+namespace QuadraticForm
+
+variable {k : Type u} {A : Type v} [CommRing k] [NonAssocRing A] [Module k A]
+  {Q : QuadraticForm k A}
+
+/-- **`GPR (19.1.4)`**: a quadratic form permitting composition satisfies
+`n(xz, yz) = n(x, y) n(z)`. Only right distributivity is used; compare
+`ConicAlgebra.IsMultiplicative.polar_mul_mul_right`, the same identity for a conic norm. -/
+theorem polar_mul_mul_right_of_map_mul (hmul : ∀ x y : A, Q (x * y) = Q x * Q y) (x y z : A) :
+    polar Q (x * z) (y * z) = polar Q x y * Q z := by
+  have hadd : x * z + y * z = (x + y) * z := (add_mul x y z).symm
+  simp only [QuadraticMap.polar, hadd, hmul]
+  ring
+
+/-- **`GPR (19.1.3)`**: a quadratic form permitting composition satisfies
+`n(xy, xz) = n(x) n(y, z)`. Only left distributivity is used; compare
+`ConicAlgebra.IsMultiplicative.polar_mul_mul_left`. -/
+theorem polar_mul_mul_left_of_map_mul (hmul : ∀ x y : A, Q (x * y) = Q x * Q y) (x y z : A) :
+    polar Q (x * y) (x * z) = Q x * polar Q y z := by
+  have hadd : x * y + x * z = x * (y + z) := (mul_add x y z).symm
+  simp only [QuadraticMap.polar, hadd, hmul]
+  ring
+
+/-- **`GPR (19.1.5)`**: a quadratic form permitting composition satisfies
+`n(xz, yw) + n(xw, yz) = n(x, y) n(z, w)`. This is `GPR`'s
+`n(xy, wz) + n(wy, xz) = n(x, w) n(y, z)` with the variables renamed, in the shape of
+`ConicAlgebra.IsMultiplicative.polar_mul_add_polar_mul`; it is `(19.1.4)` linearized in `z`. -/
+theorem polar_mul_add_polar_mul_of_map_mul (hmul : ∀ x y : A, Q (x * y) = Q x * Q y)
+    (x y z w : A) :
+    polar Q (x * z) (y * w) + polar Q (x * w) (y * z) = polar Q x y * polar Q z w := by
+  have key := polar_mul_mul_right_of_map_mul hmul x y (z + w)
+  simp only [mul_add, polar_add_left, polar_add_right, QuadraticMap.map_add Q z w] at key
+  linear_combination key - polar_mul_mul_right_of_map_mul hmul x y z -
+    polar_mul_mul_right_of_map_mul hmul x y w
+
+end QuadraticForm
 
 namespace ConicAlgebra
 
@@ -122,10 +166,8 @@ omit [SMulCommClass k A A] [IsScalarTower k A A] in
 Obtained from `n((x + y)z) = n(x + y) n(z)` by subtracting `n(xz) = n(x)n(z)` and
 `n(yz) = n(y)n(z)`; only right distributivity and additivity are used. -/
 theorem polar_mul_mul_right (h : C.IsMultiplicative) (x y z : A) :
-    QuadraticMap.polar C.norm (x * z) (y * z) = QuadraticMap.polar C.norm x y * C.norm z := by
-  have hadd : x * z + y * z = (x + y) * z := (add_mul x y z).symm
-  simp only [QuadraticMap.polar, hadd, h.norm_mul]
-  ring
+    QuadraticMap.polar C.norm (x * z) (y * z) = QuadraticMap.polar C.norm x y * C.norm z :=
+  QuadraticForm.polar_mul_mul_right_of_map_mul h x y z
 
 omit [SMulCommClass k A A] [IsScalarTower k A A] in
 /-- **First linearization of multiplicativity**, in the right variable: `n(xy, xz) = n(x) n(y, z)`.
@@ -133,10 +175,8 @@ omit [SMulCommClass k A A] [IsScalarTower k A A] in
 Not a consequence of `ConicAlgebra.IsMultiplicative.polar_mul_mul_right` — `A` is not assumed
 commutative — but proved the same way, from `n(x(y + z)) = n(x) n(y + z)`. -/
 theorem polar_mul_mul_left (h : C.IsMultiplicative) (x y z : A) :
-    QuadraticMap.polar C.norm (x * y) (x * z) = C.norm x * QuadraticMap.polar C.norm y z := by
-  have hadd : x * y + x * z = x * (y + z) := (mul_add x y z).symm
-  simp only [QuadraticMap.polar, hadd, h.norm_mul]
-  ring
+    QuadraticMap.polar C.norm (x * y) (x * z) = C.norm x * QuadraticMap.polar C.norm y z :=
+  QuadraticForm.polar_mul_mul_left_of_map_mul h x y z
 
 omit [SMulCommClass k A A] [IsScalarTower k A A] in
 /-- **Second linearization of multiplicativity**: `n(xz, yw) + n(xw, yz) = n(x, y) n(z, w)`.
@@ -146,11 +186,8 @@ norm-associativity below are read off. It is
 `ConicAlgebra.IsMultiplicative.polar_mul_mul_right` linearized in its second variable. -/
 theorem polar_mul_add_polar_mul (h : C.IsMultiplicative) (x y z w : A) :
     QuadraticMap.polar C.norm (x * z) (y * w) + QuadraticMap.polar C.norm (x * w) (y * z)
-      = QuadraticMap.polar C.norm x y * QuadraticMap.polar C.norm z w := by
-  have key := h.polar_mul_mul_right x y (z + w)
-  simp only [mul_add, QuadraticMap.polar_add_left, QuadraticMap.polar_add_right,
-    C.norm_add] at key
-  linear_combination key - h.polar_mul_mul_right x y z - h.polar_mul_mul_right x y w
+      = QuadraticMap.polar C.norm x y * QuadraticMap.polar C.norm z w :=
+  QuadraticForm.polar_mul_add_polar_mul_of_map_mul h x y z w
 
 omit [SMulCommClass k A A] in
 /-- **Norm-associativity** (`GPR 16.5`, and the reason multiplicativity is so rigid):

@@ -39,7 +39,8 @@ uses `GPR`'s argument in two halves, the degree-two identity here and Kirmse's i
 ## Proof outline
 
 *Clause 1* follows `GPR`. Linearizing `n(xy) = n(x) n(y)` gives `(19.1.3)`–`(19.1.5)` using
-only distributivity; with `t(y) := n(1, y)` they give `n(xy, x) = n(x) t(y)` `(19.3.1)` and
+only distributivity (`QuadraticForm.polar_mul_mul_left_of_map_mul` and its companions in
+`Conic/Multiplicative.lean`); with `t(y) := n(1, y)` they give `n(xy, x) = n(x) t(y)` `(19.3.1)` and
 `t(x²) = t(x)² - 2 n(x)` `(19.3.2)`. Then `w := x² - t(x) x + n(x) 1` satisfies `n(w, y) = 0` for
 all `y` and `n(w) = 0`, so `w` lies in the radical of `n`, which is zero.
 
@@ -60,9 +61,6 @@ lies in the radical.
 
 ## Main results
 
-* `QuadraticForm.polar_mul_mul_left_of_map_mul`, `QuadraticForm.polar_mul_mul_right_of_map_mul`,
-  `QuadraticForm.polar_mul_add_polar_mul_of_map_mul` : the linearizations `(19.1.3)`–`(19.1.5)`
-  of a bare quadratic form permitting composition.
 * `QuadraticForm.mul_self_sub_polar_smul_add_smul_mem_radical_of_map_mul`,
   `QuadraticForm.mul_self_eq_of_map_mul` : the degree-two identity, up to the radical and exactly.
 * `ConicAlgebra.isMultiplicative_ofMultiplicative`, `ConicAlgebra.isAlternative_ofMultiplicative` :
@@ -71,9 +69,11 @@ lies in the radical.
   structure is the constructed one; in particular its norm is `n` (`GPR 19.3`, via `GPR 16.16`).
 * `ConicAlgebra.IsMultiplicative.mul_mem_ker_polarBilin_left`,
   `ConicAlgebra.IsMultiplicative.mul_mem_ker_polarBilin_right` : `A⊥` is an ideal.
-* `QuadraticMap.injOn_ker_polarBilin` : a form with vanishing radical is injective on `A⊥`.
+* `QuadraticMap.injOn_ker_polarBilin` (in `QuadraticForm/Regularity.lean`) : a form with
+  vanishing radical is injective on `A⊥`.
 * `ConicAlgebra.IsMultiplicative.mem_center_of_mem_ker_polarBilin` : `A⊥` is central.
-* `QuadraticMap.two_smul_eq_zero_of_mem_ker_polarBilin` : `2 A⊥ = 0`.
+* `QuadraticMap.two_smul_eq_zero_of_mem_ker_polarBilin` (in `QuadraticForm/Regularity.lean`) :
+  `2 A⊥ = 0`.
 * `ConicAlgebra.IsMultiplicative.polar_smul_eq_zero_of_mem_ker_polarBilin` : `n(x, y) A⊥ = 0`.
 
 ## Implementation notes
@@ -94,9 +94,10 @@ former and `Rad(n)` for the latter; they are `LinearMap.ker (QuadraticMap.polarB
 `x ↦ x²` on `𝔽₂` has zero polar form. When `2 ∈ kˣ` the two agree
 (`QuadraticMap.radical_eq_ker_polarBilin`), so clause 4 has content only when `2` is not a unit.
 
-The linearizations of multiplicativity are proved here for a bare quadratic form, because the
-conic structure is not yet available; `Conic/Multiplicative.lean` has the same identities for the
-norm of a conic algebra.
+The linearizations of multiplicativity are needed for a bare quadratic form, because the conic
+structure is not yet available; `Conic/Multiplicative.lean` proves them in that form and derives
+the conic versions from them. The facts about the kernel of the polar form use no algebra
+structure and live in `QuadraticForm/Regularity.lean`.
 
 ## References
 
@@ -110,86 +111,12 @@ universe u v
 
 open QuadraticMap
 
-/-! ### The polar radical of a quadratic map -/
-
-namespace QuadraticMap
-
-variable {R M P : Type*} [CommRing R] [AddCommGroup M] [Module R M] [AddCommGroup P]
-  [Module R P] {Q : QuadraticMap R M P}
-
-/-- Membership in the kernel of the polar form `Q.polarBilin`: `n(z, y) = 0` for every `y`. This
-kernel is `Rad(DQ)` in `GPR`'s notation, not the radical `QuadraticMap.radical Q`. -/
-theorem mem_ker_polarBilin_iff {z : M} :
-    z ∈ LinearMap.ker Q.polarBilin ↔ ∀ y, polar Q z y = 0 := by
-  simp only [LinearMap.mem_ker, LinearMap.ext_iff, polarBilin_apply_apply, LinearMap.zero_apply]
-
-/-- A quadratic map is additive in an argument from the kernel of its polar form. -/
-theorem map_add_of_mem_ker_polarBilin {a : M} (ha : a ∈ LinearMap.ker Q.polarBilin) (b : M) :
-    Q (a + b) = Q a + Q b := by
-  rw [QuadraticMap.map_add Q, mem_ker_polarBilin_iff.mp ha, add_zero]
-
-/-- If the radical of `Q` vanishes (`GPR`'s non-degeneracy), then `Q` is injective on the kernel
-of its polar form. For `a, b` in that kernel with `Q a = Q b`, the difference `a - b` is in the
-kernel too, and `Q (a - b) = Q a + Q b = 2 • Q a = n(a, a) = 0`, so `a - b` is in the radical.
-This is the first step of `GPR 19.3`'s treatment of the polar radical. -/
-theorem injOn_ker_polarBilin (hrad : Q.radical = ⊥) :
-    Set.InjOn Q (LinearMap.ker Q.polarBilin) := by
-  intro a ha b hb hab
-  have hmem : a - b ∈ Q.radical := by
-    refine ⟨?_, LinearMap.mem_ker.mp (Submodule.sub_mem _ ha hb)⟩
-    rw [sub_eq_add_neg, map_add_of_mem_ker_polarBilin ha, QuadraticMap.map_neg, ← hab,
-      ← two_nsmul, ← polar_self, mem_ker_polarBilin_iff.mp ha]
-  rwa [hrad, Submodule.mem_bot, sub_eq_zero] at hmem
-
-/-- **`2` kills the polar radical** of a quadratic map with vanishing radical (the assertion
-`2 C⊥ = 0` of `GPR 19.3`): for `z` in the kernel of the polar form, `Q (2 • z) = 2 • n(z, z) = 0`,
-so `2 • z` is in the radical. No algebra structure is involved. -/
-theorem two_smul_eq_zero_of_mem_ker_polarBilin (hrad : Q.radical = ⊥) {z : M}
-    (hz : z ∈ LinearMap.ker Q.polarBilin) : (2 : R) • z = 0 := by
-  have hmem : (2 : R) • z ∈ Q.radical := by
-    refine ⟨?_, LinearMap.mem_ker.mp (Submodule.smul_mem _ _ hz)⟩
-    rw [QuadraticMap.map_smul, mul_smul, two_smul R (Q z), ← two_nsmul, ← polar_self,
-      mem_ker_polarBilin_iff.mp hz, smul_zero]
-  rwa [hrad, Submodule.mem_bot] at hmem
-
-end QuadraticMap
-
-/-! ### Quadratic forms permitting composition -/
+/-! ### The degree-two identity from a multiplicative form -/
 
 namespace QuadraticForm
 
 variable {k : Type u} {A : Type v} [CommRing k] [NonAssocRing A] [Module k A]
   {Q : QuadraticForm k A}
-
-/-- **`GPR (19.1.4)`**: a quadratic form permitting composition satisfies
-`n(xz, yz) = n(x, y) n(z)`. Only right distributivity is used; compare
-`ConicAlgebra.IsMultiplicative.polar_mul_mul_right`, the same identity for a conic norm. -/
-theorem polar_mul_mul_right_of_map_mul (hmul : ∀ x y : A, Q (x * y) = Q x * Q y) (x y z : A) :
-    polar Q (x * z) (y * z) = polar Q x y * Q z := by
-  have hadd : x * z + y * z = (x + y) * z := (add_mul x y z).symm
-  simp only [QuadraticMap.polar, hadd, hmul]
-  ring
-
-/-- **`GPR (19.1.3)`**: a quadratic form permitting composition satisfies
-`n(xy, xz) = n(x) n(y, z)`. Only left distributivity is used; compare
-`ConicAlgebra.IsMultiplicative.polar_mul_mul_left`. -/
-theorem polar_mul_mul_left_of_map_mul (hmul : ∀ x y : A, Q (x * y) = Q x * Q y) (x y z : A) :
-    polar Q (x * y) (x * z) = Q x * polar Q y z := by
-  have hadd : x * y + x * z = x * (y + z) := (mul_add x y z).symm
-  simp only [QuadraticMap.polar, hadd, hmul]
-  ring
-
-/-- **`GPR (19.1.5)`**: a quadratic form permitting composition satisfies
-`n(xz, yw) + n(xw, yz) = n(x, y) n(z, w)`. This is `GPR`'s
-`n(xy, wz) + n(wy, xz) = n(x, w) n(y, z)` with the variables renamed, in the shape of
-`ConicAlgebra.IsMultiplicative.polar_mul_add_polar_mul`; it is `(19.1.4)` linearized in `z`. -/
-theorem polar_mul_add_polar_mul_of_map_mul (hmul : ∀ x y : A, Q (x * y) = Q x * Q y)
-    (x y z w : A) :
-    polar Q (x * z) (y * w) + polar Q (x * w) (y * z) = polar Q x y * polar Q z w := by
-  have key := polar_mul_mul_right_of_map_mul hmul x y (z + w)
-  simp only [mul_add, polar_add_left, polar_add_right, QuadraticMap.map_add Q z w] at key
-  linear_combination key - polar_mul_mul_right_of_map_mul hmul x y z -
-    polar_mul_mul_right_of_map_mul hmul x y w
 
 /-- `GPR (19.3.1)`: `n(xy, x) = n(x) t(y)` with `t(y) = n(1, y)`; `(19.1.3)` at `z = 1`. -/
 private theorem polar_mul_self_of_map_mul (hmul : ∀ x y : A, Q (x * y) = Q x * Q y) (x y : A) :

@@ -25,17 +25,15 @@ adds condition (i), following the proof of `GPR 22.19`: (i) is linked to (iii) b
 quadratic form on a finitely generated projective `k`-module represents zero if and only if its
 extension to a localization at non-zero-divisors does. A nonzero null vector `m` stays nonzero as
 `1 ⊗ m`, because projective modules have no torsion; conversely, clearing denominators turns a
-nonzero null vector of the extension into `1 ⊗ m` for a nonzero null vector `m`.
+nonzero null vector of the extension into `1 ⊗ m` for a nonzero null vector `m`. This is
+`QuadraticForm.anisotropic_baseChangeOfProjective_iff_of_isLocalization`, which uses no algebra
+structure and lives in `QuadraticForm/BaseChangeProjective.lean`.
 
 Over the field `F`, splitness of `C_F` is failure of anisotropy of its norm (`GPR 22.18`), so (i)
 is equivalent to (iii); the remaining conditions follow from the results over a PID.
 
 ## Main results
 
-* `QuadraticForm.anisotropic_baseChangeOfProjective_iff_of_isLocalization` : **`GPR Exc. 12.38(b)`**
-  for quadratic forms on finitely generated projective modules.
-* `QuadraticForm.anisotropic_baseChangeOfProjective_iff_of_isFractionRing` : the case of the
-  fraction field.
 * `ConicAlgebra.IsComposition.isSplitOfRank_baseChangeOfProjective_iff_not_anisotropic` :
   **`GPR 22.19`, (i) ↔ (iii)**, over any ring with a fraction field.
 * `ConicAlgebra.IsComposition.isSplitOfRank_baseChangeOfProjective_iff_not_noZeroDivisors` :
@@ -73,45 +71,6 @@ generators.
 universe u v w
 
 open scoped TensorProduct nonZeroDivisors
-
-namespace QuadraticForm
-
-variable {R : Type u} {M : Type v} [CommRing R] [AddCommGroup M] [Module R M]
-  [Module.Finite R M] [Module.Projective R M]
-
-/-- **`GPR Exc. 12.38(b)`, for quadratic forms.** Let `L` be the localization of `R` at a
-multiplicative set `S` of non-zero-divisors. A quadratic form on a finitely generated projective
-`R`-module is anisotropic if and only if its base change to `L` is; equivalently, it represents
-zero if and only if its base change does.
-
-A null vector `m ≠ 0` gives the null vector `1 ⊗ m ≠ 0`, since a projective module has no
-`S`-torsion. Conversely a null vector `x` of `L ⊗[R] M` satisfies `s • x = 1 ⊗ m` for some `s ∈ S`
-and `m ∈ M`, and then `Q m` maps to `s² Q_L(x) = 0`. -/
-theorem anisotropic_baseChangeOfProjective_iff_of_isLocalization (S : Submonoid R) (hS : S ≤ R⁰)
-    (L : Type w) [CommRing L] [Algebra R L] [IsLocalization S L] (Q : QuadraticForm R M) :
-    (Q.baseChangeOfProjective L).Anisotropic ↔ Q.Anisotropic := by
-  have hval (m : M) :
-      Q.baseChangeOfProjective L (TensorProduct.mk R L M 1 m) = algebraMap R L (Q m) := by
-    rw [TensorProduct.mk_apply, baseChangeOfProjective_tmul, mul_one, Algebra.smul_def, mul_one]
-  refine ⟨fun h m hm ↦ ?_, fun h x hx ↦ ?_⟩
-  · obtain ⟨s, hs⟩ := (IsLocalizedModule.eq_zero_iff S (TensorProduct.mk R L M 1)).mp <|
-      h _ (by rw [hval, hm, map_zero])
-    exact Module.Flat.isSMulRegular_of_nonZeroDivisors (hS s.2) (hs.trans (smul_zero _).symm)
-  · obtain ⟨⟨m, s⟩, hms⟩ := IsLocalizedModule.surj S (TensorProduct.mk R L M 1) x
-    rw [Submonoid.smul_def, ← algebraMap_smul L] at hms
-    have hm : m = 0 := h m <| IsLocalization.injective L hS <| by
-      rw [map_zero, ← hval, ← hms, QuadraticMap.map_smul, hx, smul_zero]
-    rw [hm, map_zero] at hms
-    exact (IsLocalization.map_units L s).smul_eq_zero.mp hms
-
-/-- **`GPR Exc. 12.38(b)` over the fraction field.** A quadratic form on a finitely generated
-projective module is anisotropic if and only if its base change to the fraction field is. -/
-theorem anisotropic_baseChangeOfProjective_iff_of_isFractionRing (F : Type w) [CommRing F]
-    [Algebra R F] [IsFractionRing R F] (Q : QuadraticForm R M) :
-    (Q.baseChangeOfProjective F).Anisotropic ↔ Q.Anisotropic :=
-  anisotropic_baseChangeOfProjective_iff_of_isLocalization R⁰ le_rfl F Q
-
-end QuadraticForm
 
 namespace ConicAlgebra.IsComposition
 
