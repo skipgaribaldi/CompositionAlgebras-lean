@@ -36,6 +36,7 @@ public import CompositionAlgebras.Composition.Reduced.Classification
 public import CompositionAlgebras.Composition.Reduced.Defs
 public import CompositionAlgebras.Composition.Reduced.Hyperbolic
 public import CompositionAlgebras.Composition.Reduced.Orientation
+public import CompositionAlgebras.Composition.Reduced.OrientedRankEight
 public import CompositionAlgebras.Composition.Reduced.Peirce
 public import CompositionAlgebras.Composition.Reduced.RankEight
 public import CompositionAlgebras.Composition.Reduced.RankTwo

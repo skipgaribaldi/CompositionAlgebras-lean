@@ -542,12 +542,17 @@ and §23 is the comparison between those and algebra isomorphisms.
   The converse structure theorem is **proved on vector-product-pair data**
   (`Composition/Reduced/RankEight.lean`): multiplication on the two off-diagonal Peirce components
   supplies a pair, and the Peirce coordinates give a unital multiplicative norm isometry from its
-  twisted Zorn algebra onto every reduced constant-rank-eight composition algebra. ⚠ `GPR 22.15`
-  states this with an **orientation**: `C ≅ Zor(M, θ)`. What is missing is the bridge from the
-  Peirce pair back to an orientation — an orientation `θ` of the twisting module whose induced pair
-  (`Module.VectorProductPair.ofOrientation`) is the Peirce one; the construction in the other
-  direction is done. The twisting
-  module has constant rank three. `Module.VectorProductPair.ofBasis` supplies the free case, and
+  twisted Zorn algebra onto every reduced constant-rank-eight composition algebra. The oriented form
+  of `GPR 22.15`, `C ≅ Zor(M, θ)`, is **proved** in `Composition/Reduced/OrientedRankEight.lean`:
+  every vector-product pair `P` on a constant-rank-three projective module comes from a unique
+  orientation (`Module.VectorProductPair.orientation`, with `ofOrientation_orientation`), proved by
+  base change of `P` to the localizations, where it is the pair of a basis, and the triple
+  Binet–Cauchy identity `⟨x₀ × x₁, x₂⟩ ⟨φ₀, φ₁ ×* φ₂⟩ = det (φᵢ(xⱼ))` (`GPR (22.14.1)`). So
+  `exists_orientation_isometryEquiv_twistedZor` gives `θ` with `θ(u ∧ v ∧ w) = n(uv, w)`
+  (`GPR (22.15.3)`) and an isomorphism `Zor(M, θ) ≅ C` sending `e₁₁` to `c`, and
+  `exists_isomorphic_twistedZor_ofOrientation_iff` is the first sentence of `GPR 22.15` in both
+  directions. The twisting module has constant rank three. `Module.VectorProductPair.ofBasis`
+  supplies the free case, and
   every vector-product pair on a based rank-three module is the pair of a suitably rescaled basis.
   Thus a free twisting module gives exactly `Zor(k)` and satisfies `IsSplitOfRank 8`, without a
   hypothesis on `2`.

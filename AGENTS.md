@@ -273,6 +273,9 @@ CompositionAlgebras/
       Orientation.lean   -- oriented rank-three projective modules (GPR 22.14)
       TwistedZorn.lean   -- twisted Zorn vector matrices (GPR 22.14)
       RankEight.lean     -- reduced composition algebras of rank eight (GPR 22.15)
+      OrientedRankEight.lean
+                         -- GPR 22.15 with an orientation: every vector-product pair on a
+                         -- rank-three module comes from a unique orientation
       Classification.lean
                          -- reduced composition algebras over LG rings (GPR 22.16)
       Capstone.lean      -- splitting octonion algebras from their quadratic etale subalgebras
