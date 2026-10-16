@@ -8,6 +8,7 @@ import Mathlib.LinearAlgebra.QuadraticForm.Prod
 import Mathlib.LinearAlgebra.QuadraticForm.Radical
 import Mathlib.LinearAlgebra.Dual.BaseChange
 import Mathlib.LinearAlgebra.Dual.Lemmas
+import Mathlib.LinearAlgebra.PerfectPairing.Basic
 import Mathlib.LinearAlgebra.FiniteDimensional.Lemmas
 import Mathlib.RingTheory.Finiteness.Prod
 import Mathlib.RingTheory.Flat.Stability
@@ -52,7 +53,8 @@ as, GPR's "regular" and "non-degenerate".
   (`QuadraticForm/NonsingularOverFields.lean`), nor the same as `EKM`'s "non-degenerate" (see
   `QuadraticForm.IsEKMNondegenerate` below).
 * `QuadraticForm.IsGPRRegular` : `polarBilin Q` is a *bijection* onto `Module.Dual R M`, not merely
-  injective (`SeparatingLeft`/weakly regular only asks injectivity).
+  injective (`SeparatingLeft`/weakly regular only asks injectivity). Equivalently, `polarBilin Q`
+  is a mathlib perfect pairing (`QuadraticForm.isGPRRegular_iff_isPerfPair`).
 * `QuadraticForm.IsGPRNonsingular` : `radical (Q.baseChangeOfProjective F) = ⊥` for every field `F`
   with `[Algebra R F]` (`GN C.8(e)`). GPR calls this property **non-singular**; readers may know
   the same condition as **non-degenerate**, **ordinary**, or **semiregular**, especially over
@@ -256,6 +258,15 @@ injective. The strongest rung of `GPR 11.11`'s ladder.
 `radical Q = ⊥` — see `QuadraticForm.IsEKMNondegenerate` below. -/
 def QuadraticForm.IsGPRRegular (Q : QuadraticForm R M) : Prop :=
   Function.Bijective (QuadraticMap.polarBilin Q : M →ₗ[R] Module.Dual R M)
+
+/-- **`GPR`'s regularity is mathlib's perfect pairing**: `Q` is regular exactly when its polar form
+is a `LinearMap.IsPerfPair`. The polar form is symmetric, so bijectivity in one argument already
+gives it in the other. This opens mathlib's perfect-pairing API to regular forms. -/
+theorem QuadraticForm.isGPRRegular_iff_isPerfPair {Q : QuadraticForm R M} :
+    Q.IsGPRRegular ↔ (QuadraticMap.polarBilin Q).IsPerfPair := by
+  have hflip : (QuadraticMap.polarBilin Q).flip = QuadraticMap.polarBilin Q :=
+    LinearMap.ext₂ fun x y ↦ QuadraticMap.polar_comm Q y x
+  refine ⟨fun h ↦ ⟨h, by rw [hflip]; exact h⟩, fun h ↦ h.1⟩
 
 /-- A regular quadratic form is non-degenerate in `GPR`'s sense: its radical lies in the kernel
 of the polar map, and that kernel vanishes because the polar map is injective. -/

@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
 import CompositionAlgebras.Nonassociative.Alternative.Artin
+import Mathlib.Algebra.Group.PNatPowAssoc
 
 /-!
 # Power-associativity of alternative rings
@@ -24,13 +25,16 @@ direction we actually use, and it needs no new classes.
 
 The recursive power below is `private` implementation detail. It exists only because a
 non-associative multiplication has no canonical `Monoid.npow`; once associativity is available,
-prefer mathlib's `^`. mathlib does have power-associativity mixins for a type that already carries
-a power operation, `PNatPowAssoc` and `NatPowAssoc`; `pow_assoc` below is not stated as an
-instance of them because an alternative ring comes with no `Pow` instance to attach them to.
+prefer mathlib's `^`. mathlib's power-associativity mixin `PNatPowAssoc` is stated for a type
+that already carries a power operation, and an alternative ring carries none; so the left-recursive
+power is packaged as `leftRecursivePPow`, a `def` rather than an instance, and
+`IsAlternative.pnatPowAssoc` proves `PNatPowAssoc` for it. Installing `leftRecursivePPow` as a
+local instance then gives mathlib's API (`ppow_mul_assoc`, `ppow_mul_comm`, `ppow_mul`).
 
 ## Main results
 
 * `IsAlternative.pow_assoc` : powers of a single element associate.
+* `IsAlternative.pnatPowAssoc` : the same, as mathlib's `PNatPowAssoc` for `leftRecursivePPow`.
 
 ## References
 
@@ -50,6 +54,13 @@ private theorem nonassocPow_zero {α : Type u} [Mul α] (a : α) : nonassocPow 0
 
 @[simp] private theorem nonassocPow_succ {α : Type u} [Mul α] (n : ℕ) (a : α) :
     nonassocPow (n + 1) a = a * nonassocPow n a := rfl
+
+/-- Positive powers by left recursion, `a ^ 1 = a` and `a ^ (n + 1) = a * a ^ n`, as a power by
+`ℕ+`. A non-associative multiplication has no canonical power, so this is a `def` to be installed
+as a local instance where wanted, not a global instance. -/
+@[instance_reducible]
+def leftRecursivePPow (α : Type u) [Mul α] : Pow α ℕ+ :=
+  ⟨fun a n ↦ nonassocPow n.natPred a⟩
 
 namespace IsAlternative
 
@@ -74,5 +85,20 @@ theorem pow_assoc (m n : ℕ) (a : α) :
       rw [← nonassocPow_succ]
       congr 1
       omega
+
+/-- **Power-associativity in mathlib's sense**: with the left-recursive power `leftRecursivePPow`,
+an alternative ring is `PNatPowAssoc`. This is `IsAlternative.pow_assoc` with the exponents shifted
+to `ℕ+`. -/
+theorem pnatPowAssoc : @PNatPowAssoc α _ (leftRecursivePPow α) :=
+  letI := leftRecursivePPow α
+  { ppow_add := fun k n x ↦ by
+      change nonassocPow (k + n).natPred x = nonassocPow k.natPred x * nonassocPow n.natPred x
+      rw [pow_assoc]
+      congr 1
+      simp only [PNat.natPred, PNat.add_coe]
+      have := k.pos
+      have := n.pos
+      omega
+    ppow_one := fun _ ↦ rfl }
 
 end IsAlternative

@@ -7,6 +7,8 @@ import CompositionAlgebras.LGRing.Semilocal
 import CompositionAlgebras.LGRing.Unimodular
 import CompositionAlgebras.QuadraticForm.Polynomial
 import CompositionAlgebras.QuadraticForm.Regularity
+import Mathlib.RingTheory.Flat.FaithfullyFlat.Basic
+import Mathlib.RingTheory.LocalRing.ResidueField.Ideal
 
 /-!
 # The representation lemma (`GPR 11.26`, `GN Lemma C.13(a)`)
@@ -21,7 +23,8 @@ non-singular case, which is the version formalized here (`IsGPRNonsingular`, fro
 ## Main definitions
 
 * `Module.HasFullSupport R M` : `F ⊗[R] M ≠ 0` for every field `F ∈ R`-alg. This is condition (iv)
-  of `GPR 11.25`, the formulation the proof actually consumes.
+  of `GPR 11.25`, the formulation the proof actually consumes. For `M` finitely generated it is
+  mathlib's `Module.support R M = Set.univ` (`Module.hasFullSupport_iff_support_eq_univ`).
 
 ## Main results
 
@@ -77,6 +80,32 @@ def Module.HasFullSupport (R : Type u) [CommRing R] (M : Type v) [AddCommGroup M
   ∀ (F : Type u) [Field F] [Algebra R F], Nontrivial (F ⊗[R] M)
 
 variable {R : Type u} [CommRing R] {M : Type v} [AddCommGroup M] [Module R M]
+
+/-- **Full support is mathlib's `Module.support R M = Set.univ`**, for `M` finitely generated.
+
+`F ⊗[R] M ≠ 0` at the residue field `κ(𝔭)` of every prime is membership of `𝔭` in the support
+(`Module.mem_support_iff_nontrivial_residueField_tensorProduct`, which is where finite generation
+is used). Conversely, a field `F ∈ R`-alg receives `κ(𝔭)` for `𝔭 = ker (R → F)`, and
+`F ⊗[R] M = F ⊗[κ(𝔭)] (κ(𝔭) ⊗[R] M)` is nonzero because `F` is faithfully flat over the field
+`κ(𝔭)`. -/
+theorem Module.hasFullSupport_iff_support_eq_univ [Module.Finite R M] :
+    Module.HasFullSupport R M ↔ Module.support R M = Set.univ := by
+  refine ⟨fun h ↦ Set.eq_univ_of_forall fun p ↦
+    (Module.mem_support_iff_nontrivial_residueField_tensorProduct p).mpr
+      (h p.asIdeal.ResidueField), fun h F _ _ ↦ ?_⟩
+  let p : PrimeSpectrum R := ⟨RingHom.ker (algebraMap R F), RingHom.ker_isPrime _⟩
+  have : p.asIdeal.IsPrime := p.2
+  have : Nontrivial (p.asIdeal.ResidueField ⊗[R] M) :=
+    (Module.mem_support_iff_nontrivial_residueField_tensorProduct p).mp (h ▸ Set.mem_univ p)
+  let f : p.asIdeal.ResidueField →+* F :=
+    Ideal.ResidueField.lift p.asIdeal (algebraMap R F) le_rfl fun r hr ↦
+      isUnit_iff_ne_zero.mpr fun h0 ↦ hr (RingHom.mem_ker.mpr h0)
+  let : Algebra p.asIdeal.ResidueField F := f.toAlgebra
+  have : IsScalarTower R p.asIdeal.ResidueField F :=
+    IsScalarTower.of_algebraMap_eq fun r ↦
+      (Ideal.ResidueField.lift_algebraMap p.asIdeal (algebraMap R F) _ _ r).symm
+  exact (TensorProduct.AlgebraTensorModule.cancelBaseChange R p.asIdeal.ResidueField F F
+    M).symm.toEquiv.nontrivial
 
 /-- Full support gives the residue-field condition — condition (iv) of `GPR 11.25` implies
 condition (iii). This is the form the LG axiom consumes, since `IsLGRing` quantifies over residue
