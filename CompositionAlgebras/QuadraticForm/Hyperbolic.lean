@@ -4,35 +4,40 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Skip Garibaldi
 -/
 import CompositionAlgebras.QuadraticForm.Regularity
+import Mathlib.LinearAlgebra.QuadraticForm.Dual
 
 /-!
 # Hyperbolic quadratic forms
 
-The **hyperbolic form** of an `R`-module `M` is the quadratic form
-`(m, f) ↦ f m` on `M ⊕ M*`. It is the basic example of a regular quadratic form that exists over
-*every* commutative ring with no hypothesis on `2`, and it is what Witt cancellation is ultimately
-about: the reduction of `GN 6.5` to the hyperbolic case (via `q ⊥ (-q)` hyperbolic) is what makes
-the elementary route to cancellation possible in characteristic `2`, where a regular form need not
+The **hyperbolic form** of an `R`-module `M` is mathlib's `QuadraticForm.dualProd R M`, the
+quadratic form `(f, m) ↦ f m` on `M* ⊕ M`. (GPR writes it on `M ⊕ M*`; we follow mathlib's order
+of the factors.) It is the basic example of a regular quadratic form that exists over *every*
+commutative ring with no hypothesis on `2`, and it is what Witt cancellation is ultimately about:
+the reduction of `GN 6.5` to the hyperbolic case (via `q ⊥ (-q)` hyperbolic) is what makes the
+elementary route to cancellation possible in characteristic `2`, where a regular form need not
 split off any rank-one piece at all.
 
-Neither mathlib nor the rest of this development has hyperbolic forms, so this file introduces
-them.
+mathlib supplies the form and its functoriality (`QuadraticForm.dualProdIsometry`,
+`QuadraticForm.dualProdProdIsometry`). This file adds its regularity, and the
+characteristic-free isometry `q ⊥ (-q) ≅ dualProd R M` for `q` regular.
 
 ## Main definitions
 
-* `QuadraticForm.hyperbolicBilin R M` : the bilinear form `((m, f), (m', f')) ↦ f m'` on `M ⊕ M*`.
-* `QuadraticForm.hyperbolic R M` : its associated quadratic form, `(m, f) ↦ f m`.
+* `QuadraticForm.dualProdPolarEquiv R M` : the polar map of `dualProd R M`, as a linear
+  equivalence `M* ⊕ M ≃ (M* ⊕ M)*`.
+* `QuadraticForm.toDualProdMap q`, `QuadraticForm.isometryEquivDualProd q hq` : the comparison
+  map `M ⊕ M → M* ⊕ M`, and the isometry `q ⊥ (-q) ≅ dualProd R M` it gives for `q` regular.
 
 ## Main results
 
-* `QuadraticForm.polar_hyperbolic` : the polar form is the canonical pairing,
-  `((m, f), (m', f')) ↦ f m' + f' m`. It is *symmetric and nondegenerate over any ring*, with no
+* `QuadraticForm.polar_dualProd` : the polar form is the canonical pairing,
+  `((f, m), (f', m')) ↦ f m' + f' m`. It is *symmetric and nondegenerate over any ring*, with no
   hypothesis on `2` — which is exactly why hyperbolic forms survive characteristic `2`.
-* `QuadraticForm.isGPRRegular_hyperbolic` : the hyperbolic form of a finitely generated projective
+* `QuadraticForm.isGPRRegular_dualProd` : the hyperbolic form of a finitely generated projective
   module is regular.
-* `QuadraticForm.isGPRNonsingular_hyperbolic` : hence non-singular.
-* `QuadraticForm.hyperbolic_apply_inl`, `QuadraticForm.hyperbolic_apply_inr` : `M ⊕ 0` and
-  `0 ⊕ M*` are totally isotropic — the two standard Lagrangians.
+* `QuadraticForm.isGPRNonsingular_dualProd` : hence non-singular.
+* `QuadraticForm.dualProd_apply_inl`, `QuadraticForm.dualProd_apply_inr` : `M* ⊕ 0` and
+  `0 ⊕ M` are totally isotropic — the two standard Lagrangians.
 * `QuadraticForm.isGPRNonsingular_of_basis_pairing` : a form on `M ⊕ M` pairing the two summands
   against each other in the coordinates of a finite basis, `Q (x, y) = ∑ᵢ xᵢ yᵢ`, is hyperbolic
   and therefore non-singular. This is how a hyperbolic form is recognized in practice.
@@ -45,9 +50,9 @@ them.
 
 Regularity is proved by factoring the polar map as a composition of two linear equivalences:
 
-  `M ⊕ M*  ≃  M* ⊕ M**  ≃  (M ⊕ M*)*`
+  `M* ⊕ M  ≃  M** ⊕ M*  ≃  (M* ⊕ M)*`
 
-The first is `Prod.comm` followed by `Module.evalEquiv` on the second factor — this is where
+The first is `Prod.comm` followed by `Module.evalEquiv` on the first factor — this is where
 finiteness and projectivity of `M` enter, through mathlib's `Module.IsReflexive` instance for
 finitely generated projective modules. The second is mathlib's
 `Module.dualProdDualEquivDual`. No determinant, no localization, and no assumption on `2`.
@@ -65,86 +70,61 @@ universe u v w t₁
 
 namespace QuadraticForm
 
-variable (R : Type u) [CommRing R] (M : Type v) [AddCommGroup M] [Module R M]
+variable {R : Type u} [CommRing R] {M : Type v} [AddCommGroup M] [Module R M]
 
-/-- The bilinear form `((m, f), (m', f')) ↦ f m'` on `M ⊕ M*`. It is not symmetric; its
-associated quadratic form is `QuadraticForm.hyperbolic`, whose polar form *is* symmetric
-(`QuadraticForm.polar_hyperbolic`). -/
-def hyperbolicBilin : LinearMap.BilinForm R (M × Module.Dual R M) :=
-  (LinearMap.id : Module.Dual R M →ₗ[R] M →ₗ[R] R).compl₁₂
-    (LinearMap.snd R M (Module.Dual R M)) (LinearMap.fst R M (Module.Dual R M))
-
-@[simp]
-theorem hyperbolicBilin_apply (x y : M × Module.Dual R M) :
-    hyperbolicBilin R M x y = x.2 y.1 :=
-  rfl
-
-/-- The **hyperbolic quadratic form** of `M`: the form `(m, f) ↦ f m` on `M ⊕ M*`.
-
-Every module has one, over every commutative ring, and it is always regular when `M` is finitely
-generated projective (`QuadraticForm.isGPRRegular_hyperbolic`) — with no hypothesis on `2`. -/
-def hyperbolic : QuadraticForm R (M × Module.Dual R M) :=
-  (hyperbolicBilin R M).toQuadraticMap
-
-@[simp]
-theorem hyperbolic_apply (x : M × Module.Dual R M) : hyperbolic R M x = x.2 x.1 :=
-  rfl
-
-variable {R M}
-
-/-- `M ⊕ 0` is totally isotropic: it is one of the two standard Lagrangians of the hyperbolic
-form. (Not a `simp` lemma: `hyperbolic_apply` already reduces both sides.) -/
-theorem hyperbolic_apply_inl (m : M) : hyperbolic R M (m, 0) = 0 :=
-  rfl
-
-/-- `0 ⊕ M*` is totally isotropic: it is the other standard Lagrangian. -/
-theorem hyperbolic_apply_inr (f : Module.Dual R M) : hyperbolic R M (0, f) = 0 :=
+/-- `M* ⊕ 0` is totally isotropic: it is one of the two standard Lagrangians of the hyperbolic
+form. (Not a `simp` lemma: `dualProd_apply` already reduces both sides.) -/
+theorem dualProd_apply_inl (f : Module.Dual R M) : dualProd R M (f, 0) = 0 :=
   map_zero f
 
-/-- The polar form of the hyperbolic form is the canonical pairing between `M ⊕ M*` and itself,
-`((m, f), (m', f')) ↦ f m' + f' m`. Note there is no factor of `2` anywhere: this is a
+/-- `0 ⊕ M` is totally isotropic: it is the other standard Lagrangian. -/
+theorem dualProd_apply_inr (m : M) : dualProd R M (0, m) = 0 :=
+  rfl
+
+/-- The polar form of the hyperbolic form is the canonical pairing between `M* ⊕ M` and itself,
+`((f, m), (f', m')) ↦ f m' + f' m`. Note there is no factor of `2` anywhere: this is a
 nondegenerate *symmetric* bilinear form over an arbitrary commutative ring. -/
-theorem polar_hyperbolic (x y : M × Module.Dual R M) :
-    QuadraticMap.polar (hyperbolic R M) x y = x.2 y.1 + y.2 x.1 := by
-  simp only [QuadraticMap.polar, hyperbolic_apply, Prod.fst_add, Prod.snd_add,
+theorem polar_dualProd (x y : Module.Dual R M × M) :
+    QuadraticMap.polar (dualProd R M) x y = x.1 y.2 + y.1 x.2 := by
+  simp only [QuadraticMap.polar, dualProd_apply, Prod.fst_add, Prod.snd_add,
     LinearMap.add_apply, map_add]
   ring
 
 variable (R M)
 
-/-- The linear equivalence `M ⊕ M* ≃ M* ⊕ M**` underlying regularity of the hyperbolic form.
+/-- The linear equivalence `M* ⊕ M ≃ (M* ⊕ M)*` underlying regularity of the hyperbolic form.
 Reflexivity of `M` — automatic for `M` finitely generated projective — is the only input. -/
-noncomputable def hyperbolicPolarEquiv [Module.Finite R M] [Module.Projective R M] :
-    (M × Module.Dual R M) ≃ₗ[R] Module.Dual R (M × Module.Dual R M) :=
-  ((LinearEquiv.prodComm R M (Module.Dual R M)).trans
-      ((LinearEquiv.refl R (Module.Dual R M)).prodCongr (Module.evalEquiv R M))).trans
-    (Module.dualProdDualEquivDual R M (Module.Dual R M))
+noncomputable def dualProdPolarEquiv [Module.Finite R M] [Module.Projective R M] :
+    (Module.Dual R M × M) ≃ₗ[R] Module.Dual R (Module.Dual R M × M) :=
+  ((LinearEquiv.prodComm R (Module.Dual R M) M).trans
+      ((Module.evalEquiv R M).prodCongr (LinearEquiv.refl R (Module.Dual R M)))).trans
+    (Module.dualProdDualEquivDual R (Module.Dual R M) M)
 
-theorem hyperbolicPolarEquiv_apply [Module.Finite R M] [Module.Projective R M]
-    (x y : M × Module.Dual R M) : hyperbolicPolarEquiv R M x y = x.2 y.1 + y.2 x.1 := by
-  simp [hyperbolicPolarEquiv, Module.dualProdDualEquivDual_apply]
+theorem dualProdPolarEquiv_apply [Module.Finite R M] [Module.Projective R M]
+    (x y : Module.Dual R M × M) : dualProdPolarEquiv R M x y = x.1 y.2 + y.1 x.2 := by
+  simp [dualProdPolarEquiv, Module.dualProdDualEquivDual_apply, add_comm]
 
 /-- **The hyperbolic form of a finitely generated projective module is regular.**
 
-The polar map is the canonical isomorphism `M ⊕ M* ≃ (M ⊕ M*)*`, which exists because `M` is
+The polar map is the canonical isomorphism `M* ⊕ M ≃ (M* ⊕ M)*`, which exists because `M` is
 reflexive. Unlike the criteria in `QuadraticForm/Regularity.lean`, this needs no assumption on
 `2`, no determinant computation and no localization. -/
-theorem isGPRRegular_hyperbolic [Module.Finite R M] [Module.Projective R M] :
-    QuadraticForm.IsGPRRegular (hyperbolic R M) := by
-  have h : (QuadraticMap.polarBilin (hyperbolic R M) :
-      (M × Module.Dual R M) →ₗ[R] Module.Dual R (M × Module.Dual R M)) =
-      (hyperbolicPolarEquiv R M).toLinearMap := by
+theorem isGPRRegular_dualProd [Module.Finite R M] [Module.Projective R M] :
+    QuadraticForm.IsGPRRegular (dualProd R M) := by
+  have h : (QuadraticMap.polarBilin (dualProd R M) :
+      (Module.Dual R M × M) →ₗ[R] Module.Dual R (Module.Dual R M × M)) =
+      (dualProdPolarEquiv R M).toLinearMap := by
     refine LinearMap.ext fun x ↦ LinearMap.ext fun y ↦ ?_
-    rw [QuadraticMap.polarBilin_apply_apply, polar_hyperbolic, LinearEquiv.coe_coe,
-      hyperbolicPolarEquiv_apply]
+    rw [QuadraticMap.polarBilin_apply_apply, polar_dualProd, LinearEquiv.coe_coe,
+      dualProdPolarEquiv_apply]
   rw [QuadraticForm.IsGPRRegular, h]
-  exact (hyperbolicPolarEquiv R M).bijective
+  exact (dualProdPolarEquiv R M).bijective
 
 /-- The hyperbolic form of a finitely generated projective module is non-singular
-(`GN (C.8.1)` applied to `QuadraticForm.isGPRRegular_hyperbolic`). -/
-theorem isGPRNonsingular_hyperbolic [Module.Finite R M] [Module.Projective R M] :
-    QuadraticForm.IsGPRNonsingular (hyperbolic R M) :=
-  (isGPRRegular_hyperbolic R M).isGPRNonsingular
+(`GN (C.8.1)` applied to `QuadraticForm.isGPRRegular_dualProd`). -/
+theorem isGPRNonsingular_dualProd [Module.Finite R M] [Module.Projective R M] :
+    QuadraticForm.IsGPRNonsingular (dualProd R M) :=
+  (isGPRRegular_dualProd R M).isGPRNonsingular
 
 end QuadraticForm
 
@@ -159,46 +139,48 @@ namespace QuadraticForm
 variable {R : Type u} [CommRing R] {M : Type v} [AddCommGroup M] [Module R M]
 variable [Module.Finite R M] [Module.Projective R M] (q : QuadraticForm R M)
 
-/-- The comparison map `M ⊕ M → M ⊕ M*` witnessing that `q ⊥ (-q)` is hyperbolic:
-`(x, y) ↦ (x - y, B(x - y, ·) + polar q y)`, where `B` is the bilinear representative of `q`.
+/-- The comparison map `M ⊕ M → M* ⊕ M` witnessing that `q ⊥ (-q)` is hyperbolic:
+`(x, y) ↦ (B(x - y, ·) + polar q y, x - y)`, where `B` is the bilinear representative of `q`.
 
-The `B(x - y, ·)` summand is what makes this work in characteristic `2`: the naive map
-`(x, y) ↦ (x - y, polar q y)` computes `q x - q y - q (x - y)`, and it is precisely a *bilinear
-representative* — which `QuadraticForm/BaseChangeProjective.lean` provides for any finitely
-generated projective module, with no hypothesis on `2` — that supplies the missing `q (x - y)`
-linearly. -/
-noncomputable def toHyperbolicMap : (M × M) →ₗ[R] (M × Module.Dual R M) :=
-  LinearMap.prod (LinearMap.fst R M M - LinearMap.snd R M M)
+This is a characteristic-free version of mathlib's `QuadraticForm.toDualProd`, which is built from
+`QuadraticMap.associated` and so needs `2` to be invertible. The `B(x - y, ·)` summand is what
+makes this work in characteristic `2`: the naive map `(x, y) ↦ (polar q y, x - y)` computes
+`q x - q y - q (x - y)`, and it is precisely a *bilinear representative* — which
+`QuadraticForm/BaseChangeProjective.lean` provides for any finitely generated projective module,
+with no hypothesis on `2` — that supplies the missing `q (x - y)` linearly. -/
+noncomputable def toDualProdMap : (M × M) →ₗ[R] (Module.Dual R M × M) :=
+  LinearMap.prod
     (QuadraticMap.bilinRepr q ∘ₗ (LinearMap.fst R M M - LinearMap.snd R M M) +
       QuadraticMap.polarBilin q ∘ₗ LinearMap.snd R M M)
+    (LinearMap.fst R M M - LinearMap.snd R M M)
 
 @[simp]
-theorem toHyperbolicMap_apply (x : M × M) :
-    toHyperbolicMap q x =
-      (x.1 - x.2, QuadraticMap.bilinRepr q (x.1 - x.2) + QuadraticMap.polarBilin q x.2) :=
+theorem toDualProdMap_apply (x : M × M) :
+    toDualProdMap q x =
+      (QuadraticMap.bilinRepr q (x.1 - x.2) + QuadraticMap.polarBilin q x.2, x.1 - x.2) :=
   rfl
 
 /-- The comparison map is an isometry onto the hyperbolic form: `q x - q y` is computed by the
 hyperbolic pairing. -/
-theorem hyperbolic_toHyperbolicMap (x : M × M) :
-    hyperbolic R M (toHyperbolicMap q x) = (q.prod (-q)) x := by
-  simp only [toHyperbolicMap_apply, hyperbolic_apply, LinearMap.add_apply,
+theorem dualProd_toDualProdMap (x : M × M) :
+    dualProd R M (toDualProdMap q x) = (q.prod (-q)) x := by
+  simp only [toDualProdMap_apply, dualProd_apply, LinearMap.add_apply,
     QuadraticMap.bilinRepr_apply_self, QuadraticMap.polarBilin_apply_apply,
     QuadraticMap.prod_apply, neg_apply, QuadraticMap.polar]
   abel_nf
 
 /-- When `q` is regular the comparison map is bijective: solving `B(u, ·) + polar q y = φ` for `y`
 is exactly inverting the polar map, which is what regularity provides. -/
-theorem bijective_toHyperbolicMap (hq : QuadraticForm.IsGPRRegular q) :
-    Function.Bijective (toHyperbolicMap q) := by
+theorem bijective_toDualProdMap (hq : QuadraticForm.IsGPRRegular q) :
+    Function.Bijective (toDualProdMap q) := by
   set E := LinearEquiv.ofBijective (QuadraticMap.polarBilin q :
     M →ₗ[R] Module.Dual R M) hq with hE
   have hEq : ∀ y : M, QuadraticMap.polarBilin q y = E y := fun _ ↦ rfl
-  set s : (M × Module.Dual R M) →ₗ[R] M :=
-    E.symm.toLinearMap ∘ₗ (LinearMap.snd R M (Module.Dual R M) -
-      QuadraticMap.bilinRepr q ∘ₗ LinearMap.fst R M (Module.Dual R M)) with hs
-  have hsapp : ∀ z : M × Module.Dual R M,
-      QuadraticMap.polarBilin q (s z) = z.2 - QuadraticMap.bilinRepr q z.1 := by
+  set s : (Module.Dual R M × M) →ₗ[R] M :=
+    E.symm.toLinearMap ∘ₗ (LinearMap.fst R (Module.Dual R M) M -
+      QuadraticMap.bilinRepr q ∘ₗ LinearMap.snd R (Module.Dual R M) M) with hs
+  have hsapp : ∀ z : Module.Dual R M × M,
+      QuadraticMap.polarBilin q (s z) = z.1 - QuadraticMap.bilinRepr q z.2 := by
     intro z
     rw [hEq, hs]
     simp only [LinearMap.comp_apply, LinearMap.sub_apply, LinearMap.snd_apply,
@@ -206,17 +188,17 @@ theorem bijective_toHyperbolicMap (hq : QuadraticForm.IsGPRRegular q) :
     exact E.apply_symm_apply _
   constructor
   · intro x y hxy
-    simp only [toHyperbolicMap_apply, Prod.mk.injEq] at hxy
-    obtain ⟨h1, h2⟩ := hxy
+    simp only [toDualProdMap_apply, Prod.mk.injEq] at hxy
+    obtain ⟨h2, h1⟩ := hxy
     rw [h1, add_right_inj] at h2
     have hsnd : x.2 = y.2 := hq.1 h2
     rw [hsnd, sub_left_inj] at h1
     exact Prod.ext h1 hsnd
   · intro z
-    have hfst : (z.1 + s z) - s z = z.1 := by abel
-    refine ⟨(z.1 + s z, s z), ?_⟩
-    rw [toHyperbolicMap_apply]
-    refine Prod.ext hfst ?_
+    have hfst : (z.2 + s z) - s z = z.2 := by abel
+    refine ⟨(z.2 + s z, s z), ?_⟩
+    rw [toDualProdMap_apply]
+    refine Prod.ext ?_ hfst
     simp only [hfst, hsapp z]
     abel
 
@@ -224,11 +206,13 @@ theorem bijective_toHyperbolicMap (hq : QuadraticForm.IsGPRRegular q) :
 (`Baeza I, (4.7)`; used in the proof of `GN 6.5`).
 
 Regularity is exactly what is needed, and not merely a convenience: the comparison map is
-bijective if and only if the polar map is. -/
-noncomputable def isometryEquivHyperbolic (hq : QuadraticForm.IsGPRRegular q) :
-    QuadraticMap.IsometryEquiv (q.prod (-q)) (hyperbolic R M) where
-  __ := LinearEquiv.ofBijective (toHyperbolicMap q) (bijective_toHyperbolicMap q hq)
-  map_app' := hyperbolic_toHyperbolicMap q
+bijective if and only if the polar map is. This answers, without any hypothesis on `2`, the TODO
+in mathlib's `Mathlib/LinearAlgebra/QuadraticForm/Dual.lean` asking for `QuadraticForm.toDualProd`
+to be upgraded to an isometry equivalence. -/
+noncomputable def isometryEquivDualProd (hq : QuadraticForm.IsGPRRegular q) :
+    QuadraticMap.IsometryEquiv (q.prod (-q)) (dualProd R M) where
+  __ := LinearEquiv.ofBijective (toDualProdMap q) (bijective_toDualProdMap q hq)
+  map_app' := dualProd_toDualProdMap q
 
 end QuadraticForm
 
@@ -266,19 +250,19 @@ variable [Module.Finite R M] [Module.Projective R M]
 
 The hypothesis is the coordinate identity `Q (x, y) = ∑ᵢ xᵢ yᵢ` for the coordinates of some finite
 basis of `M`; the conclusion needs no hypothesis on `2`, since
-`QuadraticForm.isGPRNonsingular_hyperbolic` needs none. -/
+`QuadraticForm.isGPRNonsingular_dualProd` needs none. -/
 theorem isGPRNonsingular_of_basis_pairing {ι : Type*} [Fintype ι]
     (b : Module.Basis ι R M) {Q : QuadraticForm R (M × M)}
     (hQ : ∀ x : M × M, Q x = ∑ i, b.repr x.1 i * b.repr x.2 i) :
     QuadraticForm.IsGPRNonsingular.{u, v, w} Q := by
   classical
-  have hcomp : Q = (hyperbolic R M).comp
-      (LinearEquiv.prodCongr (LinearEquiv.refl R M) b.toDualEquiv).toLinearMap := by
+  have hcomp : Q = (dualProd R M).comp
+      (LinearEquiv.prodCongr b.toDualEquiv (LinearEquiv.refl R M)).toLinearMap := by
     refine QuadraticMap.ext fun x ↦ ?_
     rw [hQ x, QuadraticMap.comp_apply]
-    simp [b.toDual_apply_eq_sum]
+    simp [b.toDual_apply_eq_sum, mul_comm]
   rw [hcomp]
-  exact (isGPRNonsingular_hyperbolic R M).comp_linearEquiv _
+  exact (isGPRNonsingular_dualProd R M).comp_linearEquiv _
 
 /-- **A form pairing two copies of `M` against each other is regular**, being the hyperbolic form
 of `M` in the coordinates of the given basis.
@@ -290,13 +274,13 @@ theorem isGPRRegular_of_basis_pairing {ι : Type*} [Fintype ι]
     (hQ : ∀ x : M × M, Q x = ∑ i, b.repr x.1 i * b.repr x.2 i) :
     QuadraticForm.IsGPRRegular Q := by
   classical
-  have hcomp : Q = (hyperbolic R M).comp
-      (LinearEquiv.prodCongr (LinearEquiv.refl R M) b.toDualEquiv).toLinearMap := by
+  have hcomp : Q = (dualProd R M).comp
+      (LinearEquiv.prodCongr b.toDualEquiv (LinearEquiv.refl R M)).toLinearMap := by
     refine QuadraticMap.ext fun x ↦ ?_
     rw [hQ x, QuadraticMap.comp_apply]
-    simp [b.toDual_apply_eq_sum]
+    simp [b.toDual_apply_eq_sum, mul_comm]
   rw [hcomp]
-  exact QuadraticForm.IsGPRRegular.comp_linearEquiv (isGPRRegular_hyperbolic R M) _
+  exact QuadraticForm.IsGPRRegular.comp_linearEquiv (isGPRRegular_dualProd R M) _
 
 /-- **A form that becomes a pairing of two copies of `M` in suitable coordinates is hyperbolic**,
 hence non-singular.

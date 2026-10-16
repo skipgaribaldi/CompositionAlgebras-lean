@@ -174,7 +174,8 @@ mathlib is canonical. Concretely:
   `MulOpposite`.
 - Quadratic and bilinear forms: `QuadraticMap`, `QuadraticForm`, `QuadraticMap.polar`,
   `QuadraticForm.polarBilin`, `QuadraticMap.Anisotropic`, `QuadraticMap.IsometryEquiv`,
-  `QuadraticForm.baseChange`, `LinearMap.BilinForm` and `.Nondegenerate`.
+  `QuadraticForm.baseChange`, `QuadraticForm.dualProd` (the hyperbolic form, with its isometries
+  `dualProdIsometry` and `dualProdProdIsometry`), `LinearMap.BilinForm` and `.Nondegenerate`.
 - Modules: `Module.Free`, `Module.Finite`, `Module.Projective`, `Module.rank`, `Module.finrank`,
   `Basis`, `Module.Dual`, `Module.IsUnimodular`, `Algebra.TensorProduct`.
 - Concrete algebras: `Complex`, `Quaternion` / `QuaternionAlgebra`, and `Analysis.Quaternion`

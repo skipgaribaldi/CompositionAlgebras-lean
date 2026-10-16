@@ -45,7 +45,7 @@ forks the API and makes every downstream lemma unusable by anyone else.
   `NonUnitalNonAssocAlgebra`, `NonUnitalAlgHom`, `AlgEquiv`, `MulOpposite`
 - `QuadraticMap`, `QuadraticForm`, `QuadraticMap.polar`, `QuadraticForm.polarBilin`,
   `QuadraticMap.Anisotropic`, `QuadraticMap.IsometryEquiv`, `QuadraticForm.baseChange`,
-  `QuadraticForm.prod`
+  `QuadraticForm.prod`, `QuadraticForm.dualProd` (the hyperbolic form)
 - `LinearMap.BilinForm`, `.Nondegenerate`, `.SeparatingLeft`, `.IsSymm`
 - `Module.Free`, `Module.Finite`, `Module.Projective`, `Module.rank`, `Module.finrank`, `Basis`,
   `Module.Dual`, `Module.IsUnimodular`, `Submodule`, `Algebra.TensorProduct`
@@ -173,7 +173,8 @@ CompositionAlgebras/
     FiniteField.lean     -- Chevalley-Warning: forms in >= 3 variables over a finite field are
                          -- isotropic
     Real.lean            -- anisotropic real forms are definite, hence classified by dimension
-    Hyperbolic.lean      -- hyperbolic quadratic forms
+    Hyperbolic.lean      -- regularity of mathlib's hyperbolic form QuadraticForm.dualProd;
+                         -- q ⊥ -q ≅ dualProd for q regular
     HyperbolicPair.lean  -- hyperbolic pairs, Siegel-Eichler transvections, dilations
     PlaneSplitting.lean  -- a hyperbolic pair splits off a hyperbolic plane
     PlaneCancellation.lean

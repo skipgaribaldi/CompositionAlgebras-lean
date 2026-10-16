@@ -13,10 +13,10 @@ At an elementary idempotent `c`, the Peirce decomposition writes an element as
 
   `a₁ c + x₁₂ + x₂₁ + a₂ c̄`
 
-and `GPR Exc. 19.35(3)` gives its norm as `a₁a₂ + n(x₁₂, x₂₁)`. When the norm is
-regular, the polar pairing identifies `C₁₂` with `C₂₁*`. Consequently the whole norm is the
-of `k ⊕ C₂₁`. This file packages that coordinate calculation as an isometry equivalence and
-completes clause (iv) of `GPR 22.9`.
+and `GPR Exc. 19.35(3)` gives its norm as `a₁a₂ + n(x₁₂, x₂₁)`. When the norm is regular, the
+polar pairing identifies `C₁₂` with `C₂₁*`. Consequently the whole norm is the hyperbolic form
+`QuadraticForm.dualProd k (k × C₂₁)` of `k ⊕ C₂₁`. This file packages that coordinate calculation
+as an isometry equivalence and completes clause (iv) of `GPR 22.9`.
 
 ## Main definitions
 
@@ -48,41 +48,41 @@ abbrev HyperbolicModule (c : A) :=
   IsAlternative.peirceComponent (R := k) c true false
 
 /-- The Peirce-coordinate map from the hyperbolic module on `k ⊕ C₂₁` to the algebra.
-The second hyperbolic coordinate is a functional on `k ⊕ C₂₁`; `dualProdEquiv` separates it
+The first hyperbolic coordinate is a functional on `k ⊕ C₂₁`; `dualProdEquiv` separates it
 into its scalar and `C₂₁*` parts, and off-diagonal duality turns the latter into the `C₁₂`
 coordinate. -/
 noncomputable def peirceHyperbolicTo (hc : C.IsElementaryIdempotent c)
     (hmul : C.IsMultiplicative) (hreg : C.norm.IsGPRRegular) :
-    ((k × HyperbolicModule (k := k) c) ×
-      Module.Dual k (k × HyperbolicModule (k := k) c)) →ₗ[k] A := by
+    (Module.Dual k (k × HyperbolicModule (k := k) c) ×
+      (k × HyperbolicModule (k := k) c)) →ₗ[k] A := by
   let e := hc.offDiagonalDuality hmul hreg
   let d := dualProdEquiv k (HyperbolicModule (k := k) c)
   exact
     { toFun := fun x ↦
-        peirceElement c x.1.1 (d.symm x.2).1 (e.symm (-(d.symm x.2).2)) x.1.2
+        peirceElement c x.2.1 (d.symm x.1).1 (e.symm (-(d.symm x.1).2)) x.2.2
       map_add' := fun x y ↦ by
         simp only [map_add, Prod.fst_add, Prod.snd_add, map_neg, neg_add_rev,
           peirceElement, add_smul, Submodule.coe_add]
         module
       map_smul' := fun a x ↦ by
-        change peirceElement c (a * x.1.1) (d.symm (a • x.2)).1
-          (e.symm (-(d.symm (a • x.2)).2)) (a • x.1.2) =
-            a • peirceElement c x.1.1 (d.symm x.2).1 (e.symm (-(d.symm x.2).2)) x.1.2
+        change peirceElement c (a * x.2.1) (d.symm (a • x.1)).1
+          (e.symm (-(d.symm (a • x.1)).2)) (a • x.2.2) =
+            a • peirceElement c x.2.1 (d.symm x.1).1 (e.symm (-(d.symm x.1).2)) x.2.2
         rw [map_smul]
         simp only [Prod.smul_fst, Prod.smul_snd]
-        rw [show -(a • (d.symm x.2).2) = a • (-(d.symm x.2).2) by module, map_smul]
+        rw [show -(a • (d.symm x.1).2) = a • (-(d.symm x.1).2) by module, map_smul]
         simp only [peirceElement, mul_smul, Submodule.coe_smul, smul_add]
         module }
 
 @[simp] theorem peirceHyperbolicTo_apply (hc : C.IsElementaryIdempotent c)
     (hmul : C.IsMultiplicative) (hreg : C.norm.IsGPRRegular)
-    (x : (k × HyperbolicModule (k := k) c) ×
-      Module.Dual k (k × HyperbolicModule (k := k) c)) :
+    (x : Module.Dual k (k × HyperbolicModule (k := k) c) ×
+      (k × HyperbolicModule (k := k) c)) :
     peirceHyperbolicTo hc hmul hreg x =
-      peirceElement c x.1.1
-        ((dualProdEquiv k (HyperbolicModule (k := k) c)).symm x.2).1
+      peirceElement c x.2.1
+        ((dualProdEquiv k (HyperbolicModule (k := k) c)).symm x.1).1
         ((hc.offDiagonalDuality hmul hreg).symm
-          (-((dualProdEquiv k (HyperbolicModule (k := k) c)).symm x.2).2)) x.1.2 :=
+          (-((dualProdEquiv k (HyperbolicModule (k := k) c)).symm x.1).2)) x.2.2 :=
   rfl
 
 /-- The Peirce-coordinate map from the hyperbolic module is bijective. -/
@@ -96,15 +96,6 @@ theorem bijective_peirceHyperbolicTo (hc : C.IsElementaryIdempotent c)
     have hproj (i j : Bool) := congrArg
       (IsAlternative.peirceProjection (R := k) c i j) hxy
     apply Prod.ext
-    · apply Prod.ext
-      · have h := congrArg C.trace (hproj false false)
-        rw [peirceHyperbolicTo_apply, peirceHyperbolicTo_apply,
-          hc.peirceProjection_peirceElement, hc.peirceProjection_peirceElement] at h
-        simpa [hc.trace_eq_one] using h
-      · have h := hproj true false
-        rw [peirceHyperbolicTo_apply, peirceHyperbolicTo_apply,
-          hc.peirceProjection_peirceElement, hc.peirceProjection_peirceElement] at h
-        simpa using h
     · apply d.symm.injective
       apply Prod.ext
       · have h := congrArg C.trace (hproj true true)
@@ -121,11 +112,20 @@ theorem bijective_peirceHyperbolicTo (hc : C.IsElementaryIdempotent c)
         rw [peirceHyperbolicTo_apply, peirceHyperbolicTo_apply,
           hc.peirceProjection_peirceElement, hc.peirceProjection_peirceElement] at h
         simpa using h
+    · apply Prod.ext
+      · have h := congrArg C.trace (hproj false false)
+        rw [peirceHyperbolicTo_apply, peirceHyperbolicTo_apply,
+          hc.peirceProjection_peirceElement, hc.peirceProjection_peirceElement] at h
+        simpa [hc.trace_eq_one] using h
+      · have h := hproj true false
+        rw [peirceHyperbolicTo_apply, peirceHyperbolicTo_apply,
+          hc.peirceProjection_peirceElement, hc.peirceProjection_peirceElement] at h
+        simpa using h
   · intro a
     obtain ⟨a₁, a₂, x₁₂, x₂₁, ha⟩ := hc.exists_eq_peirceElement hmul a
-    let x : (k × HyperbolicModule (k := k) c) ×
-        Module.Dual k (k × HyperbolicModule (k := k) c) :=
-      ((a₁, x₂₁), d (a₂, -(e x₁₂)))
+    let x : Module.Dual k (k × HyperbolicModule (k := k) c) ×
+        (k × HyperbolicModule (k := k) c) :=
+      (d (a₂, -(e x₁₂)), (a₁, x₂₁))
     refine ⟨x, ?_⟩
     rw [ha, peirceHyperbolicTo_apply]
     change peirceElement c a₁ (d.symm (d (a₂, -(e x₁₂)))).1
@@ -136,43 +136,43 @@ theorem bijective_peirceHyperbolicTo (hc : C.IsElementaryIdempotent c)
 `A`. -/
 noncomputable def peirceHyperbolicEquiv (hc : C.IsElementaryIdempotent c)
     (hmul : C.IsMultiplicative) (hreg : C.norm.IsGPRRegular) :
-    ((k × HyperbolicModule (k := k) c) ×
-      Module.Dual k (k × HyperbolicModule (k := k) c)) ≃ₗ[k] A :=
+    (Module.Dual k (k × HyperbolicModule (k := k) c) ×
+      (k × HyperbolicModule (k := k) c)) ≃ₗ[k] A :=
   LinearEquiv.ofBijective (peirceHyperbolicTo hc hmul hreg)
     (hc.bijective_peirceHyperbolicTo hmul hreg)
 
 @[simp] theorem peirceHyperbolicEquiv_apply (hc : C.IsElementaryIdempotent c)
     (hmul : C.IsMultiplicative) (hreg : C.norm.IsGPRRegular)
-    (x : (k × HyperbolicModule (k := k) c) ×
-      Module.Dual k (k × HyperbolicModule (k := k) c)) :
+    (x : Module.Dual k (k × HyperbolicModule (k := k) c) ×
+      (k × HyperbolicModule (k := k) c)) :
     hc.peirceHyperbolicEquiv hmul hreg x = hc.peirceHyperbolicTo hmul hreg x :=
   rfl
 
 /-- **`GPR 22.9(iv)`: the Peirce-coordinate equivalence identifies the norm with the hyperbolic
-form of `k ⊕ C₂₁`.** -/
+form `QuadraticForm.dualProd k (k × C₂₁)`.** -/
 theorem norm_peirceHyperbolicEquiv (hc : C.IsElementaryIdempotent c)
     (hmul : C.IsMultiplicative) (hreg : C.norm.IsGPRRegular)
-    (x : (k × HyperbolicModule (k := k) c) ×
-      Module.Dual k (k × HyperbolicModule (k := k) c)) :
+    (x : Module.Dual k (k × HyperbolicModule (k := k) c) ×
+      (k × HyperbolicModule (k := k) c)) :
     C.norm (hc.peirceHyperbolicEquiv hmul hreg x) =
-      QuadraticForm.hyperbolic k (k × HyperbolicModule (k := k) c) x := by
+      QuadraticForm.dualProd k (k × HyperbolicModule (k := k) c) x := by
   let e := hc.offDiagonalDuality hmul hreg
   let d := dualProdEquiv k (HyperbolicModule (k := k) c)
   rw [peirceHyperbolicEquiv_apply, peirceHyperbolicTo_apply,
-    hc.norm_peirceElement hmul, QuadraticForm.hyperbolic_apply]
-  have hd : x.2 x.1 =
-      (d.symm x.2).1 * x.1.1 - (d.symm x.2).2 x.1.2 := by
-    conv_lhs => rw [← d.apply_symm_apply x.2]
+    hc.norm_peirceElement hmul, QuadraticForm.dualProd_apply]
+  have hd : x.1 x.2 =
+      (d.symm x.1).1 * x.2.1 - (d.symm x.1).2 x.2.2 := by
+    conv_lhs => rw [← d.apply_symm_apply x.1]
     exact dualProdEquiv_apply _ _
-  change x.1.1 * (d.symm x.2).1 + e (e.symm (-(d.symm x.2).2)) x.1.2 = x.2 x.1
+  change x.2.1 * (d.symm x.1).1 + e (e.symm (-(d.symm x.1).2)) x.2.2 = x.1 x.2
   rw [e.apply_symm_apply, hd, LinearMap.neg_apply]
   ring
 
 /-- **The norm of a reduced regular multiplicative conic algebra is hyperbolic**, `GPR 22.9(iv)`.
-The displayed isometry uses the hyperbolic form of `k ⊕ C₂₁`. -/
+The displayed isometry uses the hyperbolic form `QuadraticForm.dualProd k (k × C₂₁)`. -/
 noncomputable def peirceHyperbolicIsometryEquiv (hc : C.IsElementaryIdempotent c)
     (hmul : C.IsMultiplicative) (hreg : C.norm.IsGPRRegular) :
-    (QuadraticForm.hyperbolic k (k × HyperbolicModule (k := k) c)).IsometryEquiv C.norm where
+    (QuadraticForm.dualProd k (k × HyperbolicModule (k := k) c)).IsometryEquiv C.norm where
   toLinearEquiv := hc.peirceHyperbolicEquiv hmul hreg
   map_app' := hc.norm_peirceHyperbolicEquiv hmul hreg
 

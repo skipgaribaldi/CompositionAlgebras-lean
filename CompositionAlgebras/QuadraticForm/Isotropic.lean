@@ -55,8 +55,8 @@ cancelled are only assumed non-singular (`GN 6.5`, not `GPR 11.27`).
   not mathlib-anisotropic. (This is the direction that always holds.)
 * `QuadraticMap.IsGPRIsotropic.map_isometryEquiv` : isotropy transports along an isometry
   equivalence.
-* `QuadraticForm.isGPRIsotropic_hyperbolic` : a hyperbolic form is isotropic whenever its first
-  module contains a unimodular element.
+* `QuadraticForm.isGPRIsotropic_dualProd` : the hyperbolic form `dualProd R M` is isotropic
+  whenever `M` contains a unimodular element.
 * `QuadraticMap.isGPRIsotropic_iff_not_anisotropic` : over a **field**, the two notions coincide —
   every nonzero vector is unimodular (`Module.isUnimodular_of_ne_zero`), so the extra strength GPR's
   definition carries over a general ring disappears entirely over a field.
@@ -193,16 +193,16 @@ open _root_.QuadraticMap (polar polar_comm polar_smul_right IsHyperbolicPair
 
 variable {Q : QuadraticForm R M}
 
-/-- A hyperbolic form is GPR-isotropic as soon as its first module contains a unimodular element.
-The null vector is `(m, 0)`; a functional taking `m` to `1` extends across the product by the first
-projection. -/
-theorem isGPRIsotropic_hyperbolic {m : M} (hm : Module.IsUnimodular R m) :
-    (hyperbolic R M).IsGPRIsotropic := by
+/-- The hyperbolic form `dualProd R M` is GPR-isotropic as soon as `M` contains a unimodular
+element `m`. The null vector is `(0, m)`; a functional taking `m` to `1` extends across the product
+by the second projection. -/
+theorem isGPRIsotropic_dualProd {m : M} (hm : Module.IsUnimodular R m) :
+    (dualProd R M).IsGPRIsotropic := by
   obtain ⟨l, hl⟩ := Module.isUnimodular_iff.mp hm
-  refine ⟨(m, 0), Module.isUnimodular_of_apply_eq_one
-    (f := l.comp (LinearMap.fst R M (Module.Dual R M))) ?_, ?_⟩
-  · simpa only [LinearMap.comp_apply, LinearMap.fst_apply] using hl
-  · simp only [hyperbolic_apply, LinearMap.zero_apply]
+  refine ⟨(0, m), Module.isUnimodular_of_apply_eq_one
+    (f := l.comp (LinearMap.snd R (Module.Dual R M) M)) ?_, ?_⟩
+  · simpa only [LinearMap.comp_apply, LinearMap.snd_apply] using hl
+  · simp only [dualProd_apply, LinearMap.zero_apply]
 
 /-- **`GPR 11.17`, `(i) ⇒ (ii)`.** In a **regular** quadratic module an isotropic vector — a
 unimodular `u` with `q u = 0` — extends to a hyperbolic pair.

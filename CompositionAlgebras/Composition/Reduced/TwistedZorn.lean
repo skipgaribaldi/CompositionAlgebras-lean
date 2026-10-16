@@ -218,29 +218,29 @@ no rank hypothesis and no basis is needed for non-singularity. -/
 variable (P : Module.VectorProductPair k M)
 
 /-- The linear equivalence presenting a twisted Zorn vector matrix as an element of
-`(k ⊕ M) ⊕ (k ⊕ M)*`, under which the norm becomes the hyperbolic form. The sign on the second
-coordinate compensates the one built into `ConicAlgebra.dualProdEquiv`, which was chosen for the
-quaternion norm `ρ₁ρ₂ - ⟨u*, v⟩` of `GPR (22.12.1)`. -/
-def twistedZorHyperbolicEquiv : TwistedZor P ≃ₗ[k] ((k × M) × Module.Dual k (k × M)) :=
-  (LinearEquiv.prodComm k (k × Module.Dual k M) (k × M)).trans
-    ((LinearEquiv.refl k (k × M)).prodCongr
-      (((LinearEquiv.refl k k).prodCongr (LinearEquiv.neg k)).trans (dualProdEquiv k M)))
+`(k ⊕ M)* ⊕ (k ⊕ M)`, under which the norm becomes the hyperbolic form
+`QuadraticForm.dualProd k (k × M)`. The sign on the dual coordinate compensates the one built into
+`ConicAlgebra.dualProdEquiv`, which was chosen for the quaternion norm `ρ₁ρ₂ - ⟨u*, v⟩` of
+`GPR (22.12.1)`. -/
+def twistedZorDualProdEquiv : TwistedZor P ≃ₗ[k] (Module.Dual k (k × M) × (k × M)) :=
+  (((LinearEquiv.refl k k).prodCongr (LinearEquiv.neg k)).trans (dualProdEquiv k M)).prodCongr
+    (LinearEquiv.refl k (k × M))
 
-@[simp] theorem twistedZorHyperbolicEquiv_apply (x : TwistedZor P) :
-    twistedZorHyperbolicEquiv P x = (x.2, dualProdEquiv k M (x.1.1, -x.1.2)) := rfl
+@[simp] theorem twistedZorDualProdEquiv_apply (x : TwistedZor P) :
+    twistedZorDualProdEquiv P x = (dualProdEquiv k M (x.1.1, -x.1.2), x.2) := rfl
 
 /-- The **norm of a twisted Zorn vector matrix**, `GPR (22.14.4)`: `n = ρ₁ρ₂ + ⟨u*, v⟩`.
 
 ⚠ `GPR (22.14.4)` prints a minus sign; see the module docstring for why it must be a plus. -/
 def twistedZorNorm : QuadraticForm k (TwistedZor P) :=
-  (QuadraticForm.hyperbolic k (k × M)).comp (twistedZorHyperbolicEquiv P).toLinearMap
+  (QuadraticForm.dualProd k (k × M)).comp (twistedZorDualProdEquiv P).toLinearMap
 
 variable {P}
 
 @[simp] theorem twistedZorNorm_apply (x : TwistedZor P) :
     twistedZorNorm P x = x.1.1 * x.2.1 + x.1.2 x.2.2 := by
   rw [twistedZorNorm, QuadraticMap.comp_apply, LinearEquiv.coe_coe,
-    twistedZorHyperbolicEquiv_apply, QuadraticForm.hyperbolic_apply, dualProdEquiv_apply]
+    twistedZorDualProdEquiv_apply, QuadraticForm.dualProd_apply, dualProdEquiv_apply]
   simp
 
 theorem polar_twistedZorNorm (x y : TwistedZor P) :
@@ -295,14 +295,14 @@ projective: it *is* the hyperbolic form of `k ⊕ M`. No rank hypothesis and no 
 `2`. -/
 theorem isGPRNonsingular_twistedZorNorm [Module.Finite k M] [Module.Projective k M] :
     QuadraticForm.IsGPRNonsingular.{u, max u v, w} (twistedZorNorm P) :=
-  (QuadraticForm.isGPRNonsingular_hyperbolic k (k × M)).comp_linearEquiv _
+  (QuadraticForm.isGPRNonsingular_dualProd k (k × M)).comp_linearEquiv _
 
 /-- **The norm of the twisted Zorn vector matrices is regular** for `M` finitely generated
 projective: it is the hyperbolic form of `k ⊕ M`, transported along a linear equivalence. This is
 stronger than the non-singularity needed for composition and requires no hypothesis on `2`. -/
 theorem isGPRRegular_twistedZorNorm [Module.Finite k M] [Module.Projective k M] :
     QuadraticForm.IsGPRRegular (twistedZorNorm P) :=
-  (QuadraticForm.isGPRRegular_hyperbolic k (k × M)).comp_linearEquiv _
+  (QuadraticForm.isGPRRegular_dualProd k (k × M)).comp_linearEquiv _
 
 /-- The twisted Zorn norm has zero radical when `M` is finitely generated projective. -/
 theorem isGPRNondegenerate_twistedZorNorm [Module.Finite k M] [Module.Projective k M] :

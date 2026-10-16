@@ -34,7 +34,7 @@ Both directions of `GPR 22.13`:
 * the conic structure, its norm, trace and conjugation — for **any** `k`-module `L`;
 * **non-singularity of the norm** for `L` finitely generated projective — and not by a
   computation: the norm is the hyperbolic form of `k ⊕ L`, pairing `(ρ₁, u*)` against
-  `(ρ₂, -v)`, so `QuadraticForm.isGPRNonsingular_hyperbolic` applies with no basis, no rank
+  `(ρ₂, -v)`, so `QuadraticForm.isGPRNonsingular_dualProd` applies with no basis, no rank
   hypothesis and no hypothesis on `2`;
 * **multiplicativity of the norm** exactly under the identity `Module.IsRankOnePairing`,
   `⟨φ, x⟩⟨ψ, y⟩ = ⟨φ, y⟩⟨ψ, x⟩` — what the algebra needs `L` to have rank one for,
@@ -218,27 +218,26 @@ variable {k L}
 
 variable (k L)
 
-/-- The linear equivalence presenting a twisted matrix as an element of `(k ⊕ L) ⊕ (k ⊕ L)*`,
-under which the norm becomes the hyperbolic form. -/
-def twistedMatHyperbolicEquiv :
-    TwistedMat k L ≃ₗ[k] ((k × L) × Module.Dual k (k × L)) :=
-  (LinearEquiv.prodComm k (k × Module.Dual k L) (k × L)).trans
-    ((LinearEquiv.refl k (k × L)).prodCongr (dualProdEquiv k L))
+/-- The linear equivalence presenting a twisted matrix as an element of `(k ⊕ L)* ⊕ (k ⊕ L)`,
+under which the norm becomes the hyperbolic form `QuadraticForm.dualProd k (k × L)`. -/
+def twistedMatDualProdEquiv :
+    TwistedMat k L ≃ₗ[k] (Module.Dual k (k × L) × (k × L)) :=
+  (dualProdEquiv k L).prodCongr (LinearEquiv.refl k (k × L))
 
-@[simp] theorem twistedMatHyperbolicEquiv_apply (x : TwistedMat k L) :
-    twistedMatHyperbolicEquiv k L x = (x.2, dualProdEquiv k L x.1) := rfl
+@[simp] theorem twistedMatDualProdEquiv_apply (x : TwistedMat k L) :
+    twistedMatDualProdEquiv k L x = (dualProdEquiv k L x.1, x.2) := rfl
 
 /-- The **norm of a twisted matrix**, `GPR (22.12.1)`:
 `n = ρ₁ρ₂ - ⟨u*, v⟩`, the determinant. -/
 def twistedMatNorm : QuadraticForm k (TwistedMat k L) :=
-  (QuadraticForm.hyperbolic k (k × L)).comp (twistedMatHyperbolicEquiv k L).toLinearMap
+  (QuadraticForm.dualProd k (k × L)).comp (twistedMatDualProdEquiv k L).toLinearMap
 
 variable {k L}
 
 @[simp] theorem twistedMatNorm_apply (x : TwistedMat k L) :
     twistedMatNorm k L x = x.1.1 * x.2.1 - x.1.2 x.2.2 := by
   rw [twistedMatNorm, QuadraticMap.comp_apply, LinearEquiv.coe_coe,
-    twistedMatHyperbolicEquiv_apply, QuadraticForm.hyperbolic_apply, dualProdEquiv_apply]
+    twistedMatDualProdEquiv_apply, QuadraticForm.dualProd_apply, dualProdEquiv_apply]
 
 theorem polar_twistedMatNorm (x y : TwistedMat k L) :
     QuadraticMap.polar (twistedMatNorm k L) x y =
@@ -291,7 +290,7 @@ variable (k L)
 *is* the hyperbolic form of `k ⊕ L`. No rank hypothesis and no hypothesis on `2`. -/
 theorem isGPRNonsingular_twistedMatNorm [Module.Finite k L] [Module.Projective k L] :
     QuadraticForm.IsGPRNonsingular.{u, max u v, w} (twistedMatNorm k L) :=
-  (QuadraticForm.isGPRNonsingular_hyperbolic k (k × L)).comp_linearEquiv _
+  (QuadraticForm.isGPRNonsingular_dualProd k (k × L)).comp_linearEquiv _
 
 variable {k L}
 

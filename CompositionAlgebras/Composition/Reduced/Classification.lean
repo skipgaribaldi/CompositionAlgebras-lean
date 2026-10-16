@@ -31,7 +31,7 @@ constant-rank projectives are free (`GPR 11.24`, `GN 2.6(b)`).
   LG ring.
 * `ConicAlgebra.IsComposition.isSplitOfRank_iff_isGPRIsotropic_of_isLGRing` : the split/isotropic
   equivalence of **`GPR 22.18`** in ranks two, four, and eight.
-* `ConicAlgebra.IsComposition.isSplitOfRank_of_isometryEquiv_hyperbolic_of_isUnimodular` : the
+* `ConicAlgebra.IsComposition.isSplitOfRank_of_isometryEquiv_dualProd_of_isUnimodular` : the
   hyperbolic-to-split implication of **`GPR 22.18`**.
 * `ConicAlgebra.IsComposition.isSplitOfRank_iff_not_isDivision` : over a field, splitness is
   equivalent to failure of the division property (**`GPR 22.18`**).
@@ -355,17 +355,18 @@ theorem isSplitOfRank_iff_isGPRIsotropic_of_isLGRing [Nontrivial k]
     · exact hc.isSplitOfRank_eight_of_isLGRing hLG hcomp hA
 
 omit [IsAlternative A] in
-/-- **`GPR 22.18`, hyperbolic ⇒ split.** If the norm is isometric to a hyperbolic form whose
-first module contains a unimodular element, then that element gives a unimodular null vector in
-the composition algebra; the split/isotropic equivalence finishes the argument. -/
-theorem isSplitOfRank_of_isometryEquiv_hyperbolic_of_isUnimodular [Nontrivial k]
+/-- **`GPR 22.18`, hyperbolic ⇒ split.** If the norm is isometric to a hyperbolic form
+`QuadraticForm.dualProd k M` with `M` containing a unimodular element, then that element gives a
+unimodular null vector in the composition algebra; the split/isotropic equivalence finishes the
+argument. -/
+theorem isSplitOfRank_of_isometryEquiv_dualProd_of_isUnimodular [Nontrivial k]
     (hcomp : C.IsComposition.{u, v, u}) (hLG : IsLGRing k)
     (hA : Module.rankAtStalk (R := k) A = fun _ ↦ r)
     (hr : r = 2 ∨ r = 4 ∨ r = 8) {M : Type*} [AddCommGroup M] [Module k M]
     {m : M} (hm : Module.IsUnimodular k m)
-    (e : (QuadraticForm.hyperbolic k M).IsometryEquiv C.norm) : C.IsSplitOfRank r :=
+    (e : (QuadraticForm.dualProd k M).IsometryEquiv C.norm) : C.IsSplitOfRank r :=
   (hcomp.isSplitOfRank_iff_isGPRIsotropic_of_isLGRing hLG hA hr).mpr
-    ((QuadraticForm.isGPRIsotropic_hyperbolic hm).map_isometryEquiv e)
+    ((QuadraticForm.isGPRIsotropic_dualProd hm).map_isometryEquiv e)
 
 omit [IsAlternative A] in
 /-- **`GPR 22.18`, split ⟺ not division over a field.** For a constant-rank composition algebra

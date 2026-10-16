@@ -28,13 +28,13 @@ version (GPR's "quadratic space" means regular throughout); `GN 6.5` subsumes it
 
 ## What is proved here
 
-`QuadraticForm.isometryEquiv_prod_hyperbolic_of_isometryEquiv_prod`: cancelling a **regular** form
+`QuadraticForm.isometryEquiv_prod_dualProd_of_isometryEquiv_prod`: cancelling a **regular** form
 `q₃` reduces to cancelling a **hyperbolic** one. Adding `-q₃` to both sides of
 `q₁ ⊥ q₃ ≅ q₂ ⊥ q₃` and reassociating turns it into
 
   `q₁ ⊥ (q₃ ⊥ -q₃) ≅ q₂ ⊥ (q₃ ⊥ -q₃)`,
 
-and `q₃ ⊥ -q₃` is hyperbolic (`QuadraticForm.isometryEquivHyperbolic`, `Baeza I (4.7)`,
+and `q₃ ⊥ -q₃` is hyperbolic (`QuadraticForm.isometryEquivDualProd`, `Baeza I (4.7)`,
 `QuadraticForm/Hyperbolic.lean`). This is the same first move `GN` makes at the start of the proof
 of 6.5, and it is where regularity of `q₃` — as opposed to non-singularity — is consumed: the
 comparison map `q ⊥ -q → h` is bijective exactly when the polar map of `q` is.
@@ -43,7 +43,7 @@ Note that this reduction needs no LG hypothesis at all.
 
 ## Where the theorem itself is
 
-`QuadraticForm.cancel` — the statement displayed above — and `QuadraticForm.cancel_hyperbolic` are
+`QuadraticForm.cancel` — the statement displayed above — and `QuadraticForm.cancel_dualProd` are
 in `QuadraticForm/WittCancellation.lean`, which imports this file. `GN 6.5`'s hypothesis that `q₁`
 be non-singular is not carried, since it is implied by the others: `q₂ ⊥ q₃` is non-singular, so
 `q₁ ⊥ q₃` is too, and non-singularity passes to summands
@@ -79,12 +79,12 @@ deliberately *not* `GN`'s own cohomological proof via reductive group schemes an
 4. **`Dias II.6.4`**, cancellation of a plane given step 3 — `QuadraticForm/PlaneCancellation.lean`,
    `QuadraticForm.isometryEquiv_of_isometryEquiv_plane_prod`. This step needs no regularity of `q₁`
    or `q₂` at all: membership in the second summand is detected by orthogonality to the pair.
-5. **From one plane to `hyperbolic R N`** — `QuadraticForm/WittCancellation.lean`. Choose `N'` with
-   `N × N' ≅ Rⁿ`, add `hyperbolic R N'` to both sides, and use
-   `hyperbolic R (M × N) ≅ hyperbolic R M ⊥ hyperbolic R N` with `hyperbolic R R ≅ plane R` to
+5. **From one plane to `dualProd R N`** — `QuadraticForm/WittCancellation.lean`. Choose `N'` with
+   `N × N' ≅ Rⁿ`, add `dualProd R N'` to both sides, and use
+   `dualProd R (M × N) ≅ dualProd R M ⊥ dualProd R N` with `dualProd R R ≅ plane R` to
    reduce to `n` planes, then induct. This needs `N` neither free nor of constant rank, so it
    avoids `GN 2.6(b)` and the rank decomposition. The intermediate forms
-   `hyperbolic R (Rᵏ) ⊥ q₂` are non-singular by `GN (C.8.3)`
+   `dualProd R (Rᵏ) ⊥ q₂` are non-singular by `GN (C.8.3)`
    (`QuadraticForm.IsGPRRegular.prod_isGPRNonsingular`) — which is why the hyperbolic summand is
    kept on the left, where a *regular* form is what that lemma wants.
 
@@ -126,26 +126,26 @@ def QuadraticMap.IsometryEquiv.prodAssoc (Q₁ : QuadraticForm R M₁) (Q₂ : Q
 /-- **Cancelling a regular form reduces to cancelling a hyperbolic one.**
 
 From `q₁ ⊥ q₃ ≅ q₂ ⊥ q₃` with `q₃` regular, add `-q₃` to both sides and reassociate: since
-`q₃ ⊥ -q₃` is hyperbolic (`QuadraticForm.isometryEquivHyperbolic`), the result is
+`q₃ ⊥ -q₃` is hyperbolic (`QuadraticForm.isometryEquivDualProd`), the result is
 `q₁ ⊥ h ≅ q₂ ⊥ h` with `h` the hyperbolic form of `M₃`.
 
 This is the opening move of `GN`'s proof of 6.5, and it needs no LG hypothesis. Regularity of
 `q₃` — rather than mere non-singularity — is consumed here and nowhere else. -/
-theorem QuadraticForm.isometryEquiv_prod_hyperbolic_of_isometryEquiv_prod
+theorem QuadraticForm.isometryEquiv_prod_dualProd_of_isometryEquiv_prod
     [Module.Finite R M₃] [Module.Projective R M₃] {q₁ : QuadraticForm R M₁}
     {q₂ : QuadraticForm R M₂} {q₃ : QuadraticForm R M₃}
     (h₃ : QuadraticForm.IsGPRRegular q₃)
     (h : Nonempty (QuadraticMap.IsometryEquiv (q₁.prod q₃) (q₂.prod q₃))) :
-    Nonempty (QuadraticMap.IsometryEquiv (q₁.prod (QuadraticForm.hyperbolic R M₃))
-      (q₂.prod (QuadraticForm.hyperbolic R M₃))) := by
+    Nonempty (QuadraticMap.IsometryEquiv (q₁.prod (QuadraticForm.dualProd R M₃))
+      (q₂.prod (QuadraticForm.dualProd R M₃))) := by
   obtain ⟨e⟩ := h
   refine ⟨?_⟩
   -- `q₁ ⊥ h ≅ q₁ ⊥ (q₃ ⊥ -q₃) ≅ (q₁ ⊥ q₃) ⊥ -q₃`
   -- `≅ (q₂ ⊥ q₃) ⊥ -q₃ ≅ q₂ ⊥ (q₃ ⊥ -q₃) ≅ q₂ ⊥ h`
   refine ((QuadraticMap.IsometryEquiv.prod (QuadraticMap.IsometryEquiv.refl q₁)
-    (QuadraticForm.isometryEquivHyperbolic q₃ h₃).symm).trans ?_).trans
+    (QuadraticForm.isometryEquivDualProd q₃ h₃).symm).trans ?_).trans
     (QuadraticMap.IsometryEquiv.prod (QuadraticMap.IsometryEquiv.refl q₂)
-      (QuadraticForm.isometryEquivHyperbolic q₃ h₃))
+      (QuadraticForm.isometryEquivDualProd q₃ h₃))
   refine (QuadraticMap.IsometryEquiv.prodAssoc q₁ q₃ (-q₃)).symm.trans ?_
   exact (QuadraticMap.IsometryEquiv.prod e (QuadraticMap.IsometryEquiv.refl (-q₃))).trans
     (QuadraticMap.IsometryEquiv.prodAssoc q₂ q₃ (-q₃))

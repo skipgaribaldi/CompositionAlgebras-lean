@@ -10,26 +10,26 @@ import CompositionAlgebras.QuadraticForm.PlaneTransitivity
 # Witt cancellation over LG rings (`GN 6.5`, `GPR 11.27`)
 
 The capstone of Layer 0. `QuadraticForm/PlaneTransitivity.lean` cancels **one** hyperbolic plane;
-this file passes from there to `QuadraticForm.hyperbolic R N` for an arbitrary finitely generated
+this file passes from there to `QuadraticForm.dualProd R N` for an arbitrary finitely generated
 projective `N`, and then to `GN 6.5` by way of the reduction in `QuadraticForm/Cancellation.lean`.
 
 ## The route
 
-1. `hyperbolic R (Fin 0 → R)` is the form on a trivial module, so it can simply be dropped
+1. `dualProd R (Fin 0 → R)` is the form on a trivial module, so it can simply be dropped
    (`QuadraticMap.IsometryEquiv.prodOfSubsingletonLeft`).
-2. `hyperbolic R R ≅ plane R` (`QuadraticForm.isometryEquivPlane`) and
-   `hyperbolic R (M × N) ≅ hyperbolic R M ⊥ hyperbolic R N`
-   (`QuadraticForm.isometryEquivHyperbolicProd`). Together with
-   `Fin (n+1) → R ≃ₗ R × (Fin n → R)` these turn `hyperbolic R (Fin n → R)` into `n` planes, so
+2. `dualProd R R ≅ plane R` (`QuadraticForm.isometryEquivPlane`) and
+   `dualProd R (M × N) ≅ dualProd R M ⊥ dualProd R N`
+   (mathlib's `QuadraticForm.dualProdProdIsometry`). Together with
+   `Fin (n+1) → R ≃ₗ R × (Fin n → R)` these turn `dualProd R (Fin n → R)` into `n` planes, so
    `n` applications of `QuadraticForm.isometryEquiv_of_isometryEquiv_plane_prod_of_isLGRing`
-   cancel it — `QuadraticForm.cancel_hyperbolic_fin`.
+   cancel it — `QuadraticForm.cancel_dualProd_fin`.
 3. A finitely generated projective `N` is a direct summand of some `Rⁿ`
-   (`QuadraticForm.exists_linearEquiv_prod_fin`). Adding `hyperbolic R N'` for a complement `N'`
-   to both sides of `hyperbolic R N ⊥ q₁ ≅ hyperbolic R N ⊥ q₂` turns it into the free case —
-   `QuadraticForm.cancel_hyperbolic`. Note `N'` needs no hypotheses whatever: it is only ever fed
-   to `hyperbolic`, which is defined for every module.
-4. `QuadraticForm.cancel` is `GN 6.5`, obtained from `cancel_hyperbolic` and
-   `QuadraticForm.isometryEquiv_prod_hyperbolic_of_isometryEquiv_prod`.
+   (`QuadraticForm.exists_linearEquiv_prod_submodule`). Adding `dualProd R N'` for a complement `N'`
+   to both sides of `dualProd R N ⊥ q₁ ≅ dualProd R N ⊥ q₂` turns it into the free case —
+   `QuadraticForm.cancel_dualProd`. Note `N'` needs no hypotheses whatever: it is only ever fed
+   to `dualProd`, which is defined for every module.
+4. `QuadraticForm.cancel` is `GN 6.5`, obtained from `cancel_dualProd` and
+   `QuadraticForm.isometryEquiv_prod_dualProd_of_isometryEquiv_prod`.
 
 Note where the hypotheses are consumed. Non-singularity is asked of `q₂` only, since the plane
 cancellation of step 2 needs the *second* summand non-singular at each stage; `GN 6.5` also lists
@@ -71,43 +71,21 @@ namespace QuadraticForm
 variable {R : Type u} [CommRing R] {M : Type v} [AddCommGroup M] [Module R M]
   {N : Type v₁} [AddCommGroup N] [Module R N]
 
-/-! ### Functoriality of the hyperbolic form -/
+/-! ### The hyperbolic form of `Rⁿ` -/
 
-/-- Isomorphic modules have isometric hyperbolic forms: `e` acts on `M` and its inverse-transpose
-on `M*`. -/
-def isometryEquivHyperbolicCongr (e : M ≃ₗ[R] N) :
-    (hyperbolic R M).IsometryEquiv (hyperbolic R N) where
-  __ := e.prodCongr e.symm.dualMap
+/-- **`dualProd R R` is the hyperbolic plane.** Evaluation at `1` identifies `R*` with `R`. -/
+noncomputable def isometryEquivPlane : (dualProd R R).IsometryEquiv (plane R) where
+  __ := (LinearMap.ringLmapEquivSelf R R R).prodCongr (LinearEquiv.refl R R)
   map_app' x := by
-    change (e.symm.dualMap x.2) (e x.1) = x.2 x.1
-    rw [LinearEquiv.dualMap_apply, LinearEquiv.symm_apply_apply]
+    change x.1 1 * x.2 = x.1 x.2
+    rw [mul_comm, ← smul_eq_mul, ← map_smul, smul_eq_mul, mul_one]
 
-/-- **The hyperbolic form of a direct sum is the orthogonal sum of the hyperbolic forms.** The
-dual splits as `(M × N)* = M* × N*`, and the pairing splits with it. -/
-noncomputable def isometryEquivProdHyperbolic (M : Type v) (N : Type v₁) [AddCommGroup M]
-    [Module R M] [AddCommGroup N] [Module R N] :
-    ((hyperbolic R M).prod (hyperbolic R N)).IsometryEquiv (hyperbolic R (M × N)) where
-  __ := (LinearEquiv.prodProdProdComm R M (Module.Dual R M) N (Module.Dual R N)).trans
-    ((LinearEquiv.refl R (M × N)).prodCongr (Module.dualProdDualEquivDual R M N))
-  map_app' x := by
-    change x.1.2 x.1.1 + x.2.2 x.2.1 =
-      (Module.dualProdDualEquivDual R M N (x.1.2, x.2.2)) (x.1.1, x.2.1)
-    rw [Module.dualProdDualEquivDual_apply]
-    rfl
-
-/-- **`hyperbolic R R` is the hyperbolic plane.** Evaluation at `1` identifies `R*` with `R`. -/
-noncomputable def isometryEquivPlane : (hyperbolic R R).IsometryEquiv (plane R) where
-  __ := (LinearEquiv.refl R R).prodCongr (LinearMap.ringLmapEquivSelf R R R)
-  map_app' x := by
-    change x.1 * x.2 1 = x.2 x.1
-    rw [← smul_eq_mul, ← map_smul, smul_eq_mul, mul_one]
-
-/-- Splitting off the first coordinate: `hyperbolic R (Rⁿ⁺¹) ≅ plane ⊥ hyperbolic R (Rⁿ)`. -/
-noncomputable def isometryEquivHyperbolicFinSucc (R : Type u) [CommRing R] (k : ℕ) :
-    (hyperbolic R (Fin (k + 1) → R)).IsometryEquiv
-      ((plane R).prod (hyperbolic R (Fin k → R))) :=
-  (isometryEquivHyperbolicCongr (Fin.consLinearEquiv R (fun _ : Fin (k + 1) ↦ R)).symm).trans
-    ((isometryEquivProdHyperbolic R (Fin k → R)).symm.trans
+/-- Splitting off the first coordinate: `dualProd R (Rⁿ⁺¹) ≅ plane ⊥ dualProd R (Rⁿ)`. -/
+noncomputable def isometryEquivDualProdFinSucc (R : Type u) [CommRing R] (k : ℕ) :
+    (dualProd R (Fin (k + 1) → R)).IsometryEquiv
+      ((plane R).prod (dualProd R (Fin k → R))) :=
+  (dualProdIsometry (Fin.consLinearEquiv R (fun _ : Fin (k + 1) ↦ R)).symm).trans
+    ((dualProdProdIsometry (M := R) (N := Fin k → R)).trans
       (QuadraticMap.IsometryEquiv.prod isometryEquivPlane (QuadraticMap.IsometryEquiv.refl _)))
 
 /-! ### Cancelling a hyperbolic form -/
@@ -116,17 +94,17 @@ variable {M₁ : Type v₁} [AddCommGroup M₁] [Module R M₁] {M₂ : Type v�
   [AddCommGroup M₂]
   [Module R M₂]
 
-/-- **Cancellation of `hyperbolic R (Rⁿ)` over an LG ring**, by induction on `n`: strip off one
+/-- **Cancellation of `dualProd R (Rⁿ)` over an LG ring**, by induction on `n`: strip off one
 plane at a time with `isometryEquiv_of_isometryEquiv_plane_prod_of_isLGRing`.
 
-At the `k`-th stage the form being cancelled against is `hyperbolic R (Rᵏ) ⊥ q₂`, non-singular by
+At the `k`-th stage the form being cancelled against is `dualProd R (Rᵏ) ⊥ q₂`, non-singular by
 `GN (C.8.3)` since the hyperbolic summand is *regular*; that is why the hyperbolic form is kept on
 the left. Nothing is assumed about `q₁`. -/
-theorem cancel_hyperbolic_fin (hLG : IsLGRing R) [Module.Finite R M₂] [Module.Projective R M₂]
+theorem cancel_dualProd_fin (hLG : IsLGRing R) [Module.Finite R M₂] [Module.Projective R M₂]
     {q₁ : QuadraticForm R M₁} {q₂ : QuadraticForm R M₂}
     (h₂ : q₂.IsGPRNonsingular.{u, v₂, u})
-    (n : ℕ) (h : Nonempty (((hyperbolic R (Fin n → R)).prod q₁).IsometryEquiv
-      ((hyperbolic R (Fin n → R)).prod q₂))) :
+    (n : ℕ) (h : Nonempty (((dualProd R (Fin n → R)).prod q₁).IsometryEquiv
+      ((dualProd R (Fin n → R)).prod q₂))) :
     Nonempty (q₁.IsometryEquiv q₂) := by
   induction n with
   | zero =>
@@ -137,23 +115,23 @@ theorem cancel_hyperbolic_fin (hLG : IsLGRing R) [Module.Finite R M₂] [Module.
       (QuadraticMap.IsometryEquiv.prodOfSubsingletonLeft _ q₂))⟩
   | succ k ih =>
     obtain ⟨e⟩ := h
-    set Hk := hyperbolic R (Fin k → R) with hHk
+    set Hk := dualProd R (Fin k → R) with hHk
     -- reassociate `H(Rᵏ⁺¹) ⊥ q` as `plane ⊥ (H(Rᵏ) ⊥ q)`
     let step₁ : (((plane R).prod (Hk.prod q₁))).IsometryEquiv
-        (((hyperbolic R (Fin (k + 1) → R)).prod q₁)) :=
+        (((dualProd R (Fin (k + 1) → R)).prod q₁)) :=
       (QuadraticMap.IsometryEquiv.prodAssoc (plane R) Hk q₁).symm.trans
-        (QuadraticMap.IsometryEquiv.prod (isometryEquivHyperbolicFinSucc R k).symm
+        (QuadraticMap.IsometryEquiv.prod (isometryEquivDualProdFinSucc R k).symm
           (QuadraticMap.IsometryEquiv.refl q₁))
     let step₂ : (((plane R).prod (Hk.prod q₂))).IsometryEquiv
-        (((hyperbolic R (Fin (k + 1) → R)).prod q₂)) :=
+        (((dualProd R (Fin (k + 1) → R)).prod q₂)) :=
       (QuadraticMap.IsometryEquiv.prodAssoc (plane R) Hk q₂).symm.trans
-        (QuadraticMap.IsometryEquiv.prod (isometryEquivHyperbolicFinSucc R k).symm
+        (QuadraticMap.IsometryEquiv.prod (isometryEquivDualProdFinSucc R k).symm
           (QuadraticMap.IsometryEquiv.refl q₂))
     have e' : ((plane R).prod (Hk.prod q₁)).IsometryEquiv ((plane R).prod (Hk.prod q₂)) :=
       (step₁.trans e).trans step₂.symm
     refine ih (isometryEquiv_of_isometryEquiv_plane_prod_of_isLGRing
       (q₁ := Hk.prod q₁) (q₂ := Hk.prod q₂) hLG ?_ ⟨e'⟩)
-    exact (isGPRRegular_hyperbolic R (Fin k → R)).prod_isGPRNonsingular h₂
+    exact (isGPRRegular_dualProd R (Fin k → R)).prod_isGPRNonsingular h₂
 
 /-- **A finitely generated projective module is a direct summand of `Rⁿ`.** The complement is
 produced as a submodule of `Rⁿ`, so that no auxiliary type has to be introduced. -/
@@ -176,47 +154,47 @@ theorem exists_linearEquiv_prod_submodule (N : Type v₁) [AddCommGroup N] [Modu
     (Submodule.prodEquivOfIsCompl _ _ (LinearMap.isCompl_of_proj hproj))
 
 /-- **Cancellation of a hyperbolic form over an LG ring.** For `N` finitely generated projective
-and `q₂` non-singular, `hyperbolic R N ⊥ q₁ ≅ hyperbolic R N ⊥ q₂` implies `q₁ ≅ q₂`.
+and `q₂` non-singular, `dualProd R N ⊥ q₁ ≅ dualProd R N ⊥ q₂` implies `q₁ ≅ q₂`.
 
-Choose a complement `N'` with `N × N' ≅ Rⁿ` and add `hyperbolic R N'` to both sides: since
-`hyperbolic R (N × N') ≅ hyperbolic R N ⊥ hyperbolic R N'`, this turns the hypothesis into one
-about `hyperbolic R (Rⁿ)`, which `cancel_hyperbolic_fin` handles. `N'` carries no hypotheses —
-it is only ever fed to `hyperbolic`, which every module has. -/
-theorem cancel_hyperbolic (hLG : IsLGRing R) {N : Type v₃} [AddCommGroup N] [Module R N]
+Choose a complement `N'` with `N × N' ≅ Rⁿ` and add `dualProd R N'` to both sides: since
+`dualProd R (N × N') ≅ dualProd R N ⊥ dualProd R N'`, this turns the hypothesis into one
+about `dualProd R (Rⁿ)`, which `cancel_dualProd_fin` handles. `N'` carries no hypotheses —
+it is only ever fed to `dualProd`, which every module has. -/
+theorem cancel_dualProd (hLG : IsLGRing R) {N : Type v₃} [AddCommGroup N] [Module R N]
     [Module.Finite R N] [Module.Projective R N] [Module.Finite R M₂] [Module.Projective R M₂]
     {q₁ : QuadraticForm R M₁} {q₂ : QuadraticForm R M₂}
     (h₂ : q₂.IsGPRNonsingular.{u, v₂, u})
-    (h : Nonempty (((hyperbolic R N).prod q₁).IsometryEquiv ((hyperbolic R N).prod q₂))) :
+    (h : Nonempty (((dualProd R N).prod q₁).IsometryEquiv ((dualProd R N).prod q₂))) :
     Nonempty (q₁.IsometryEquiv q₂) := by
   obtain ⟨n, N', ⟨eN⟩⟩ := exists_linearEquiv_prod_submodule (R := R) N
   obtain ⟨e⟩ := h
   -- `H(Rⁿ) ⊥ q ≅ H(N') ⊥ (H(N) ⊥ q)`, so `e` can be applied inside
-  let swap₁ : ((hyperbolic R (Fin n → R)).prod q₁).IsometryEquiv
-      ((hyperbolic R N').prod ((hyperbolic R N).prod q₁)) :=
-    ((QuadraticMap.IsometryEquiv.prod (isometryEquivHyperbolicCongr eN.symm)
+  let swap₁ : ((dualProd R (Fin n → R)).prod q₁).IsometryEquiv
+      ((dualProd R N').prod ((dualProd R N).prod q₁)) :=
+    ((QuadraticMap.IsometryEquiv.prod (dualProdIsometry eN.symm)
       (QuadraticMap.IsometryEquiv.refl q₁)).trans
-      ((QuadraticMap.IsometryEquiv.prod (isometryEquivProdHyperbolic N N').symm
+      ((QuadraticMap.IsometryEquiv.prod (dualProdProdIsometry (M := N) (N := N'))
         (QuadraticMap.IsometryEquiv.refl q₁)).trans
         ((QuadraticMap.IsometryEquiv.prod (QuadraticMap.IsometryEquiv.prodComm _ _)
           (QuadraticMap.IsometryEquiv.refl q₁)).trans
           (QuadraticMap.IsometryEquiv.prodAssoc _ _ _))))
-  let swap₂ : ((hyperbolic R (Fin n → R)).prod q₂).IsometryEquiv
-      ((hyperbolic R N').prod ((hyperbolic R N).prod q₂)) :=
-    ((QuadraticMap.IsometryEquiv.prod (isometryEquivHyperbolicCongr eN.symm)
+  let swap₂ : ((dualProd R (Fin n → R)).prod q₂).IsometryEquiv
+      ((dualProd R N').prod ((dualProd R N).prod q₂)) :=
+    ((QuadraticMap.IsometryEquiv.prod (dualProdIsometry eN.symm)
       (QuadraticMap.IsometryEquiv.refl q₂)).trans
-      ((QuadraticMap.IsometryEquiv.prod (isometryEquivProdHyperbolic N N').symm
+      ((QuadraticMap.IsometryEquiv.prod (dualProdProdIsometry (M := N) (N := N'))
         (QuadraticMap.IsometryEquiv.refl q₂)).trans
         ((QuadraticMap.IsometryEquiv.prod (QuadraticMap.IsometryEquiv.prodComm _ _)
           (QuadraticMap.IsometryEquiv.refl q₂)).trans
           (QuadraticMap.IsometryEquiv.prodAssoc _ _ _))))
-  refine cancel_hyperbolic_fin hLG h₂ n ⟨swap₁.trans (((QuadraticMap.IsometryEquiv.prod
-    (QuadraticMap.IsometryEquiv.refl (hyperbolic R N')) e)).trans swap₂.symm)⟩
+  refine cancel_dualProd_fin hLG h₂ n ⟨swap₁.trans (((QuadraticMap.IsometryEquiv.prod
+    (QuadraticMap.IsometryEquiv.refl (dualProd R N')) e)).trans swap₂.symm)⟩
 
 /-- **Witt cancellation over an LG ring** (`GN 6.5`; cf. `GPR 11.27`). If `q₃` is **regular** and
 `q₂` is non-singular, then `q₁ ⊥ q₃ ≅ q₂ ⊥ q₃` implies `q₁ ≅ q₂`.
 
 Adding `-q₃` turns `q₃` into a hyperbolic form
-(`QuadraticForm.isometryEquiv_prod_hyperbolic_of_isometryEquiv_prod`), which `cancel_hyperbolic`
+(`QuadraticForm.isometryEquiv_prod_dualProd_of_isometryEquiv_prod`), which `cancel_dualProd`
 cancels. Regularity of `q₃` is consumed in that first step and nowhere else; it cannot be weakened
 to non-singularity (`EKM`, p. 49 — see `QuadraticForm/Cancellation.lean`).
 
@@ -230,8 +208,8 @@ theorem cancel (hLG : IsLGRing R) {M₃ : Type v₃} [AddCommGroup M₃] [Module
     (h₂ : q₂.IsGPRNonsingular.{u, v₂, u}) (h₃ : q₃.IsGPRRegular)
     (h : Nonempty ((q₁.prod q₃).IsometryEquiv (q₂.prod q₃))) :
     Nonempty (q₁.IsometryEquiv q₂) := by
-  obtain ⟨e⟩ := isometryEquiv_prod_hyperbolic_of_isometryEquiv_prod h₃ h
-  exact cancel_hyperbolic hLG h₂
+  obtain ⟨e⟩ := isometryEquiv_prod_dualProd_of_isometryEquiv_prod h₃ h
+  exact cancel_dualProd hLG h₂
     ⟨((QuadraticMap.IsometryEquiv.prodComm _ _).trans e).trans
       (QuadraticMap.IsometryEquiv.prodComm _ _)⟩
 

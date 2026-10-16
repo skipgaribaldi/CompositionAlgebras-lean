@@ -28,7 +28,7 @@ proof.
 ## Main definitions
 
 * `QuadraticForm.plane R` : the hyperbolic plane `(a, b) ↦ a * b` on `R × R`. This is the
-  elementary model, defined without dual modules, of `QuadraticForm.hyperbolic R R`.
+  elementary model, defined without dual modules, of `QuadraticForm.dualProd R R`.
 * `QuadraticMap.IsHyperbolicPair Q u v` : `Q u = 0`, `Q v = 0`, `polar Q u v = 1`.
 * `QuadraticMap.eichlerMap Q x y` : the transvection as a linear endomorphism.
 * `QuadraticMap.eichler hx hxy` : the transvection as a self-isometry of `Q`.
@@ -64,7 +64,7 @@ variable (R : Type u) [CommRing R]
 
 /-- The **hyperbolic plane** `(a, b) ↦ a * b` on `R × R`.
 
-This is the elementary model of `QuadraticForm.hyperbolic R R`, written without dual modules so
+This is the elementary model of `QuadraticForm.dualProd R R`, written without dual modules so
 that computations with an explicit hyperbolic pair stay computational. -/
 def plane : QuadraticForm R (R × R) :=
   QuadraticMap.linMulLin (LinearMap.fst R R R) (LinearMap.snd R R R)
