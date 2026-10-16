@@ -463,11 +463,6 @@ theorem Module.rankAtStalk_dual [Module.Finite R M] [Module.Projective R M] :
 
 namespace Module.Dual
 
--- `Fintype ι`/`DecidableEq ι` are consumed by `LinearMap.toMatrix` and `Matrix.det` in the proof
--- rather than appearing in the statement, which the two linters below flag; they are genuinely
--- needed, so keep them as hypotheses instead of rederiving them inside the proof.
-set_option linter.unusedFintypeInType false in
-set_option linter.unusedDecidableInType false in
 /-- If a linear map from a finite free module into its own dual is injective after base change
 to every residue field of the base ring, it is bijective. Used for the base-changed half of
 `GN (C.8.2)` (`QuadraticForm.IsGPRNonsingular.isGPRRegular` below), applied after localizing at
@@ -491,11 +486,15 @@ abstract that term never appears, and `IsGPRNonsingular` — which accepts *any*
 identification needed at all. `F` shares `S`'s universe because the internal instantiation at
 `S ⧸ 𝔪` lives there. -/
 theorem bijective_of_forall_residue_field_injective {S : Type s} [CommRing S]
-    {P : Type*} [AddCommGroup P] [Module S P] {ι : Type*} [Fintype ι] [DecidableEq ι]
+    {P : Type*} [AddCommGroup P] [Module S P] {ι : Type*} [Finite ι]
     (v : Basis ι S P) {g : P →ₗ[S] Module.Dual S P}
     (hinj : ∀ (𝔪 : Ideal S) [𝔪.IsMaximal] (F : Type s) [Field F] [Algebra S F],
       RingHom.ker (algebraMap S F) = 𝔪 → Function.Injective (LinearMap.baseChange F g)) :
     Function.Bijective g := by
+  -- The matrix and determinant below need `Fintype ι` and `DecidableEq ι`; neither appears in the
+  -- statement, so both are recovered here.
+  cases nonempty_fintype ι
+  classical
   have hUnit : IsUnit (LinearMap.toMatrix v v.dualBasis g).det := by
     by_contra hnot
     obtain ⟨𝔪, hmax, hmem⟩ := exists_max_ideal_of_mem_nonunits (mem_nonunits_iff.mpr hnot)
