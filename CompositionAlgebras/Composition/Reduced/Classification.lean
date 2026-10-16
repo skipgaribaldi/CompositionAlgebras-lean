@@ -5,11 +5,13 @@ Authors: Skip Garibaldi
 -/
 module
 
+public import CompositionAlgebras.Composition.Reduced.Hyperbolic
 public import CompositionAlgebras.Composition.Reduced.RankEight
 public import CompositionAlgebras.Composition.Reduced.RankTwo
 public import CompositionAlgebras.Composition.Reduced.Reducedness
 public import CompositionAlgebras.LGRing.ConstantRank
 public import CompositionAlgebras.LGRing.Semilocal
+public import CompositionAlgebras.Module.IdempotentFactor
 
 /-!
 # Reduced and split composition algebras (`GPR 22.16`)
@@ -35,14 +37,22 @@ with `IsDivision`; both are in `Composition/Fields/Basic.lean`.
 * `ConicAlgebra.IsElementaryIdempotent.isSplitOfRank_two` : the rank-two case.
 * `ConicAlgebra.IsElementaryIdempotent.isSplitOfRank_four_of_isLGRing` : the rank-four case.
 * `ConicAlgebra.IsElementaryIdempotent.isSplitOfRank_eight_of_isLGRing` : the rank-eight case.
-* `ConicAlgebra.IsReduced.isSplit_of_projective_constantRank_free_on_factors` : the converse of
-  **`GPR 22.16`** under its factorwise freeness hypothesis.
+* `ConicAlgebra.IsReduced.isSplit_of_projectiveConstantRankFree` : the converse of
+  **`GPR 22.16`** under `GPR`'s own hypothesis, that constant-rank finite projective `k`-modules
+  are free; `ConicAlgebra.IsElementaryIdempotent.ProjectiveConstantRankFree.onFactors` passes the
+  hypothesis to the idempotent factors.
+* `ConicAlgebra.IsReduced.isSplit_of_projective_constantRank_free_on_factors` : the same under
+  the factorwise freeness hypothesis.
 * `ConicAlgebra.IsReduced.isSplit_of_isLGRing` : **`GPR 22.16`**, reduced implies split over an
   LG ring.
-* `ConicAlgebra.IsComposition.isSplitOfRank_iff_isGPRIsotropic_of_isLGRing` : the split/isotropic
-  equivalence of **`GPR 22.18`** in ranks two, four, and eight.
-* `ConicAlgebra.IsComposition.isSplitOfRank_of_isometryEquiv_dualProd_of_isUnimodular` : the
-  hyperbolic-to-split implication of **`GPR 22.18`**.
+* `ConicAlgebra.IsComposition.isSplitOfRank_iff_isGPRIsotropic_of_projectiveConstantRankFree`,
+  `IsComposition.isSplitOfRank_iff_exists_isometryEquiv_dualProd_of_projectiveConstantRankFree` :
+  **`GPR 22.18`** (i) ↔ (ii) ↔ (iii) under `GPR`'s hypothesis, in ranks two, four, and eight.
+* `ConicAlgebra.IsComposition.isSplitOfRank_iff_isGPRIsotropic_of_isLGRing`,
+  `ConicAlgebra.IsComposition.isSplitOfRank_iff_exists_isometryEquiv_dualProd_of_isLGRing`,
+  `ConicAlgebra.IsComposition.isSplitOfRank_of_isometryEquiv_dualProd` : the LG-ring case.
+* `ConicAlgebra.isGPRIsotropic_norm_of_isometryEquiv_dualProd` : a hyperbolic norm is isotropic
+  (`GPR 22.9`, (iv) ⇒ (iii)), with no hypothesis on the hyperbolic module.
 * `ConicAlgebra.IsComposition.isSplitOfRank_iff_not_hasTwoSidedInverses` : over a field, splitness
   is equivalent to failure of the division property (**`GPR 22.18`**).
 * `ConicAlgebra.IsComposition.isSplitOfRank_iff_not_anisotropic_of_pid` : over a PID, splitness
@@ -51,7 +61,8 @@ with `IsDivision`; both are in `Composition/Fields/Basic.lean`.
   splitness is equivalent to having zero divisors (**`GPR 22.19`**).
 
 Together with `isSplitOfRank_iff_isGPRIsotropic_of_pid` these are conditions (ii)–(v) of
-`GPR 22.19`. Condition (i), splitness after extension to the fraction field, is not formalized.
+`GPR 22.19`. Condition (i), splitness after extension to the fraction field, is
+`Composition/Fields/FractionField.lean`.
 
 ## References
 
@@ -63,7 +74,7 @@ Together with `isSplitOfRank_iff_isGPRIsotropic_of_pid` these are conditions (ii
 
 @[expose] public section
 
-universe u v
+universe u v w
 
 open scoped TensorProduct
 
@@ -92,6 +103,27 @@ def ProjectiveConstantRankFreeOnFactors (k : Type u) [CommRing k] : Prop :=
       [Module.Projective (k ⧸ Ideal.span {1 - e}) M], ∀ (r : ℕ),
       (Module.rankAtStalk (R := k ⧸ Ideal.span {1 - e}) M = fun _ ↦ r) →
         Module.Free (k ⧸ Ideal.span {1 - e}) M
+
+/-- **`GPR`'s freeness hypothesis** in `GPR 22.16`–`22.18`: every finitely generated projective
+`k`-module of constant rank (in the universe `w`) is free. It holds over every LG ring
+(`ProjectiveConstantRankFree.of_isLGRing`, `GPR 11.24`), and its factorwise form
+`ProjectiveConstantRankFreeOnFactors` follows from it (`ProjectiveConstantRankFree.onFactors`). -/
+def ProjectiveConstantRankFree (k : Type u) [CommRing k] : Prop :=
+  ∀ (M : Type w) [AddCommGroup M] [Module k M] [Module.Finite k M] [Module.Projective k M],
+    ∀ (r : ℕ), (Module.rankAtStalk (R := k) M = fun _ ↦ r) → Module.Free k M
+
+/-- `GPR`'s freeness hypothesis implies its factorwise form: a constant-rank projective module over
+an idempotent factor `k ⧸ (1 - e)` is free, by `Module.free_of_forall_free_of_isIdempotentElem`. -/
+theorem ProjectiveConstantRankFree.onFactors (h : ProjectiveConstantRankFree.{u, max u v} k) :
+    ProjectiveConstantRankFreeOnFactors.{u, v} k :=
+  fun _ he M _ _ _ _ r hM ↦ Module.free_of_forall_free_of_isIdempotentElem he
+    (fun N _ _ _ _ r hN ↦ h N r hN) M r hM
+
+/-- Over an LG ring every finitely generated projective module of constant rank is free
+(`GPR 11.24`, `GN 2.6(b)`), so `GPR`'s freeness hypothesis holds. -/
+theorem ProjectiveConstantRankFree.of_isLGRing (hLG : IsLGRing k) :
+    ProjectiveConstantRankFree.{u, w} k :=
+  fun M _ _ _ _ r hM ↦ Module.free_of_isLGRing_of_rankAtStalk_eq hLG r M hM
 
 private theorem finrank_eq_of_rankAtStalk_eq [Nontrivial k]
     {M : Type v} [AddCommGroup M] [Module k M] [Module.Free k M]
@@ -286,6 +318,15 @@ theorem isSplit_of_projective_constantRank_free_on_factors (h : C.IsReduced)
   exact ⟨h.isComposition, hone, htwo, hfour, height⟩
 
 omit [IsAlternative A] in
+/-- **`GPR 22.16`, converse, under `GPR`'s own hypothesis.** If every finitely generated projective
+`k`-module of constant rank is free, every reduced composition algebra over `k` is split. The
+hypothesis passes to the idempotent factors of the rank decomposition
+(`IsElementaryIdempotent.ProjectiveConstantRankFree.onFactors`). -/
+theorem isSplit_of_projectiveConstantRankFree (h : C.IsReduced)
+    (hfree : IsElementaryIdempotent.ProjectiveConstantRankFree.{u, max u v} k) : C.IsSplit :=
+  h.isSplit_of_projective_constantRank_free_on_factors hfree.onFactors
+
+omit [IsAlternative A] in
 /-- **`GPR 22.16`, reduced ⇒ split over an LG ring.** Each rank component has constant rank by
 the rank decomposition. Its base is again LG because it is an idempotent factor; ranks four and
 eight are therefore untwisted by freeness of constant-rank projective modules. -/
@@ -343,7 +384,87 @@ theorem isSplit_of_isLGRing (h : C.IsReduced) (hLG : IsLGRing k) : C.IsSplit := 
 
 end IsReduced
 
+omit [SMulCommClass k A A] [IsScalarTower k A A] [IsAlternative A] [Module.Finite k A]
+  [Module.Projective k A] in
+/-- **A hyperbolic norm is isotropic** (`GPR 22.9`, (iv) ⇒ (iii)). If `n ≅ dualProd k M`, write
+`1 = e₁ + e₂` across the two totally isotropic summands: the preimage `(φ, m)` of `1` has
+`φ m = n(1) = 1`, so `m` is unimodular and `(0, m)` is a unimodular null vector. No hypothesis on
+`M` is needed. -/
+theorem isGPRIsotropic_norm_of_isometryEquiv_dualProd {M : Type*} [AddCommGroup M] [Module k M]
+    (e : (QuadraticForm.dualProd k M).IsometryEquiv C.norm) : C.norm.IsGPRIsotropic := by
+  have h1 : QuadraticForm.dualProd k M (e.symm 1) = 1 := by rw [e.symm.map_app, C.norm_one]
+  have hm : Module.IsUnimodular k (e.symm 1).2 :=
+    Module.isUnimodular_of_apply_eq_one (f := (e.symm 1).1) h1
+  exact (QuadraticForm.isGPRIsotropic_dualProd hm).map_isometryEquiv e
+
 namespace IsComposition
+
+omit [IsAlternative A] in
+/-- **`GPR 22.18`, split ↔ isotropic, under `GPR`'s hypothesis.** If every finitely generated
+projective `k`-module of constant rank is free, a composition algebra of constant rank two, four,
+or eight is split exactly when its norm has a unimodular null vector. The reverse implication
+produces an elementary idempotent (`GPR 22.9`) and then untwists the reduced model with the
+freeness hypothesis (`GPR 22.16`). -/
+theorem isSplitOfRank_iff_isGPRIsotropic_of_projectiveConstantRankFree [Nontrivial k]
+    (hfree : IsElementaryIdempotent.ProjectiveConstantRankFree.{u, v} k)
+    (hcomp : C.IsComposition.{u, v, u})
+    (hA : Module.rankAtStalk (R := k) A = fun _ ↦ r)
+    (hr : r = 2 ∨ r = 4 ∨ r = 8) : C.IsSplitOfRank r ↔ C.norm.IsGPRIsotropic := by
+  constructor
+  · intro hsplit
+    obtain ⟨c, hc⟩ := hsplit.hasElementaryIdempotent_of_two_or_four_or_eight hr
+    exact hc.isGPRIsotropic
+  · intro hiso
+    have hreg := hcomp.isGPRRegular_of_rankAtStalk_ne_one hA (by omega)
+    obtain ⟨c, hc⟩ := exists_isElementaryIdempotent_of_isGPRIsotropic
+      hreg hcomp.isMultiplicative hiso
+    let : IsAlternative A :=
+      hcomp.isMultiplicative.isAlternative hreg.isGPRNondegenerate
+    rcases hr with rfl | rfl | rfl
+    · exact hc.isSplitOfRank_two hA
+    · exact hc.isSplitOfRank_four_of_projective_constantRank_free hfree hcomp hA
+    · exact hc.isSplitOfRank_eight_of_projective_constantRank_free hfree hcomp hA
+
+omit [IsAlternative A] in
+/-- **`GPR 22.18`, split ↔ hyperbolic, under `GPR`'s hypothesis.** If every finitely generated
+projective `k`-module of constant rank is free, a composition algebra of constant rank two, four,
+or eight is split exactly when its norm is hyperbolic, i.e. isometric to
+`QuadraticForm.dualProd k M` for a finitely generated projective `M`. Forwards, an elementary
+idempotent gives the Peirce presentation `peirceHyperbolicIsometryEquiv` (`GPR 22.9`,
+(i) ⇒ (iv)); backwards, a hyperbolic norm is isotropic
+(`isGPRIsotropic_norm_of_isometryEquiv_dualProd`). -/
+theorem isSplitOfRank_iff_exists_isometryEquiv_dualProd_of_projectiveConstantRankFree
+    [Nontrivial k] (hfree : IsElementaryIdempotent.ProjectiveConstantRankFree.{u, v} k)
+    (hcomp : C.IsComposition.{u, v, u})
+    (hA : Module.rankAtStalk (R := k) A = fun _ ↦ r) (hr : r = 2 ∨ r = 4 ∨ r = 8) :
+    C.IsSplitOfRank r ↔ ∃ (M : Type (max u v)) (_ : AddCommGroup M) (_ : Module k M)
+      (_ : Module.Finite k M) (_ : Module.Projective k M),
+      Nonempty ((QuadraticForm.dualProd k M).IsometryEquiv C.norm) := by
+  constructor
+  · intro hsplit
+    obtain ⟨c, hc⟩ := hsplit.hasElementaryIdempotent_of_two_or_four_or_eight hr
+    have hreg := hcomp.isGPRRegular_of_rankAtStalk_ne_one hA (by omega)
+    let : IsAlternative A := hcomp.isMultiplicative.isAlternative hreg.isGPRNondegenerate
+    have := IsAlternative.finite_peirceComponent (R := k) (c := c) true false
+    have := IsAlternative.projective_peirceComponent (R := k) hc.mul_self true false
+    exact ⟨_, _, _, inferInstance, inferInstance,
+      ⟨hc.peirceHyperbolicIsometryEquiv hcomp.isMultiplicative hreg⟩⟩
+  · rintro ⟨M, _, _, _, _, ⟨e⟩⟩
+    exact (hcomp.isSplitOfRank_iff_isGPRIsotropic_of_projectiveConstantRankFree hfree hA hr).mpr
+      (isGPRIsotropic_norm_of_isometryEquiv_dualProd e)
+
+omit [IsAlternative A] in
+/-- **`GPR 22.18`, split ↔ hyperbolic over an LG ring**: the case of
+`isSplitOfRank_iff_exists_isometryEquiv_dualProd_of_projectiveConstantRankFree` where the
+freeness hypothesis is `GPR 11.24`. -/
+theorem isSplitOfRank_iff_exists_isometryEquiv_dualProd_of_isLGRing [Nontrivial k]
+    (hcomp : C.IsComposition.{u, v, u}) (hLG : IsLGRing k)
+    (hA : Module.rankAtStalk (R := k) A = fun _ ↦ r) (hr : r = 2 ∨ r = 4 ∨ r = 8) :
+    C.IsSplitOfRank r ↔ ∃ (M : Type (max u v)) (_ : AddCommGroup M) (_ : Module k M)
+      (_ : Module.Finite k M) (_ : Module.Projective k M),
+      Nonempty ((QuadraticForm.dualProd k M).IsometryEquiv C.norm) :=
+  hcomp.isSplitOfRank_iff_exists_isometryEquiv_dualProd_of_projectiveConstantRankFree
+    (.of_isLGRing hLG) hA hr
 
 omit [IsAlternative A] in
 /-- **`GPR 22.18`, split ↔ isotropic over an LG ring.** For a constant-rank composition
@@ -370,18 +491,16 @@ theorem isSplitOfRank_iff_isGPRIsotropic_of_isLGRing [Nontrivial k]
     · exact hc.isSplitOfRank_eight_of_isLGRing hLG hcomp hA
 
 omit [IsAlternative A] in
-/-- **`GPR 22.18`, hyperbolic ⇒ split.** If the norm is isometric to a hyperbolic form
-`QuadraticForm.dualProd k M` with `M` containing a unimodular element, then that element gives a
-unimodular null vector in the composition algebra; the split/isotropic equivalence finishes the
-argument. -/
-theorem isSplitOfRank_of_isometryEquiv_dualProd_of_isUnimodular [Nontrivial k]
+/-- **`GPR 22.18`, hyperbolic ⇒ split over an LG ring.** A norm isometric to a hyperbolic form
+`QuadraticForm.dualProd k M` is isotropic (`isGPRIsotropic_norm_of_isometryEquiv_dualProd`), with
+no hypothesis on `M`; the split/isotropic equivalence finishes the argument. -/
+theorem isSplitOfRank_of_isometryEquiv_dualProd [Nontrivial k]
     (hcomp : C.IsComposition.{u, v, u}) (hLG : IsLGRing k)
     (hA : Module.rankAtStalk (R := k) A = fun _ ↦ r)
     (hr : r = 2 ∨ r = 4 ∨ r = 8) {M : Type*} [AddCommGroup M] [Module k M]
-    {m : M} (hm : Module.IsUnimodular k m)
     (e : (QuadraticForm.dualProd k M).IsometryEquiv C.norm) : C.IsSplitOfRank r :=
   (hcomp.isSplitOfRank_iff_isGPRIsotropic_of_isLGRing hLG hA hr).mpr
-    ((QuadraticForm.isGPRIsotropic_dualProd hm).map_isometryEquiv e)
+    (isGPRIsotropic_norm_of_isometryEquiv_dualProd e)
 
 omit [IsAlternative A] in
 /-- **`GPR 22.18`, split ↔ not division over a field.** For a constant-rank composition algebra

@@ -16,10 +16,11 @@ If `B` is an **associative** composition algebra whose norm is **regular**, and 
 quaternion algebras from the quadratic étale algebras and the octonion algebras from the quaternion
 algebras, and — because octonion algebras are not associative — it stops there.
 
-⚠ This is the direction `⇐` of `GPR 19.14`, which is an equivalence: conversely, if `Cay(B, μ)` is
+This is the direction `⇐` of `GPR 19.14`, which is an equivalence: conversely, if `Cay(B, μ)` is
 a composition algebra then `B` is a regular associative composition algebra and `μ` is a unit, and
-in that case the double is regular. That converse and the regularity of the double are not
-formalized.
+in that case the double is regular. The converse, the regularity of the double, and the
+equivalence itself (`ConicAlgebra.isComposition_cay_iff`) are in
+`Composition/CayleyDicksonIff.lean`.
 
 Each of the three clauses of `ConicAlgebra.IsComposition` is supplied by an earlier file:
 

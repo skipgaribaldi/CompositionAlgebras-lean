@@ -5,16 +5,18 @@ Authors: Skip Garibaldi
 -/
 module
 
+public import CompositionAlgebras.Composition.Alternative
 public import CompositionAlgebras.Composition.BaseChange
 public import CompositionAlgebras.Composition.Basic
-public import CompositionAlgebras.Composition.Alternative
 public import CompositionAlgebras.Composition.CayleyDickson
+public import CompositionAlgebras.Composition.CayleyDicksonIff
 public import CompositionAlgebras.Composition.ComplexQuaternion
 public import CompositionAlgebras.Composition.Defs
 public import CompositionAlgebras.Composition.Doubling
 public import CompositionAlgebras.Composition.Examples
 public import CompositionAlgebras.Composition.Fields.Basic
 public import CompositionAlgebras.Composition.Fields.Finite
+public import CompositionAlgebras.Composition.Fields.FractionField
 public import CompositionAlgebras.Composition.Fields.Real
 public import CompositionAlgebras.Composition.Fields.SepClosed
 public import CompositionAlgebras.Composition.Fields.SurjectiveNorm
@@ -24,23 +26,24 @@ public import CompositionAlgebras.Composition.NormClassification
 public import CompositionAlgebras.Composition.NormEquivalence
 public import CompositionAlgebras.Composition.Octonion
 public import CompositionAlgebras.Composition.QuadraticEtale
+public import CompositionAlgebras.Composition.QuadraticNormEquivalence
 public import CompositionAlgebras.Composition.QuadraticSubalgebra
 public import CompositionAlgebras.Composition.RankDichotomy
 public import CompositionAlgebras.Composition.RankOneTwoFourEight
 public import CompositionAlgebras.Composition.RankTwoSubalgebra
-public import CompositionAlgebras.Composition.Reduced.Defs
-public import CompositionAlgebras.Composition.Reduced.Classification
 public import CompositionAlgebras.Composition.Reduced.Capstone
+public import CompositionAlgebras.Composition.Reduced.Classification
+public import CompositionAlgebras.Composition.Reduced.Defs
 public import CompositionAlgebras.Composition.Reduced.Hyperbolic
 public import CompositionAlgebras.Composition.Reduced.Orientation
 public import CompositionAlgebras.Composition.Reduced.Peirce
+public import CompositionAlgebras.Composition.Reduced.RankEight
 public import CompositionAlgebras.Composition.Reduced.RankTwo
 public import CompositionAlgebras.Composition.Reduced.Reducedness
 public import CompositionAlgebras.Composition.Reduced.Split
 public import CompositionAlgebras.Composition.Reduced.Splitness
 public import CompositionAlgebras.Composition.Reduced.TwistedMatrix
 public import CompositionAlgebras.Composition.Reduced.TwistedZorn
-public import CompositionAlgebras.Composition.Reduced.RankEight
 public import CompositionAlgebras.Composition.Reduced.Zorn
 public import CompositionAlgebras.Composition.Sedenion
 public import CompositionAlgebras.Composition.Tower
@@ -58,6 +61,7 @@ public import CompositionAlgebras.Conic.Doubling
 public import CompositionAlgebras.Conic.Kirmse
 public import CompositionAlgebras.Conic.Multiplicative
 public import CompositionAlgebras.Conic.Projective
+public import CompositionAlgebras.Conic.Recognition
 public import CompositionAlgebras.Conic.Subalgebra
 public import CompositionAlgebras.Conic.TraceDefectCounterexample
 public import CompositionAlgebras.LGRing.ConstantRank
@@ -74,6 +78,7 @@ public import CompositionAlgebras.LGRing.ZeroDimensional
 public import CompositionAlgebras.Module.AlternatingBaseChange
 public import CompositionAlgebras.Module.ExteriorPower
 public import CompositionAlgebras.Module.IdempotentDecomposition
+public import CompositionAlgebras.Module.IdempotentFactor
 public import CompositionAlgebras.Module.Invertible
 public import CompositionAlgebras.Module.RankDecomposition
 public import CompositionAlgebras.Module.SelfAnnihilating

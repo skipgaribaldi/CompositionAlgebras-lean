@@ -30,10 +30,12 @@ equivalence preserves both; so it is automatically multiplicative. The hypothesi
 *is* `k[u]` is supplied in constant rank two by `GPR 19.16(b)` together with the exhaustion
 criterion: the subalgebra `k[u]` produced there is regular of rank two, hence all of `A`.
 
-⚠ `GPR 23.4(b)` is stated for every quadratic algebra over every commutative ring; its proof
+`GPR 23.4(b)` is stated for every quadratic algebra over every commutative ring; its proof
 localizes, where a generator exists. Here the generator is **global**: the general engine assumes
 `A = k[u]`, and the composition-algebra statements obtain `u` over a nontrivial LG ring. The
-localization argument for a quadratic algebra with no global generator is not formalized.
+localized statement, for an arbitrary conic algebra of constant rank two over an arbitrary
+commutative ring, is `ConicAlgebra.map_mul_of_isometryEquiv_map_one_of_rankAtStalk_eq_two` in
+`Composition/QuadraticNormEquivalence.lean`.
 
 ⚠ **(b) is false in higher rank**, which is why `GPR 23.4` is stated as it is. The standard
 conjugation of a quaternion algebra is a unital norm equivalence — `ConicAlgebra.norm_conj` and
