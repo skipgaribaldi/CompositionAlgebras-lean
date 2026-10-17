@@ -48,7 +48,8 @@ tower at a **regular rank-2** subalgebra rather than at `k`, and why `GPR 19.4` 
 and not a composition algebra. The regularity hypothesis here is the same phenomenon seen from the
 constructive side.
 
-**`B` must be associative**, for multiplicativity (`GPR Exc. 18.18`). Nothing is assumed about the
+**`B` must be associative** (`GPR 19.14`); here associativity is what makes the doubled norm
+multiplicative, the associative special case of `GPR Exc. 18.18`. Nothing is assumed about the
 conjugation of `B`, and nothing about `2`.
 
 ## Main results

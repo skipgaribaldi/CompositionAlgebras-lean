@@ -206,7 +206,7 @@ CompositionAlgebras/
     TraceDefectCounterexample.lean
                          -- an associative conic algebra over ℤ/4 whose conjugation is not an
                          -- anti-homomorphism (README trap 6)
-    Multiplicative.lean  -- IsMultiplicative (GPR 19.1); norm-associativity (GPR 16.5)
+    Multiplicative.lean  -- IsMultiplicative (GPR 19.1); norm-associativity (GPR 16.12, 17.2(a))
     Division.lean        -- division, two-sided inverses, anisotropy; GPR 13.8 for alternative
                          -- conic algebras over a field
     Subalgebra.lean      -- the conic structure restricted to a unital subalgebra

@@ -114,13 +114,15 @@ theorem norm_mul (h : C.IsComposition.{u, v, w}) (x y : A) :
   h.isMultiplicative.norm_mul x y
 
 omit [SMulCommClass k A A] in
-/-- **Norm-associativity** of a composition algebra (`GPR 16.5`): `n(xy, z) = n(y, (conj x)z)`. -/
+/-- **Norm-associativity** of a composition algebra (`GPR 16.12(4)` and `17.2(a)`):
+`n(xy, z) = n(y, (conj x)z)`. -/
 theorem polar_mul_left (h : C.IsComposition.{u, v, w}) (x y z : A) :
     QuadraticMap.polar C.norm (x * y) z = QuadraticMap.polar C.norm y (C.conj x * z) :=
   h.isMultiplicative.polar_mul_left x y z
 
 omit [IsScalarTower k A A] in
-/-- **Norm-associativity** of a composition algebra (`GPR 16.5`): `n(xy, z) = n(x, z(conj y))`. -/
+/-- **Norm-associativity** of a composition algebra (`GPR 16.12(3)` and `17.2(a)`):
+`n(xy, z) = n(x, z(conj y))`. -/
 theorem polar_mul_right (h : C.IsComposition.{u, v, w}) (x y z : A) :
     QuadraticMap.polar C.norm (x * y) z = QuadraticMap.polar C.norm x (z * C.conj y) :=
   h.isMultiplicative.polar_mul_right x y z
